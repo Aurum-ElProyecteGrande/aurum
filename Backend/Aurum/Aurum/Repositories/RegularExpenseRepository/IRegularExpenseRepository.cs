@@ -5,7 +5,7 @@ namespace Aurum.Repositories.RegularExpenseRepository;
 public interface IRegularExpenseRepository
 {
 	Task<List<RawRegularExpenseDto>> GetAllRegular(int accountId);
-	Task<int> Create(RegularExpenseDto expense);
-	Task<int> Update(RegularExpenseDto expense);
+	Task<int> Create(RawRegularExpenseDto expense);
+	Task<int> Update(RawRegularExpenseDto expense);
 	Task<bool> Delete(int regularId);
 }
