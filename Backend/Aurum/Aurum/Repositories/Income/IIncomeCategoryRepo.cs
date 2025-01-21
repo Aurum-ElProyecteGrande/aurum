@@ -4,7 +4,7 @@ namespace Aurum.Repositories.Income
 {
     public interface IIncomeCategoryRepo
     {
-        List<CategoryDto> GetAllCategory();
+        Task<List<CategoryDto>> GetAllCategory();
 
     }
 }

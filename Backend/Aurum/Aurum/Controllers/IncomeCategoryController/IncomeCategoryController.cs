@@ -5,32 +5,30 @@ using Microsoft.AspNetCore.Mvc;
 namespace Aurum.Controllers.Categories
 {
     [ApiController]
+    [Route("/categories/income")]
     public class IncomeCategoryController : ControllerBase
     {
         private IIncomeCategoryRepo _incomeCategoryRepo;
-        private ILogger<IncomeCategoryController> _logger;
 
-        public IncomeCategoryController(IIncomeCategoryRepo incomeCategoryRepo, ILogger<IncomeCategoryController> logger)
+        public IncomeCategoryController(IIncomeCategoryRepo incomeCategoryRepo)
         {
             _incomeCategoryRepo = incomeCategoryRepo;
-            _logger = logger;
         }
 
-        [HttpGet("/categories/expense")]
-        public ActionResult<List<CategoryDto>> GetAll()
+        [HttpGet]
+        public async Task<ActionResult<List<CategoryDto>>> GetAll()
         {
             try
             {
-                var incomeCategories = _incomeCategoryRepo.GetAllCategory();
+                var incomeCategories = await _incomeCategoryRepo.GetAllCategory();
 
                 return Ok(incomeCategories);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                Console.WriteLine(ex.Message);
                 return BadRequest(ex.Message);
             }
-            throw new NotImplementedException();
         }
     }
 

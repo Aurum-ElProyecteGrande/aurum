@@ -1,3 +1,5 @@
+using Aurum.Repositories.Income;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +8,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IIncomeRepo, IncomeRepo>();
+builder.Services.AddScoped<IRegularIncomeRepo, RegularIncomeRepo>();
+builder.Services.AddScoped<IIncomeCategoryRepo, IncomeCategoryRepo>();
 
 var app = builder.Build();
 

@@ -4,10 +4,10 @@ namespace Aurum.Repositories.Income
 {
     public interface IRegularIncomeRepo
     {
-        List<RegularIncomeDto> GetAllRegular(int accountId);
-        int CreateRegular(ModifyRegularIncomeDto income);
-        int UpdateRegular(int regularId, ModifyRegularIncomeDto regularIncome);
-        bool DeleteRegular(int regularId);
+        Task<List<RegularIncomeDto>> GetAllRegular(int accountId);
+        Task<int> CreateRegular(ModifyRegularIncomeDto income);
+        Task<int> UpdateRegular(int regularId, ModifyRegularIncomeDto regularIncome);
+        Task<bool> DeleteRegular(int regularId);
 
     }
 }

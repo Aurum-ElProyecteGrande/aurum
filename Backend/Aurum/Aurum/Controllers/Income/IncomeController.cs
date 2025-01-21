@@ -11,17 +11,15 @@ namespace Aurum.Controllers.Income
     {
         private IIncomeRepo _incomeRepo;
         private IRegularIncomeRepo _regularIncomeRepo;
-        private ILogger<IncomeController> _logger;
-        public IncomeController(IIncomeRepo incomeRepo, IRegularIncomeRepo regularIncomeRepo, ILogger<IncomeController> logger)
+        public IncomeController(IIncomeRepo incomeRepo, IRegularIncomeRepo regularIncomeRepo)
         {
             _incomeRepo = incomeRepo;
             _regularIncomeRepo = regularIncomeRepo;
-            _logger = logger;
         }
 
 
         [HttpGet("{accountId:int}")]
-        public ActionResult<List<IncomeDto>> GetAllByDate(int accountId, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
+        public async Task<ActionResult<List<IncomeDto>>> GetAllByDate(int accountId, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
         {
             try
             {
@@ -29,28 +27,28 @@ namespace Aurum.Controllers.Income
 
                 if (startDate is not null && endDate is not null)
                 {
-                    incomes = _incomeRepo.GetAll(accountId, startDate, endDate);
+                    incomes = await _incomeRepo.GetAll(accountId, startDate, endDate);
                 }
                 else
                 {
-                    incomes = _incomeRepo.GetAll(accountId);
+                    incomes = await _incomeRepo.GetAll(accountId);
                 }
 
                 return Ok(incomes);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                Console.WriteLine(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpPost]
-        public ActionResult<int> Create(ModifyIncomeDto income)
+        public async Task<ActionResult<int>> Create(ModifyIncomeDto income)
         {
             try
             {
-                var incomeId = _incomeRepo.Create(income);
+                var incomeId = await _incomeRepo.Create(income);
 
                 if (incomeId == 0) return BadRequest("Invalid income input");
 
@@ -59,18 +57,18 @@ namespace Aurum.Controllers.Income
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                Console.WriteLine(ex.Message);
                 return BadRequest(ex.Message);
 
             }
         }
 
         [HttpDelete("{incomeId:int}")]
-        public ActionResult<bool> Delete(int incomeId)
+        public async Task<ActionResult<bool>> Delete(int incomeId)
         {
             try
             {
-                var isDeleted = _incomeRepo.Delete(incomeId);
+                var isDeleted = await _incomeRepo.Delete(incomeId);
 
                 if (!isDeleted) return BadRequest($"Could not delete income with id {incomeId}");
 
@@ -78,14 +76,14 @@ namespace Aurum.Controllers.Income
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                Console.WriteLine(ex.Message);
                 return BadRequest(ex.Message);
 
             }
         }
 
         [HttpGet("regulars/{accountId:int}")]
-        public ActionResult<List<RegularIncomeDto>> GetAllRegular(int accountId)
+        public async Task<ActionResult<List<RegularIncomeDto>>> GetAllRegular(int accountId)
         {
             try
             {
@@ -95,18 +93,18 @@ namespace Aurum.Controllers.Income
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                Console.WriteLine(ex.Message);
                 return BadRequest(ex.Message);
 
             }
         }
 
         [HttpPost("regulars")]
-        public ActionResult<int> CreateRegular(ModifyRegularIncomeDto regularIncome)
+        public async Task<ActionResult<int>> CreateRegular(ModifyRegularIncomeDto regularIncome)
         {
             try
             {
-                var regularIncomeId = _regularIncomeRepo.CreateRegular(regularIncome);
+                var regularIncomeId = await _regularIncomeRepo.CreateRegular(regularIncome);
 
                 if (regularIncomeId == 0) return BadRequest("Invalid regular income input");
 
@@ -114,18 +112,18 @@ namespace Aurum.Controllers.Income
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                Console.WriteLine(ex.Message);
                 return BadRequest(ex.Message);
 
             }
         }
 
         [HttpPut("regulars/{regularId:int}")]
-        public ActionResult<int> UpdateRegular(int regularId, ModifyRegularIncomeDto regularIncome)
+        public async Task<ActionResult<int>> UpdateRegular(int regularId, ModifyRegularIncomeDto regularIncome)
         {
             try
             {
-                var regularIncomeId = _regularIncomeRepo.UpdateRegular(regularId, regularIncome);
+                var regularIncomeId = await _regularIncomeRepo.UpdateRegular(regularId, regularIncome);
 
                 if (regularIncomeId == 0) return BadRequest("Invalid regular income input");
 
@@ -133,18 +131,18 @@ namespace Aurum.Controllers.Income
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                Console.WriteLine(ex.Message);
                 return BadRequest(ex.Message);
 
             }
         }
 
         [HttpDelete("regulars/{regularId:int}")]
-        public ActionResult<bool> DeleteRegular(int regularId)
+        public async Task<ActionResult<bool>> DeleteRegular(int regularId)
         {
             try
             {
-                var isDeleted = _regularIncomeRepo.DeleteRegular(regularId);
+                var isDeleted = await _regularIncomeRepo.DeleteRegular(regularId);
 
                 if (!isDeleted) return BadRequest($"Could not delete income with id {regularId}");
 
@@ -152,7 +150,7 @@ namespace Aurum.Controllers.Income
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                Console.WriteLine(ex.Message);
                 return BadRequest(ex.Message);
 
             }
