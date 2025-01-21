@@ -15,34 +15,32 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
 	public async Task<List<ExpenseDto>> GetAll(int accountId, int userId)
 	{
 		var rawData = await _repository.GetAll(accountId);
-		var categories = await _categoryService.GetAllExpenseCategories(userId);
 
 		if (rawData.Count == 0)
 			return [];
 
+		var categories = await _categoryService.GetAllExpenseCategories(userId);
+		
 		if (categories.Count == 0)
 			throw new InvalidDataException("No categories found");
 		
-		var categoryDict = categories.ToDictionary(c => c.Key.CategoryId);
-		
-		return CreateExpenseDtoList(rawData, categoryDict);
+		return CreateExpenseDtoList(rawData, categories);
 		
 	}
 
 	public async Task<List<ExpenseDto>> GetAll(int accountId, int userId, DateTime startDate, DateTime endDate)
 	{
 		var rawData = await _repository.GetAll(accountId, startDate, endDate);
-		var categories = await _categoryService.GetAllExpenseCategories(userId);
 
 		if (rawData.Count == 0)
 			return [];
 
+		var categories = await _categoryService.GetAllExpenseCategories(userId);
+		
 		if (categories.Count == 0)
 			throw new InvalidDataException("No categories found");
 		
-		var categoryDict = categories.ToDictionary(c => c.Key.CategoryId);
-		
-		return CreateExpenseDtoList(rawData, categoryDict);
+		return CreateExpenseDtoList(rawData, categories);
 	}
 
 	public async Task<int> Create(ModifyExpenseDto expenseDto)
@@ -59,25 +57,29 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
 		await _repository.Delete(expenseId);
 
 	private List<ExpenseDto> CreateExpenseDtoList(
-			List<RawExpenseDto> rawExpenses,
-		Dictionary<int,KeyValuePair<CategoryDto, List<SubCategoryDto>>> categoryDict
-			)=> 
-		rawExpenses.Select(rawExpense => CreateExpenseDto(categoryDict, rawExpense))
-			.ToList();
-	
-
-	private ExpenseDto CreateExpenseDto(Dictionary<int, KeyValuePair<CategoryDto, List<SubCategoryDto>>> categoryDict, RawExpenseDto rawExpense)
+		List<RawExpenseDto> rawExpenses,
+		Dictionary<CategoryDto, List<SubCategoryDto>> categories)
 	{
-		//For faster lookup time
-		if (!categoryDict.TryGetValue(rawExpense.CategoryId, out var categoryKvp))
-			throw new KeyNotFoundException($"Category with ID {rawExpense.CategoryId} not found");
+		var categoryDict = categories.ToDictionary(c => c.Key.CategoryId);
+		var expenses = new List<ExpenseDto>();
 
-		var category = categoryKvp.Key;
-		var subCategories = categoryKvp.Value;
+		foreach (var rawExpense in rawExpenses)
+		{
+			//For faster lookup
+			if (!categoryDict.TryGetValue(rawExpense.CategoryId, out var categoryKvp))
+				throw new KeyNotFoundException($"Category with ID {rawExpense.CategoryId} not found");
+
+			var category = categoryKvp.Key;
+			var subCategories = categoryKvp.Value;
 			
-		var subCategory = subCategories.FirstOrDefault(s => s.SubCategoryId == rawExpense.SubCategoryId);
+			var subCategory = subCategories.FirstOrDefault(s => s.SubCategoryId == rawExpense.SubCategoryId);
 		
-		return CreateExpenseDto(rawExpense, category, subCategory);
+			var expense = CreateExpenseDto(rawExpense, category, subCategory);
+			
+			expenses.Add(expense);
+		}
+		
+		return expenses;
 	}
 	
 	private ExpenseDto CreateExpenseDto(RawExpenseDto expense, CategoryDto category, SubCategoryDto? subCategory) => 
