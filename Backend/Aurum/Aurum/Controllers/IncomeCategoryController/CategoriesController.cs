@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace Aurum.Controllers.Categories
 {
     [ApiController]
-    [Route("[controller]")]
     public class CategoriesController : ControllerBase
     {
         private IIncomeCategoryRepo _incomeCategoryRepo;
@@ -17,7 +16,7 @@ namespace Aurum.Controllers.Categories
             _logger = logger;
         }
 
-        [HttpGet("income/{userId}")]
+        [HttpGet("/categories/expense/{userId:int}")]
         public ActionResult<List<CategoryDto>> GetAll(int userID)
         {
             throw new NotImplementedException();

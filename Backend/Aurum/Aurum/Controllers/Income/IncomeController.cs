@@ -20,7 +20,7 @@ namespace Aurum.Controllers.Income
         }
 
 
-        [HttpGet("{accountId}")]
+        [HttpGet("{accountId:int}")]
         public ActionResult<List<IncomeDto>> GetAllByDate(int accountId, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
         {
             try
@@ -43,8 +43,6 @@ namespace Aurum.Controllers.Income
                 _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
-
-            throw new NotImplementedException();
         }
 
         [HttpPost]
@@ -67,7 +65,7 @@ namespace Aurum.Controllers.Income
             }
         }
 
-        [HttpDelete("{incomeId}")]
+        [HttpDelete("{incomeId:int}")]
         public ActionResult<bool> Delete(int incomeId)
         {
             try
@@ -86,7 +84,7 @@ namespace Aurum.Controllers.Income
             }
         }
 
-        [HttpGet("regulars/{accountId}")]
+        [HttpGet("regulars/{accountId:int}")]
         public ActionResult<List<RegularIncomeDto>> GetAllRegular(int accountId)
         {
             try
@@ -122,7 +120,7 @@ namespace Aurum.Controllers.Income
             }
         }
 
-        [HttpPut("regulars/{regularId}")]
+        [HttpPut("regulars/{regularId:int}")]
         public ActionResult<int> UpdateRegular(int regularId, ModifyRegularIncomeDto regularIncome)
         {
             try
@@ -141,7 +139,7 @@ namespace Aurum.Controllers.Income
             }
         }
 
-        [HttpDelete("regulars/{regularId}")]
+        [HttpDelete("regulars/{regularId:int}")]
         public ActionResult<bool> DeleteRegular(int regularId)
         {
             try
@@ -160,12 +158,4 @@ namespace Aurum.Controllers.Income
             }
         }
     }
-
-}
-
-}
-
-}
-
-
 }
