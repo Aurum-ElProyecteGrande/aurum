@@ -11,10 +11,16 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\" />
-      <Folder Include="Models\" />
-      <Folder Include="Repositories\" />
-      <Folder Include="Services\" />
+      <Folder Include="Controllers\ExpenseCategoryController\" />
+      <Folder Include="Controllers\ExpenseController\" />
+      <Folder Include="Controllers\RegularExpressController\" />
+      <Folder Include="Models\ExpenseDto\" />
+      <Folder Include="Models\RegularExpenseDto\" />
+      <Folder Include="Repositories\ExpenseCategoryRepository\" />
+      <Folder Include="Repositories\ExpenseRepo\" />
+      <Folder Include="Repositories\RegularExpenseRepo\" />
+      <Folder Include="Services\ExpenseCategoryService\" />
+      <Folder Include="Services\ExpenseService\" />
     </ItemGroup>
 
 </Project>
