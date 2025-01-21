@@ -1,0 +1,35 @@
+##UserService
+
+PasswordChange ???
+
+##ExpenseCategoryService
+
+Dictionary<CategoryDto, List<SubCategoryDto>> GetAllExpenseCategories(int userID)
+
+int AcquireSubCategoryId(int categoryId,string subCategoryName)
+
+##ExpenseService
+
+List(ExpenseDto) GetAll(int accountId, int userID)
+	ExpenseRepo -> GetAll(int accountId)
+	ExpenseCategoryService -> GetAllExpenseCategories(int userID)
+
+List(ExpenseDto) GetAll(int accountId, int userID, dateTime startDate,dateTime endDate)
+	ExpenseRepo -> GetAll(int accountId, dateTime startDate,dateTime endDate)
+	ExpenseCategoryService -> GetAllExpenseCategories(int userID)
+
+int Create(ModifyExpenseDto)
+	ExpenseCategoryService -> AcquireSubCategoryId(int categoryId,string subCategoryName)
+
+##RegularExpenseService
+List(RegularExpenseDto) GetAll(int accountId, int userID)
+	RegularExpenseRepo -> GetAll(int accountId)
+	ExpenseCategoryService -> GetAllExpenseCategories(int userID)
+
+int Create(ModifyRegularExpenseDto)
+	ExpenseCategoryService -> AcquireSubCategoryId(int categoryId,string subCategoryName)	
+
+int Update(ModifyRegularExpenseDto)
+	ExpenseCategoryService -> AcquireSubCategoryId(int categoryId,string subCategoryName)
+	RegularExpenseRepo -> UpdateRegular(RawRegularExpenseDto)
+	
