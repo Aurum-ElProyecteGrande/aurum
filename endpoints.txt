@@ -1,0 +1,39 @@
+Endpoints:
+UserController
+UserDto Get(int userId) -> /users/{userId:int}
+int Create(ModifyUserDto) -> /users
+int Update(int userId, ModifyUserDto) -> /users/{userId:int}
+Bool Delete(int userId) -> /users/{userId:int}
+
+AccountController
+List(AccountDto) GetAll(int userId) -> /accounts/{userId:int}
+int Create(ModidfyAccountDto) -> /accounts
+int Update(int accountId, ModifyAccountDto) -> /accounts/{accountId:int}
+Bool Delete(int accountId) -> /accounts/{accountId:int}
+
+ExpenseController
+List(ExpenseDto) GetAll(int accountId) -> /expenses/{accountId:int}
+List(ExpenseDto) GetAll(int accountId, dateTime startDate,dateTime endDate ) -> /expenses/{accountId:int}&{startDate:dateTime}&{endDate:dateTime}
+Int Create(ModifyExpenseDto) -> /expenses
+Bool Delete(int expenseId) -> /expenses/{expenseId:int}
+List(RegularExpenseDto) GetAllRegular(int accountId) -> /expenses/regulars/{accountId:int}
+Int CreateRegular(ModifyRegularExpenseDto) -> /expenses/regulars
+Int UpdateRegular(int regularId, ModifyRegularExpenseDto) -> /expenses/regulars/{regularId:int}
+Bool DeleteRegular(int regularId) -> /expenses/regulars/{regularId:int}
+
+IncomeController
+List(IncomeDto) GetAll(int accountId) -> /incomes/{accountId:int}
+List(IncomeDto) GetAll(int accountId, dateTime startDate,dateTime endDate ) -> /incomes/{accountId:int}&{startDate:dateTime}&{endDate:dateTime}
+Int Create(ModifyIncomeDto) -> /incomes
+Bool Delete(int incomeId) -> /incomes/{incomeId:int}
+List(RegularIncomeDto) GetAllRegular(int accountId) -> /incomes/regulars/{accountId:int}
+Int CreateRegular(ModifyRegularIncomeDto) -> /incomes/regulars
+Int UpdateRegular(int regularId, ModifyRegularIncomeDto) -> /incomes/regulars/{regularId:int}
+Bool DeleteRegular(int regularId) -> /incomes/regulars/{regularId:int}
+
+CategoryController
+Dictionary<CategoryDto, List<SubCategoryDto>> GetAll(int userID) -> /categories/{userID:int}
+
+CurrencyController
+List(CurrencyDto) GetAll() -> /currency
+
