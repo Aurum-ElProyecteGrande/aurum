@@ -21,6 +21,13 @@ string Label
 decimal Amount
 dateTime Date
 
+RawExpenseDto
+int categoryId
+int subCategoryId
+string Label
+decimal Amount
+dateTime Date
+
 ExpenseDto
 CategoryDto Category
 SubCategoryDto? Subcategory
