@@ -15,30 +15,33 @@ public class RegularExpenseService(IRegularExpenseRepository repository,IExpense
 	
 	public async Task<List<RegularExpenseDto>> GetAll(int accountId, int userId)
 	{
-		var categories = await _categoryService.GetAllExpenseCategories(userId);
-		var categoryDict = categories
-			.ToDictionary(c => c.Key.CategoryId);
 		var rawExpenses = await _repository.GetAllRegular(accountId);
 		
-		return CreateRegularExpenseDtoList(rawExpenses, categoryDict);
+		if (rawExpenses.Count == 0)
+			return [];
+		
+		var categories = await _categoryService.GetAllExpenseCategories(userId);
+		
+		if (categories.Count == 0)
+			throw new InvalidDataException("No categories found");
+		
+		return CreateRegularExpenseDtoList(rawExpenses, categories);
 	}
 
-	public async Task<int> Create(int userdId, ModifyRegularExpenseDto expenseDto)
+	public async Task<int> Create(ModifyRegularExpenseDto expenseDto)
 	{
-		var categories = await _categoryService.GetAllExpenseCategories(userdId);
-		var categoryDict = categories
-			.ToDictionary(c => c.Key.CategoryId);
-		var expense = CreateRegularExpenseDto(expenseDto, categoryDict);
+		var subCategoryId = string.IsNullOrEmpty(expenseDto.SubCategoryName) ? (int?)null :
+			await _categoryService.AcquireSubCategoryId(expenseDto.CategoryId,expenseDto.SubCategoryName);
+		var expense = CreateRawRegularExpenseDto(expenseDto, subCategoryId);
 		
 		return await _repository.Create(expense); 
 	}
 
-	public async Task<int> Update(int userId, ModifyRegularExpenseDto expenseDto)
+	public async Task<int> Update(ModifyRegularExpenseDto expenseDto)
 	{
-		var categories = await _categoryService.GetAllExpenseCategories(userId);
-		var categoryDict = categories
-			.ToDictionary(c => c.Key.CategoryId);
-		var expense = CreateRegularExpenseDto(expenseDto, categoryDict);
+		var subCategoryId = string.IsNullOrEmpty(expenseDto.SubCategoryName) ? (int?)null :
+			await _categoryService.AcquireSubCategoryId(expenseDto.CategoryId,expenseDto.SubCategoryName);
+		var expense = CreateRawRegularExpenseDto(expenseDto, subCategoryId);
 		
 		return await _repository.Update(expense); 
 	}
@@ -48,58 +51,39 @@ public class RegularExpenseService(IRegularExpenseRepository repository,IExpense
 
 	private List<RegularExpenseDto> CreateRegularExpenseDtoList(
 		List<RawRegularExpenseDto> expenseDtoList,
-		Dictionary<int, KeyValuePair<CategoryDto, List<SubCategoryDto>>> categoryDict
-		) => 
-		expenseDtoList
-			.Select(expenseDto => 
-				CreateRegularExpenseDto(expenseDto, categoryDict))
-			.ToList();
-	
-
-	private RegularExpenseDto CreateRegularExpenseDto(
-		ModifyRegularExpenseDto expenseDto,
-		Dictionary<int, KeyValuePair<CategoryDto, List<SubCategoryDto>>> categoryDict
-		)
+		Dictionary<CategoryDto, List<SubCategoryDto>> categories
+	)
 	{
-		//For faster lookup time
-		if (!categoryDict.TryGetValue(expenseDto.CategoryId, out var categoryKvp))
-			throw new KeyNotFoundException($"Category with ID {expenseDto.CategoryId} not found");
+		var categoryDict = categories.ToDictionary(c => c.Key.CategoryId);
+		var expenses = new List<RegularExpenseDto>();
 
-		var category = categoryKvp.Key;
-		var subCategories = categoryKvp.Value;
+		foreach (var expenseDto in expenseDtoList)
+		{
+			//For faster lookup time
+			if (!categoryDict.TryGetValue(expenseDto.CategoryId, out var categoryKvp))
+				throw new KeyNotFoundException($"Category with ID {expenseDto.CategoryId} not found");
+
+			var category = categoryKvp.Key;
+			var subCategories = categoryKvp.Value;
 			
-		var subCategory = subCategories.FirstOrDefault(s => s.Name == expenseDto.SubCategoryName);
+			var subCategory = subCategories.FirstOrDefault(s => s.SubCategoryId == expenseDto.SubcategoryId);
+			
+			var expense = CreateRegularExpenseDto(expenseDto, category, subCategory);
+			expenses.Add(expense);
+		}
 		
-		return CreateRegularExpenseDto(expenseDto, category, subCategory);
+		return expenses;
 	}
 	
-	private RegularExpenseDto CreateRegularExpenseDto(
-		RawRegularExpenseDto expenseDto,
-		Dictionary<int, KeyValuePair<CategoryDto, List<SubCategoryDto>>> categoryDict
-		)
-	{
-		//For faster lookup time
-		if (!categoryDict.TryGetValue(expenseDto.CategoryId, out var categoryKvp))
-			throw new KeyNotFoundException($"Category with ID {expenseDto.CategoryId} not found");
-
-		var category = categoryKvp.Key;
-		var subCategories = categoryKvp.Value;
-			
-		var subCategory = subCategories.FirstOrDefault(s => s.SubCategoryId == expenseDto.SubcategoryId);
-		
-		return CreateRegularExpenseDto(expenseDto, category, subCategory);
-	}
-	
-	private RegularExpenseDto CreateRegularExpenseDto(
+	private RawRegularExpenseDto CreateRawRegularExpenseDto(
 		ModifyRegularExpenseDto expense, 
-		CategoryDto category, 
-		SubCategoryDto? subCategory
+		int? subCategoryId
 		) => 
-		new RegularExpenseDto(
+		new RawRegularExpenseDto(
 			expense.RegularId,
 			expense.AccountId,
-			category,
-			subCategory ?? null,
+			expense.CategoryId,
+			subCategoryId ?? null,
 			expense.Label,
 			expense.Amount,
 			expense.StartDate,
