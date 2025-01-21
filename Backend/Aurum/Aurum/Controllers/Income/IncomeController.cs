@@ -19,52 +19,145 @@ namespace Aurum.Controllers.Income
             _logger = logger;
         }
 
-        [HttpGet("{accountId}")]
-        public ActionResult<List<IncomeDto>> GetAll(int accountId)
-        {
-            throw new NotImplementedException();
-        }
 
-        [HttpGet("{accountId}/bydate")]
-        public ActionResult<List<IncomeDto>> GetAllByDate(int accountId, DateTime startDate, DateTime endDate)
+        [HttpGet("{accountId}")]
+        public ActionResult<List<IncomeDto>> GetAllByDate(int accountId, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
         {
+            try
+            {
+                List<IncomeDto> incomes = new();
+
+                if (startDate is not null && endDate is not null)
+                {
+                    incomes = _incomeRepo.GetAll(accountId, startDate, endDate);
+                }
+                else
+                {
+                    incomes = _incomeRepo.GetAll(accountId);
+                }
+
+                return Ok(incomes);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex.Message);
+            }
+
             throw new NotImplementedException();
         }
 
         [HttpPost]
         public ActionResult<int> Create(ModifyIncomeDto income)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var incomeId = _incomeRepo.Create(income);
+
+                if (incomeId == 0) return BadRequest("Invalid income input");
+
+                return Ok(incomeId);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex.Message);
+
+            }
         }
 
         [HttpDelete("{incomeId}")]
         public ActionResult<bool> Delete(int incomeId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var isDeleted = _incomeRepo.Delete(incomeId);
+
+                if (!isDeleted) return BadRequest($"Could not delete income with id {incomeId}");
+
+                return Ok(isDeleted);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex.Message);
+
+            }
         }
 
         [HttpGet("regulars/{accountId}")]
         public ActionResult<List<RegularIncomeDto>> GetAllRegular(int accountId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var regularIncomes = _regularIncomeRepo.GetAllRegular(accountId);
+
+                return Ok(regularIncomes);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex.Message);
+
+            }
         }
 
         [HttpPost("regulars")]
-        public ActionResult<int> CreateRegular(ModifyRegularIncomeDto)
+        public ActionResult<int> CreateRegular(ModifyRegularIncomeDto regularIncome)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var regularIncomeId = _regularIncomeRepo.CreateRegular(regularIncome);
+
+                if (regularIncomeId == 0) return BadRequest("Invalid regular income input");
+
+                return Ok(regularIncomeId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex.Message);
+
+            }
         }
 
         [HttpPut("regulars/{regularId}")]
         public ActionResult<int> UpdateRegular(int regularId, ModifyRegularIncomeDto regularIncome)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var regularIncomeId = _regularIncomeRepo.UpdateRegular(regularId, regularIncome);
+
+                if (regularIncomeId == 0) return BadRequest("Invalid regular income input");
+
+                return Ok(regularIncomeId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex.Message);
+
+            }
         }
 
         [HttpDelete("regulars/{regularId}")]
         public ActionResult<bool> DeleteRegular(int regularId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var isDeleted = _regularIncomeRepo.DeleteRegular(regularId);
+
+                if (!isDeleted) return BadRequest($"Could not delete income with id {regularId}");
+
+                return Ok(isDeleted);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex.Message);
+
+            }
         }
     }
 
