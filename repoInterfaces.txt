@@ -1,0 +1,47 @@
+UserRepo
+UserDto Get(int userId)
+int Create(ModifyUserDto)
+int Update(int userId, ModifyUserDto)
+Bool Delete(int userId)
+
+AccountRepo
+List(AccountDto) GetAll(int userId)
+int Create(ModifyAccountDto)
+int Update(int accountId, ModifyAccountDto)
+Bool Delete(int accountId)
+
+ExpenseCategoryRepo
+List(CategoryDto) GetAllCategory()
+List(SubCategoryDto) GetAllSubCategory(int userId)
+int? GetSubCategoryByName(int categoryId, string subCategoryName)
+int CreateSubCategory(int categoryId, string subCategoryName)
+
+IncomeCategoryRepo
+List(CategoryDto) GetAllCategory()
+
+IncomeRepo
+List(IncomeDto) GetAll(int accountId)
+List(IncomeDto) GetAll(int accountId, dateTime startDate,dateTime endDate)
+int Create(ModifyIncomeDto)
+Bool Delete(int incomeId)
+
+RegularIncomeRepo
+List(RegularIncomeDto) GetAllRegular(int accountId)
+Int CreateRegular(ModifyRegularIncomeDto)
+Int UpdateRegular(int regularId, ModifyRegularIncomeDto)
+Bool DeleteRegular(int regularId)
+
+ExpenseRepo
+List(RawExpenseDto) GetAll(int accountId)
+List(ExpenseDto) GetAll(int accountId, dateTime startDate,dateTime endDate)
+Int Create(ModifyExpenseDto)
+Bool Delete(int expenseId)
+
+RegularExpenseRepo
+List(RawRegularExpenseDto) GetAllRegular(int accountId)
+Int CreateRegular(ModifyRegularExpenseDto)
+Int UpdateRegular(int regularId, RawRegularExpenseDto)
+Bool DeleteRegular(int regularId)
+
+CurrencyRepo
+List(CurrencyDto) GetAll()
