@@ -4,8 +4,8 @@ namespace Aurum.Repositories.ExpenseCategoryRepository;
 
 public interface IExpenseCategoryRepository
 {
-	List<CategoryDto> GetAllCategory();
-	List<SubCategoryDto> GetAllSubCategory(int userId);
-	int? GetSubCategoryByName(int categoryId, string subCategoryName);
-	int CreateSubCategory(int categoryId, string subCategoryName);
+	Task<List<CategoryDto>> GetAllCategory();
+	Task<List<SubCategoryDto>> GetAllSubCategory(int userId);
+	Task<int?> GetSubCategoryByName(int categoryId, string subCategoryName);
+	Task<int> CreateSubCategory(int categoryId, string subCategoryName);
 }
