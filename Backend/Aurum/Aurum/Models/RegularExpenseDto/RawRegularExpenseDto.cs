@@ -4,7 +4,7 @@ public record RawRegularExpenseDto(
 	int RegularId,
 	int AccountId,
 	int CategoryId,
-	int SubcategoryId,
+	int? SubcategoryId,
 	string Label,
 	decimal Amount,
 	DateTime StartDate,
