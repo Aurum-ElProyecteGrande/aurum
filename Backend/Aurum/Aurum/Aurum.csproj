@@ -16,7 +16,6 @@
       <Folder Include="Controllers\RegularExpressController\" />
       <Folder Include="Models\ExpenseDto\" />
       <Folder Include="Models\RegularExpenseDto\" />
-      <Folder Include="Repositories\ExpenseCategoryRepository\" />
       <Folder Include="Repositories\ExpenseRepo\" />
       <Folder Include="Repositories\RegularExpenseRepo\" />
       <Folder Include="Services\ExpenseCategoryService\" />
