@@ -32,7 +32,8 @@ Int UpdateRegular(int regularId, ModifyRegularIncomeDto) -> /incomes/regulars/{r
 Bool DeleteRegular(int regularId) -> /incomes/regulars/{regularId:int}
 
 CategoryController
-Dictionary<CategoryDto, List<SubCategoryDto>> GetAll(int userID) -> /categories/{userID:int}
+Dictionary<CategoryDto, List<SubCategoryDto>> GetAllExpense(int userID) -> /categories/expense/{userID:int}
+List(CategoryDto) GetAllIncome(int userID) -> /categories/income/{userID:int}
 
 CurrencyController
 List(CurrencyDto) GetAll() -> /currency
