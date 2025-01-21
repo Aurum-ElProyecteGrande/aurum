@@ -1,6 +1,7 @@
 using Aurum.Models.CategoryDto;
 using Aurum.Models.ExpenseDto;
 using Aurum.Models.ExpenseDtos;
+using Aurum.Models.RegularExpenseDto;
 using Aurum.Repositories.ExpenseRepository;
 using Aurum.Services.ExpenseCategoryService;
 
@@ -22,7 +23,9 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
 		if (categories.Count == 0)
 			throw new InvalidDataException("No categories found");
 		
-		return CreateExpenseDtoList(rawData, categories);
+		var categoryDict = categories.ToDictionary(c => c.Key.CategoryId);
+		
+		return CreateExpenseDtoList(rawData, categoryDict);
 		
 	}
 
@@ -37,41 +40,46 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
 		if (categories.Count == 0)
 			throw new InvalidDataException("No categories found");
 		
-		return CreateExpenseDtoList(rawData, categories);
+		var categoryDict = categories.ToDictionary(c => c.Key.CategoryId);
+		
+		return CreateExpenseDtoList(rawData, categoryDict);
 	}
 
-	public async Task<int> Create(ModifyExpenseDto expense) => 
-		await _repository.Create(expense);
+	public async Task<int> Create(ModifyExpenseDto expenseDto)
+	{
+		var subCategoryId = string.IsNullOrEmpty(expenseDto.SubCategoryName) ? (int?)null :
+			await _categoryService.AcquireSubCategoryId(expenseDto.CategoryId,expenseDto.SubCategoryName);
+		
+		var expense = CreateRawExpenseDto(expenseDto, subCategoryId);
+		
+		return await _repository.Create(expense);
+	}
 
 	public async Task<bool> Delete(int expenseId) => 
 		await _repository.Delete(expenseId);
 
-	private List<ExpenseDto> CreateExpenseDtoList(List<RawExpenseDto> rawExpenses,
-		Dictionary<CategoryDto, List<SubCategoryDto>> categories)
+	private List<ExpenseDto> CreateExpenseDtoList(
+			List<RawExpenseDto> rawExpenses,
+		Dictionary<int,KeyValuePair<CategoryDto, List<SubCategoryDto>>> categoryDict
+			)=> 
+		rawExpenses.Select(rawExpense => CreateExpenseDto(categoryDict, rawExpense))
+			.ToList();
+	
+
+	private ExpenseDto CreateExpenseDto(Dictionary<int, KeyValuePair<CategoryDto, List<SubCategoryDto>>> categoryDict, RawExpenseDto rawExpense)
 	{
-		var categoryDict = categories.ToDictionary(c => c.Key.CategoryId);
+		//For faster lookup time
+		if (!categoryDict.TryGetValue(rawExpense.CategoryId, out var categoryKvp))
+			throw new KeyNotFoundException($"Category with ID {rawExpense.CategoryId} not found");
 
-		var expenses = new List<ExpenseDto>();
-
-		foreach (var rawExpense in rawExpenses)
-		{
-			//For faster lookup time
-			if (!categoryDict.TryGetValue(rawExpense.CategoryId, out var categoryKvp))
-				throw new KeyNotFoundException($"Category with ID {rawExpense.CategoryId} not found");
-
-			var category = categoryKvp.Key;
-			var subCategories = categoryKvp.Value;
+		var category = categoryKvp.Key;
+		var subCategories = categoryKvp.Value;
 			
-			var subCategory = subCategories.FirstOrDefault(s => s.SubCategoryId == rawExpense.SubCategoryId);
-			
-			var expense = CreateExpenseDto(rawExpense, category, subCategory);
-			
-			expenses.Add(expense);
-		}
-
-		return expenses;
+		var subCategory = subCategories.FirstOrDefault(s => s.SubCategoryId == rawExpense.SubCategoryId);
+		
+		return CreateExpenseDto(rawExpense, category, subCategory);
 	}
-
+	
 	private ExpenseDto CreateExpenseDto(RawExpenseDto expense, CategoryDto category, SubCategoryDto? subCategory) => 
 		new ExpenseDto(
 			category,
@@ -80,4 +88,13 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
 			expense.Amount,
 			expense.Date
 		);
+
+	private RawExpenseDto CreateRawExpenseDto(ModifyExpenseDto expenseDto, int? subCategoryId) =>
+		new RawExpenseDto(
+			expenseDto.CategoryId,
+			subCategoryId ?? null,
+			expenseDto.Label,
+			expenseDto.Amount,
+			expenseDto.Date
+			);
 }
