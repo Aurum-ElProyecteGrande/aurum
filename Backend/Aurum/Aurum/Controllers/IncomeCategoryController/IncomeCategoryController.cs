@@ -16,7 +16,7 @@ namespace Aurum.Controllers.Categories
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<CategoryDto>>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
             try
             {

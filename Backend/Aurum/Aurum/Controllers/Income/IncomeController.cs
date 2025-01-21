@@ -19,7 +19,7 @@ namespace Aurum.Controllers.Income
 
 
         [HttpGet("{accountId:int}")]
-        public async Task<ActionResult<List<IncomeDto>>> GetAllByDate(int accountId, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
+        public async Task<IActionResult> GetAllByDate(int accountId, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
         {
             try
             {
@@ -44,13 +44,13 @@ namespace Aurum.Controllers.Income
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Create(ModifyIncomeDto income)
+        public async Task<IActionResult> Create(ModifyIncomeDto income)
         {
             try
             {
                 var incomeId = await _incomeRepo.Create(income);
 
-                if (incomeId == 0) return BadRequest("Invalid income input");
+                if (incomeId == 0) throw new InvalidOperationException ("Invalid income input");
 
                 return Ok(incomeId);
 
@@ -64,13 +64,13 @@ namespace Aurum.Controllers.Income
         }
 
         [HttpDelete("{incomeId:int}")]
-        public async Task<ActionResult<bool>> Delete(int incomeId)
+        public async Task<IActionResult> Delete(int incomeId)
         {
             try
             {
                 var isDeleted = await _incomeRepo.Delete(incomeId);
 
-                if (!isDeleted) return BadRequest($"Could not delete income with id {incomeId}");
+                if (!isDeleted) throw new InvalidOperationException ($"Could not delete income with id {incomeId}");
 
                 return Ok(isDeleted);
             }
@@ -83,7 +83,7 @@ namespace Aurum.Controllers.Income
         }
 
         [HttpGet("regulars/{accountId:int}")]
-        public async Task<ActionResult<List<RegularIncomeDto>>> GetAllRegular(int accountId)
+        public async Task<IActionResult> GetAllRegular(int accountId)
         {
             try
             {
@@ -100,13 +100,13 @@ namespace Aurum.Controllers.Income
         }
 
         [HttpPost("regulars")]
-        public async Task<ActionResult<int>> CreateRegular(ModifyRegularIncomeDto regularIncome)
+        public async Task<IActionResult> CreateRegular(ModifyRegularIncomeDto regularIncome)
         {
             try
             {
                 var regularIncomeId = await _regularIncomeRepo.CreateRegular(regularIncome);
 
-                if (regularIncomeId == 0) return BadRequest("Invalid regular income input");
+                if (regularIncomeId == 0) throw new InvalidOperationException ("Invalid regular income input");
 
                 return Ok(regularIncomeId);
             }
@@ -119,13 +119,13 @@ namespace Aurum.Controllers.Income
         }
 
         [HttpPut("regulars/{regularId:int}")]
-        public async Task<ActionResult<int>> UpdateRegular(int regularId, ModifyRegularIncomeDto regularIncome)
+        public async Task<IActionResult> UpdateRegular(int regularId, ModifyRegularIncomeDto regularIncome)
         {
             try
             {
                 var regularIncomeId = await _regularIncomeRepo.UpdateRegular(regularId, regularIncome);
 
-                if (regularIncomeId == 0) return BadRequest("Invalid regular income input");
+                if (regularIncomeId == 0) throw new InvalidOperationException ("Invalid regular income input");
 
                 return Ok(regularIncomeId);
             }
@@ -138,13 +138,13 @@ namespace Aurum.Controllers.Income
         }
 
         [HttpDelete("regulars/{regularId:int}")]
-        public async Task<ActionResult<bool>> DeleteRegular(int regularId)
+        public async Task<IActionResult> DeleteRegular(int regularId)
         {
             try
             {
                 var isDeleted = await _regularIncomeRepo.DeleteRegular(regularId);
 
-                if (!isDeleted) return BadRequest($"Could not delete income with id {regularId}");
+                if (!isDeleted) throw new InvalidOperationException ($"Could not delete income with id {regularId}");
 
                 return Ok(isDeleted);
             }
