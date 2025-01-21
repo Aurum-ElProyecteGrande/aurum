@@ -41,7 +41,10 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
 	}
 
 	public async Task<int> Create(ModifyExpenseDto expense) => 
-		await _repository.Create(expense); 
+		await _repository.Create(expense);
+
+	public async Task<bool> Delete(int expenseId) => 
+		await _repository.Delete(expenseId);
 
 	private List<ExpenseDto> CreateExpenseDtoList(List<RawExpenseDto> rawExpenses,
 		Dictionary<CategoryDto, List<SubCategoryDto>> categories)
