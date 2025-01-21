@@ -1,0 +1,101 @@
+DTO(RECORD)
+CategoryDto
+string Name
+int CategoryId
+
+SubCategoryDto
+string Name
+int SubCategoryId
+int CategoryId
+
+IncomeDto
+CategoryDto Category
+string Label
+decimal Amount
+dateTime Date
+
+ModifyIncomeDto
+int accountId
+int CategoryId
+string Label
+decimal Amount
+dateTime Date
+
+ExpenseDto
+CategoryDto Category
+SubCategoryDto? Subcategory
+string Label
+decimal Amount
+dateTime Date
+
+ModifyExpenseDto
+int AccountId
+int CategoryId
+string? SubCategoryName
+string Label
+decimal Amount
+dateTime Date
+
+ModifyRegularIncomeDto
+int AccountId
+int CategoryId
+string Label
+decimal Amount
+dateTime StartDate
+Regularity Regularity
+
+RegularIncomeDto
+int RegularId
+int AccountId
+CategoryDto Category
+string Label
+decimal Amount
+dateTime StartDate
+Regularity Regularity
+
+ModifyRegularExpenseDto
+int AccountId
+int CategoryId
+string? SubCategoryName
+string Label
+decimal Amount
+dateTime StartDate
+Regularity Regularity
+
+RegularExpenseDto
+int RegularId
+int AccountId
+CategoryDto Category
+SubcategoryDto? Subcategory
+string Label
+decimal Amount
+dateTime StartDate
+Regularity Regularity
+
+AccountDto
+int AccountId
+int UserId
+string DisplayName
+decimal Amount
+int currencyId
+
+ModifyAccountDto
+int UserId
+string DisplayName
+decimal Amount
+int currencyId
+
+UserDto
+int userId
+string DisplayName
+string Email
+
+ModifyUserDto
+string DisplayName
+string Email
+string? Password
+
+CurrencyDto
+string Name
+string CurrencyCode
+string Symbol
