@@ -5,7 +5,7 @@ namespace Aurum.Services.ExpenseCategoryService;
 
 public class ExpenseCategoryService(IExpenseCategoryRepository repository): IExpenseCategoryService
 {
-	private IExpenseCategoryRepository _repository = repository;
+	private readonly IExpenseCategoryRepository _repository = repository;
 	
 	public async Task<Dictionary<CategoryDto, List<SubCategoryDto>>> GetAllExpenseCategories(int userId)
 	{
@@ -14,9 +14,6 @@ public class ExpenseCategoryService(IExpenseCategoryRepository repository): IExp
 		var subCategories = await _repository.GetAllSubCategory(userId);
 
 		// Validate inputs
-		if (categories == null || subCategories == null)
-			throw new InvalidOperationException("Failed to retrieve expense categories or subcategories.");
-
 		if (categories.Count == 0 || subCategories.Count == 0)
 			throw new InvalidOperationException("No expense categories found.");
 
