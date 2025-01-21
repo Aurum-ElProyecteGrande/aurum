@@ -79,6 +79,16 @@ decimal Amount
 dateTime StartDate
 Regularity Regularity
 
+RawRegularExpenseDto
+int RegularId
+int AccountId
+int CategoryId
+int SubcategoryId
+string Label
+decimal Amount
+dateTime StartDate
+Regularity Regularity
+
 AccountDto
 int AccountId
 int UserId
