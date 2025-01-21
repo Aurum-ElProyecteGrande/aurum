@@ -7,6 +7,6 @@ public interface IExpenseRepository
 {
 	Task<List<RawExpenseDto>> GetAll(int accountId);
 	Task<List<RawExpenseDto>> GetAll(int accountId, DateTime startDate, DateTime endDate);
-	Task<int> Create(ModifyExpenseDto expense);
+	Task<int> Create(RawExpenseDto expense);
 	Task<bool> Delete(int expenseId);
 }
