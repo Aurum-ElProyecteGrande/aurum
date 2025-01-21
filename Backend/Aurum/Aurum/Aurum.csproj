@@ -15,7 +15,6 @@
       <Folder Include="Controllers\RegularExpressController\" />
       <Folder Include="Models\RegularExpenseDto\" />
       <Folder Include="Repositories\RegularExpenseRepository\" />
-      <Folder Include="Services\ExpenseService\" />
     </ItemGroup>
 
 </Project>
