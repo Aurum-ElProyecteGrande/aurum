@@ -5,8 +5,8 @@ namespace Aurum.Repositories.ExpenseRepository;
 
 public interface IExpenseRepository
 {
-	List<RawExpenseDto> GetAll(int accountId);
-	List<ExpenseDto> GetAll(int accountId, DateTime startDate, DateTime endDate);
-	int Create(ModifyExpenseDto expense);
-	bool Delete(int expenseId);
+	Task<List<RawExpenseDto>> GetAll(int accountId);
+	Task<List<ExpenseDto>> GetAll(int accountId, DateTime startDate, DateTime endDate);
+	Task<int> Create(ModifyExpenseDto expense);
+	Task<bool> Delete(int expenseId);
 }
