@@ -4,13 +4,13 @@ using Aurum.Services.Income;
 
 namespace Aurum.Services.BallanceService
 {
-    public class BallanceService : IBallanceService
+    public class BalanceService : IBalanceService
     {
         IIncomeService _incomeService;
         IExpenseService _expenseService;
         IAccountService _accountService;
 
-        public BallanceService(IIncomeService incomeService, IExpenseService expenseService, IAccountService accountService)
+        public BalanceService(IIncomeService incomeService, IExpenseService expenseService, IAccountService accountService)
         {
             _incomeService = incomeService;
             _expenseService = expenseService;
@@ -28,7 +28,7 @@ namespace Aurum.Services.BallanceService
             return validDate;
         }
 
-        public async Task<decimal> GetBallance(int accountId)
+        public async Task<decimal> GetBalance(int accountId)
         {
             decimal initialAmount = await _accountService.GetInitialAmount(accountId);
             decimal totalExpense = await _expenseService.GetTotalExpense(accountId);
@@ -36,7 +36,7 @@ namespace Aurum.Services.BallanceService
 
             return initialAmount - totalExpense + totalIncome;
         }
-        public async Task<decimal> GetBallance(int accountId, DateTime date)
+        public async Task<decimal> GetBalance(int accountId, DateTime date)
         {
             decimal initialAmount = await _accountService.GetInitialAmount(accountId);
             decimal totalExpense = await _expenseService.GetTotalExpense(accountId, date);

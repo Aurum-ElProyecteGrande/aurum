@@ -9,16 +9,16 @@ using Aurum.Services.ExpenseService;
 using Aurum.Services.Income;
 using Moq;
 
-namespace AurumTest.BallanceTests
+namespace AurumTest.BalanceTests
 {
     [TestFixture]
-    public class BallanceServiceTest
+    public class BalanceServiceTest
     {
         private Mock<IIncomeService> _incomeService;
         private Mock<IExpenseService> _expenseService;
         private Mock<IAccountService> _accountService;
 
-        private BallanceService _ballanceService;
+        private BalanceService _balanceService;
 
         [SetUp]
         public void Setup()
@@ -27,11 +27,11 @@ namespace AurumTest.BallanceTests
             _expenseService = new();
             _accountService = new();
 
-            _ballanceService = new(_incomeService.Object, _expenseService.Object, _accountService.Object);
+            _balanceService = new(_incomeService.Object, _expenseService.Object, _accountService.Object);
         }
 
         [Test]
-        public async Task CalculatesBallanceCorrectly()
+        public async Task CalculatesBalanceCorrectly()
         {
             decimal account = 100;
             decimal income = 20;
@@ -41,7 +41,7 @@ namespace AurumTest.BallanceTests
             _expenseService.Setup(x => x.GetTotalExpense(It.IsAny<int>())).ReturnsAsync(expense);
             _accountService.Setup(x => x.GetInitialAmount(It.IsAny<int>())).ReturnsAsync(account);
 
-            var result = _ballanceService.GetBallance(It.IsAny<int>()).Result;
+            var result = _balanceService.GetBalance(It.IsAny<int>()).Result;
 
             Assert.That(result, Is.EqualTo(account - expense + income));
 

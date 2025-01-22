@@ -6,12 +6,12 @@ namespace Aurum.Controllers.BallanceController
 {
     [ApiController]
     [Route("[controller]")]
-    public class BallanceController : ControllerBase
+    public class BalanceController : ControllerBase
     {
-        IBallanceService _ballanceService;
-        public BallanceController(IBallanceService ballanceService)
+        IBalanceService _balanceService;
+        public BalanceController(IBalanceService balanceService)
         {
-            _ballanceService = ballanceService;
+            _balanceService = balanceService;
         }
 
         [HttpGet("{accountId:int}")]
@@ -23,12 +23,12 @@ namespace Aurum.Controllers.BallanceController
 
                 if (date is not null)
                 {
-                    var validDate = _ballanceService.ValidateDate(date);
-                    ballance = await _ballanceService.GetBallance(accountId, validDate);
+                    var validDate = _balanceService.ValidateDate(date);
+                    ballance = await _balanceService.GetBalance(accountId, validDate);
                 }
                 else
                 {
-                    ballance = await _ballanceService.GetBallance(accountId);
+                    ballance = await _balanceService.GetBalance(accountId);
                 }
 
                 return Ok(ballance);

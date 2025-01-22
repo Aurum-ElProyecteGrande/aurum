@@ -26,7 +26,7 @@ builder.Services.AddScoped<IRegularIncomeRepo, RegularIncomeRepo>();
 builder.Services.AddScoped<IIncomeCategoryRepo, IncomeCategoryRepo>();
 builder.Services.AddScoped<IIncomeService, IncomeService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
-builder.Services.AddScoped<IBallanceService, BallanceService>();
+builder.Services.AddScoped<IBalanceService, BalanceService>();
 
 var app = builder.Build();
 
