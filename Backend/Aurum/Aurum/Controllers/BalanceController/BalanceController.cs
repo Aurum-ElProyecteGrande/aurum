@@ -15,23 +15,23 @@ namespace Aurum.Controllers.BallanceController
         }
 
         [HttpGet("{accountId:int}")]
-        public async Task<IActionResult> GetBallance(int accountId, [FromQuery] DateTime? date)
+        public async Task<IActionResult> GetBalance(int accountId, [FromQuery] DateTime? date)
         {
             try
             {
-                decimal ballance = 0;
+                decimal balance = 0;
 
                 if (date is not null)
                 {
                     var validDate = _balanceService.ValidateDate(date);
-                    ballance = await _balanceService.GetBalance(accountId, validDate);
+                    balance = await _balanceService.GetBalance(accountId, validDate);
                 }
                 else
                 {
-                    ballance = await _balanceService.GetBalance(accountId);
+                    balance = await _balanceService.GetBalance(accountId);
                 }
 
-                return Ok(ballance);
+                return Ok(balance);
             }
             catch (Exception ex)
             {
