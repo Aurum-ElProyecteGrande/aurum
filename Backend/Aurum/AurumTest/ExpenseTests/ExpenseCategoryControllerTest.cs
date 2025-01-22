@@ -1,5 +1,5 @@
 using Aurum.Controllers.ExpenseCategoryController;
-using Aurum.Models.CategoryDto;
+using Aurum.Models.CategoryDtos;
 using Aurum.Services.ExpenseCategoryService;
 using Microsoft.AspNetCore.Mvc;
 using Moq;

@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Aurum.Models.CustomJsonConverter;
+using Aurum.Models.RegularityEnum;
 using Aurum.Models.RegularExpenseDto;
 
 namespace AurumTest.ModelTests;

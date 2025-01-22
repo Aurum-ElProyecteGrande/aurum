@@ -1,4 +1,4 @@
-﻿using Aurum.Models.CategoryDTOs;
+﻿using Aurum.Models.CategoryDtos;
 using Aurum.Repositories.Income.IncomeCategory;
 using Aurum.Services.Income;
 using Microsoft.AspNetCore.Mvc;
