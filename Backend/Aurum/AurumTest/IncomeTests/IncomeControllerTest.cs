@@ -7,16 +7,20 @@ using Aurum.Controllers.Income;
 using Aurum.Models.IncomeDTOs;
 using Aurum.Repositories.Income.Income;
 using Aurum.Repositories.Income.RegularIncome;
+using Aurum.Repositories.Income.Income;
+using Aurum.Repositories.Income.RegularIncome;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using Aurum.Services.Income;
 
 namespace AurumTest.IncomeTests
-{
+{ 
     [TestFixture]
     public class IncomeControllerTest
     {
         private Mock<IIncomeRepo> _incomeRepo;
         private Mock<IRegularIncomeRepo> _regularIncomeRepo;
+        private Mock<IIncomeService> _incomeService;
         private IncomeController _controller;
 
         [SetUp]
@@ -24,7 +28,8 @@ namespace AurumTest.IncomeTests
         {
             _incomeRepo = new();
             _regularIncomeRepo = new();
-            _controller = new(_incomeRepo.Object, _regularIncomeRepo.Object);
+            _incomeService = new();
+            _controller = new(_incomeRepo.Object, _regularIncomeRepo.Object, _incomeService.Object);
         }
 
         [Test]

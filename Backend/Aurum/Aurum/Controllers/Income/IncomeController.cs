@@ -3,6 +3,7 @@ using Aurum.Models.IncomeDTOs;
 using System;
 using Aurum.Repositories.Income.Income;
 using Aurum.Repositories.Income.RegularIncome;
+using Aurum.Services.Income;
 
 namespace Aurum.Controllers.Income
 {
@@ -12,10 +13,12 @@ namespace Aurum.Controllers.Income
     {
         private IIncomeRepo _incomeRepo;
         private IRegularIncomeRepo _regularIncomeRepo;
-        public IncomeController(IIncomeRepo incomeRepo, IRegularIncomeRepo regularIncomeRepo)
+        private IIncomeService _incomeService;
+        public IncomeController(IIncomeRepo incomeRepo, IRegularIncomeRepo regularIncomeRepo, IIncomeService incomeService)
         {
             _incomeRepo = incomeRepo;
             _regularIncomeRepo = regularIncomeRepo;
+            _incomeService = incomeService;
         }
 
 
@@ -28,7 +31,9 @@ namespace Aurum.Controllers.Income
 
                 if (startDate is not null && endDate is not null)
                 {
-                    incomes = await _incomeRepo.GetAll(accountId, startDate, endDate);
+                    var (validStartDate, validEndDate) = _incomeService.ValidateDates(startDate, endDate);
+
+                    incomes = await _incomeRepo.GetAll(accountId, validStartDate, validEndDate);
                 }
                 else
                 {
