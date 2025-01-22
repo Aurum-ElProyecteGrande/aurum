@@ -69,14 +69,15 @@ public class RegularExpenseControllerTest
     public async Task Create_Valid_ReturnsOkResult()
     {
         // Arrange
-        var modifyExpenseDto = new ModifyRegularExpenseDto(0, 1, 1, null, "Expense 1", 100, DateTime.Now, Regularity.Daily);
+        var modifyExpenseDto = new ModifyRegularExpenseDto(1, 1, null, "Expense 1", 100, DateTime.Now, Regularity.Daily);
         var createdId = 1;
+        var regularId = 0;
         _serviceMock
-            .Setup(s => s.Create(modifyExpenseDto))
+            .Setup(s => s.Create(regularId, modifyExpenseDto))
             .ReturnsAsync(createdId);
 
         // Act
-        var result = await _controller.Create(modifyExpenseDto);
+        var result = await _controller.Create(regularId, modifyExpenseDto);
 
         // Assert
         var okResult = result as OkObjectResult;
@@ -88,11 +89,12 @@ public class RegularExpenseControllerTest
     public async Task Create_ExceptionThrows_ReturnsStatusCode500()
     {
         // Arrange
-        var modifyExpenseDto = new ModifyRegularExpenseDto(0, 1, 1, null, "Expense 1", 100, DateTime.Now, Regularity.Daily);
-        _serviceMock.Setup(s => s.Create(modifyExpenseDto)).ThrowsAsync(new Exception("An error occurred"));
+        var modifyExpenseDto = new ModifyRegularExpenseDto(1, 1, null, "Expense 1", 100, DateTime.Now, Regularity.Daily);
+        var regularId = 0;
+        _serviceMock.Setup(s => s.Create(regularId, modifyExpenseDto)).ThrowsAsync(new Exception("An error occurred"));
 
         // Act
-        var result = await _controller.Create(modifyExpenseDto);
+        var result = await _controller.Create(regularId, modifyExpenseDto);
 
         // Assert
         var statusCodeResult = result as ObjectResult;
@@ -104,14 +106,15 @@ public class RegularExpenseControllerTest
     public async Task Update_Valid_ReturnsOkResult()
     {
         // Arrange
-        var modifyExpenseDto = new ModifyRegularExpenseDto(1, 1, 1, null, "Updated Expense", 150, DateTime.Now, Regularity.Monthly);
+        var modifyExpenseDto = new ModifyRegularExpenseDto(1, 1, null, "Updated Expense", 150, DateTime.Now, Regularity.Monthly);
         var updatedId = 1;
+        var regularId = 1;
         _serviceMock
-            .Setup(s => s.Update(modifyExpenseDto))
+            .Setup(s => s.Update(regularId, modifyExpenseDto))
             .ReturnsAsync(updatedId);
 
         // Act
-        var result = await _controller.Update(modifyExpenseDto);
+        var result = await _controller.Update(regularId, modifyExpenseDto);
 
         // Assert
         var okResult = result as OkObjectResult;
@@ -123,13 +126,14 @@ public class RegularExpenseControllerTest
     public async Task Update_ExceptionThrows_ReturnsStatusCode500()
     {
         // Arrange
-        var modifyExpenseDto = new ModifyRegularExpenseDto(1, 1, 1, null, "Updated Expense", 150, DateTime.Now, Regularity.Monthly);
+        var modifyExpenseDto = new ModifyRegularExpenseDto(1, 1, null, "Updated Expense", 150, DateTime.Now, Regularity.Monthly);
+        var regularId = 1;
         _serviceMock
-            .Setup(s => s.Update(modifyExpenseDto))
+            .Setup(s => s.Update(regularId, modifyExpenseDto))
             .ThrowsAsync(new Exception("An error occurred"));
 
         // Act
-        var result = await _controller.Update(modifyExpenseDto);
+        var result = await _controller.Update(regularId, modifyExpenseDto);
 
         // Assert
         var statusCodeResult = result as ObjectResult;

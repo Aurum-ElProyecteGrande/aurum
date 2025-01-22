@@ -88,8 +88,9 @@ public class RegularExpenseServiceTest
     public async Task Create_Valid_ReturnsId()
     {
         // Arrange
-        var expenseDto = new ModifyRegularExpenseDto(0, 1, 1, null, "Expense 1", 100, DateTime.Now, Regularity.Monthly);
+        var expenseDto = new ModifyRegularExpenseDto(1, 1, null, "Expense 1", 100, DateTime.Now, Regularity.Monthly);
         var createdId = 1;
+        var regularId = 0;
         _categoryServiceMock
             .Setup(c => c.AcquireSubCategoryId(expenseDto.CategoryId, expenseDto.SubCategoryName))
             .ReturnsAsync(null!);
@@ -98,7 +99,7 @@ public class RegularExpenseServiceTest
             .ReturnsAsync(createdId);
 
         // Act
-        var result = await _service.Create(expenseDto);
+        var result = await _service.Create(regularId, expenseDto);
 
         // Assert
         Assert.That(result, Is.EqualTo(createdId));
@@ -108,13 +109,14 @@ public class RegularExpenseServiceTest
     public async Task Create_NoSubCategory_ThrowsException()
     {
         // Arrange
-        var expenseDto = new ModifyRegularExpenseDto(0, 1, 1, "NonExistingSubCategory", "Expense 1", 100, DateTime.Now, Regularity.Monthly);
+        var expenseDto = new ModifyRegularExpenseDto( 1, 1, "NonExistingSubCategory", "Expense 1", 100, DateTime.Now, Regularity.Monthly);
+        var regularId = 0;
         _categoryServiceMock
             .Setup(c => c.AcquireSubCategoryId(expenseDto.CategoryId, expenseDto.SubCategoryName))
             .ThrowsAsync(new KeyNotFoundException("SubCategory not found"));
 
         // Act & Assert
-        var ex = Assert.ThrowsAsync<KeyNotFoundException>(() => _service.Create(expenseDto));
+        var ex = Assert.ThrowsAsync<KeyNotFoundException>(() => _service.Create(regularId, expenseDto));
         Assert.That(ex.Message, Is.EqualTo("SubCategory not found"));
     }
 
@@ -122,8 +124,9 @@ public class RegularExpenseServiceTest
     public async Task Update_Valid_ReturnsUpdatedId()
     {
         // Arrange
-        var expenseDto = new ModifyRegularExpenseDto(1, 1, 1, null, "Updated Expense", 150, DateTime.Now, Regularity.Monthly);
+        var expenseDto = new ModifyRegularExpenseDto(1, 1, null, "Updated Expense", 150, DateTime.Now, Regularity.Monthly);
         var updatedId = 1;
+        var regularId = 0;
         _categoryServiceMock
             .Setup(c => c.AcquireSubCategoryId(expenseDto.CategoryId, expenseDto.SubCategoryName))
             .ReturnsAsync(null!);
@@ -132,7 +135,7 @@ public class RegularExpenseServiceTest
             .ReturnsAsync(updatedId);
 
         // Act
-        var result = await _service.Update(expenseDto);
+        var result = await _service.Update(regularId, expenseDto);
 
         // Assert
         Assert.That(result, Is.EqualTo(updatedId));
