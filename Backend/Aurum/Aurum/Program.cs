@@ -1,12 +1,18 @@
 using Aurum.Repositories.Income.Income;
 using Aurum.Repositories.Income.IncomeCategory;
 using Aurum.Repositories.Income.RegularIncome;
+using Aurum.Models.CustomJsonConverter;
+using Aurum.Models.RegularExpenseDto;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+	.AddJsonOptions(options => 
+	{ 
+		options.JsonSerializerOptions.Converters.Add(new CaseInsensitiveEnumConverter<Regularity>()); 
+	});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
