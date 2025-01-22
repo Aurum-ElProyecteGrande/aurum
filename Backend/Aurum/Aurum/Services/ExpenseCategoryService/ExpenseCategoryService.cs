@@ -1,4 +1,4 @@
-using Aurum.Models.CategoryDto;
+using Aurum.Models.CategoryDtos;
 using Aurum.Repositories.ExpenseCategoryRepository;
 
 namespace Aurum.Services.ExpenseCategoryService;

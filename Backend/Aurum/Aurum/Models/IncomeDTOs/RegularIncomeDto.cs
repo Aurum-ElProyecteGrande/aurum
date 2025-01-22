@@ -1,4 +1,5 @@
-﻿using Aurum.Models.CategoryDTOs;
+﻿using Aurum.Models.RegularityEnum;
+using Aurum.Models.CategoryDtos;
 
 namespace Aurum.Models.IncomeDTOs
 {

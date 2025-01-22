@@ -1,4 +1,4 @@
-﻿using Aurum.Models.CategoryDTOs;
+﻿using Aurum.Models.CategoryDtos;
 
 namespace Aurum.Repositories.Income.IncomeCategory
 {

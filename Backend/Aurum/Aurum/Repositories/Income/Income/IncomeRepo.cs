@@ -8,7 +8,7 @@ namespace Aurum.Repositories.Income.Income
         {
             throw new NotImplementedException();
         }
-        public async Task<List<IncomeDto>> GetAll(int accountId, DateTime? startDate, DateTime? endDate)
+        public async Task<List<IncomeDto>> GetAll(int accountId, DateTime startDate, DateTime endDate)
         {
             throw new NotImplementedException();
         }

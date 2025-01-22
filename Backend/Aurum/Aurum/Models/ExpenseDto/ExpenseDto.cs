@@ -1,11 +1,11 @@
 
 
-using Aurum.Models.CategoryDto;
+using Aurum.Models.CategoryDtos;
 
 namespace Aurum.Models.ExpenseDtos
 {
 	public record ExpenseDto(
-		CategoryDto.CategoryDto Category,
+		CategoryDto Category,
 		SubCategoryDto? Subcategory,
 		string Label,
 		decimal Amount,
