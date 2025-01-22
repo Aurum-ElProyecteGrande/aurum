@@ -3,6 +3,7 @@ using Aurum.Repositories.Income.IncomeCategory;
 using Aurum.Repositories.Income.RegularIncome;
 using Aurum.Models.CustomJsonConverter;
 using Aurum.Models.RegularExpenseDto;
+using Aurum.Models.RegularityEnum;
 
 var builder = WebApplication.CreateBuilder(args);
 

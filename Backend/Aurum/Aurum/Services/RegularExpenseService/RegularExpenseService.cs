@@ -28,20 +28,20 @@ public class RegularExpenseService(IRegularExpenseRepository repository,IExpense
 		return CreateRegularExpenseDtoList(rawExpenses, categories);
 	}
 
-	public async Task<int> Create(ModifyRegularExpenseDto expenseDto)
+	public async Task<int> Create(int regularId, ModifyRegularExpenseDto expenseDto)
 	{
 		var subCategoryId = string.IsNullOrEmpty(expenseDto.SubCategoryName) ? (int?)null :
 			await _categoryService.AcquireSubCategoryId(expenseDto.CategoryId,expenseDto.SubCategoryName);
-		var expense = CreateRawRegularExpenseDto(expenseDto, subCategoryId);
+		var expense = CreateRawRegularExpenseDto(expenseDto, regularId, subCategoryId);
 		
 		return await _repository.Create(expense); 
 	}
 
-	public async Task<int> Update(ModifyRegularExpenseDto expenseDto)
+	public async Task<int> Update(int regularId, ModifyRegularExpenseDto expenseDto)
 	{
 		var subCategoryId = string.IsNullOrEmpty(expenseDto.SubCategoryName) ? (int?)null :
 			await _categoryService.AcquireSubCategoryId(expenseDto.CategoryId,expenseDto.SubCategoryName);
-		var expense = CreateRawRegularExpenseDto(expenseDto, subCategoryId);
+		var expense = CreateRawRegularExpenseDto(expenseDto, regularId, subCategoryId);
 		
 		return await _repository.Update(expense); 
 	}
@@ -76,11 +76,12 @@ public class RegularExpenseService(IRegularExpenseRepository repository,IExpense
 	}
 	
 	private RawRegularExpenseDto CreateRawRegularExpenseDto(
-		ModifyRegularExpenseDto expense, 
+		ModifyRegularExpenseDto expense,
+		int regularId,
 		int? subCategoryId
 		) => 
 		new RawRegularExpenseDto(
-			expense.RegularId,
+			regularId,
 			expense.AccountId,
 			expense.CategoryId,
 			subCategoryId ?? null,

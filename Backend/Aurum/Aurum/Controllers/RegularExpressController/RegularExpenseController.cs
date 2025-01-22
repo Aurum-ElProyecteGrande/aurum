@@ -8,8 +8,9 @@ public class RegularExpenseController(IRegularExpenseService service):Controller
 {
 	private readonly IRegularExpenseService _service = service;
 
-	[HttpGet("/expenses/regulars/{accountId:int}&{userId:int}")]
-	public async Task<IActionResult> GetAll([FromRoute]int accountId, [FromRoute]int userId)
+	//TODO userId should be replaced from the authentication context
+	[HttpGet("/expenses/regulars/{accountId:int}")]
+	public async Task<IActionResult> GetAll([FromRoute]int accountId, [FromQuery]int userId)
 	{
 		try
 		{
@@ -23,12 +24,12 @@ public class RegularExpenseController(IRegularExpenseService service):Controller
 		}
 	}
 
-	[HttpPost("/expenses/regulars")]
-	public async Task<IActionResult> Create([FromBody]ModifyRegularExpenseDto expense)
+	[HttpPost("/expenses/regulars/")]
+	public async Task<IActionResult> Create([FromQuery]int regularId,[FromBody]ModifyRegularExpenseDto expense)
 	{
 		try
 		{
-			var id = await _service.Create(expense);
+			var id = await _service.Create(regularId,expense);
 			return Ok(id);
 		}
 		catch (Exception e)
@@ -39,11 +40,11 @@ public class RegularExpenseController(IRegularExpenseService service):Controller
 	}
 	
 	[HttpPut("/expenses/regulars/{regularId:int}")]
-	public async Task<IActionResult> Update([FromBody]ModifyRegularExpenseDto expense)
+	public async Task<IActionResult> Update([FromRoute]int regularId,[FromBody]ModifyRegularExpenseDto expense)
 	{
 		try
 		{
-			var id = await _service.Update(expense);
+			var id = await _service.Update(regularId, expense);
 			return Ok(id);
 		}
 		catch (Exception e)

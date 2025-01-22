@@ -9,8 +9,9 @@ public class ExpenseController(IExpenseService service):ControllerBase
 {
 	private readonly IExpenseService _service = service;
 
-	[HttpGet("/expenses/{accountId:int}&{userId:int}")]
-	public async Task<IActionResult> GetAll([FromRoute]int accountId, [FromRoute]int userId)
+	//TODO userId should be replaced from the authentication context
+	[HttpGet("/expenses/{accountId:int}")]
+	public async Task<IActionResult> GetAll([FromRoute]int accountId, [FromQuery]int userId)
 	{
 		try
 		{
@@ -23,8 +24,10 @@ public class ExpenseController(IExpenseService service):ControllerBase
 			return StatusCode(500, e.Message);
 		}
 	}
-	[HttpGet("/expenses/{accountId:int}&{userId:int}&{startDate:DateTime}&{endDate:DateTime}")]
-	public async Task<IActionResult> GetAll([FromRoute]int accountId, [FromRoute]int userId, [FromRoute]DateTime startDate, [FromRoute]DateTime endDate)
+	
+	//TODO userId should be replaced from the authentication context
+	[HttpGet("/expenses/{accountId:int}/{startDate:datetime}-{endDate:datetime}")]
+	public async Task<IActionResult> GetAllWithDate([FromRoute]int accountId, [FromRoute]DateTime startDate, [FromRoute]DateTime endDate, [FromQuery]int userId)
 	{
 		try
 		{

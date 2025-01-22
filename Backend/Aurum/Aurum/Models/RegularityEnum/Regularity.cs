@@ -1,4 +1,4 @@
-﻿namespace Aurum.Models.RegularityEnum
+namespace Aurum.Models.RegularityEnum
 {
     public enum Regularity
     {

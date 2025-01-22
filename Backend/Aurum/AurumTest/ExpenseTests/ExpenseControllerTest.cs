@@ -79,7 +79,7 @@ public class ExpenseControllerTest
             .ReturnsAsync(expenses);
 
         // Act
-        var result = await _controller.GetAll(1, 1, DateTime.Now.AddDays(-1), DateTime.Now);
+        var result = await _controller.GetAllWithDate(1, DateTime.Now.AddDays(-1), DateTime.Now, 1);
 
         // Assert
         var okResult = result as OkObjectResult;
