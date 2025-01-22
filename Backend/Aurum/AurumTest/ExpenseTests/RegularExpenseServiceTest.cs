@@ -1,7 +1,7 @@
 using Aurum.Controllers.RegularExpressController;
 using Aurum.Models.CategoryDto;
-using Aurum.Models.Regular_enum;
 using Aurum.Models.RegularExpenseDto;
+using Aurum.Models.RegularityEnum;
 using Aurum.Repositories.RegularExpenseRepository;
 using Aurum.Services.ExpenseCategoryService;
 using Aurum.Services.RegularExpenseService;
