@@ -1,4 +1,4 @@
-namespace Aurum.Models.RegularExpenseDto;
+namespace Aurum.Models.Regular_enum;
 
 public enum Regularity
 {

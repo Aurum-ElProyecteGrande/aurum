@@ -1,4 +1,5 @@
 using Aurum.Models.CustomJsonConverter;
+using Aurum.Models.Regular_enum;
 using Aurum.Models.RegularExpenseDto;
 
 var builder = WebApplication.CreateBuilder(args);
