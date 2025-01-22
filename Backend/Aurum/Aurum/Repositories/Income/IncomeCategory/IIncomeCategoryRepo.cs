@@ -1,6 +1,6 @@
 ﻿using Aurum.Models.CategoryDTOs;
 
-namespace Aurum.Repositories.Income
+namespace Aurum.Repositories.Income.IncomeCategory
 {
     public interface IIncomeCategoryRepo
     {

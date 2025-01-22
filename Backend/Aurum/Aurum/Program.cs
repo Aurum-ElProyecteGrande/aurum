@@ -1,4 +1,6 @@
-using Aurum.Repositories.Income;
+using Aurum.Repositories.Income.Income;
+using Aurum.Repositories.Income.IncomeCategory;
+using Aurum.Repositories.Income.RegularIncome;
 
 var builder = WebApplication.CreateBuilder(args);
 

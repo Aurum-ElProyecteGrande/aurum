@@ -1,5 +1,5 @@
 ﻿using Aurum.Models.CategoryDTOs;
-using Aurum.Repositories.Income;
+using Aurum.Repositories.Income.IncomeCategory;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aurum.Controllers.Categories

@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Aurum.Models.IncomeDTOs;
 using System;
-using Aurum.Repositories.Income;
+using Aurum.Repositories.Income.Income;
+using Aurum.Repositories.Income.RegularIncome;
 
 namespace Aurum.Controllers.Income
 {
@@ -19,7 +20,7 @@ namespace Aurum.Controllers.Income
 
 
         [HttpGet("{accountId:int}")]
-        public async Task<IActionResult> GetAllByDate(int accountId, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
+        public async Task<IActionResult> GetAll(int accountId, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
         {
             try
             {

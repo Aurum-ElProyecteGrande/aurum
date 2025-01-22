@@ -1,5 +1,4 @@
 ﻿using Aurum.Models.CategoryDTOs;
-using Aurum.Models;
 
 namespace Aurum.Models.IncomeDTOs
 {

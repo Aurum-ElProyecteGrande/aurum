@@ -1,6 +1,6 @@
 ﻿using Aurum.Models.IncomeDTOs;
 
-namespace Aurum.Repositories.Income
+namespace Aurum.Repositories.Income.Income
 {
     public class IncomeRepo : IIncomeRepo
     {

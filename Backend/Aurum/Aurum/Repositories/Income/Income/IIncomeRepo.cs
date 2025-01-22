@@ -1,7 +1,7 @@
 ﻿using Aurum.Models.IncomeDTOs;
 using System;
 
-namespace Aurum.Repositories.Income
+namespace Aurum.Repositories.Income.Income
 {
     public interface IIncomeRepo
     {

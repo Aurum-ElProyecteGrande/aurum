@@ -5,7 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Aurum.Controllers.Income;
 using Aurum.Models.IncomeDTOs;
-using Aurum.Repositories.Income;
+using Aurum.Repositories.Income.Income;
+using Aurum.Repositories.Income.RegularIncome;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
