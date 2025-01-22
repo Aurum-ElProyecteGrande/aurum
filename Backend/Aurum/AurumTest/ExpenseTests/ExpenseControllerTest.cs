@@ -1,5 +1,5 @@
 using Aurum.Controllers.ExpenseController;
-using Aurum.Models.CategoryDto;
+using Aurum.Models.CategoryDtos;
 using Aurum.Models.ExpenseDto;
 using Aurum.Models.ExpenseDtos;
 using Aurum.Services.ExpenseService;

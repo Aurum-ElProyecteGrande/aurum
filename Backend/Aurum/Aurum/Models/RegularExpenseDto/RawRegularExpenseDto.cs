@@ -1,6 +1,7 @@
 using Aurum.Models.RegularityEnum;
 
 namespace Aurum.Models.RegularExpenseDto;
+using Aurum.Models.RegularityEnum;
 
 public record RawRegularExpenseDto(
 	int RegularId,

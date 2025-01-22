@@ -1,8 +1,10 @@
-namespace Aurum.Models.RegularityEnum;
-
-public enum Regularity
+namespace Aurum.Models.RegularityEnum
 {
-	Daily,
-	Weekly,
-	Monthly,
+    public enum Regularity
+    {
+        Daily,
+        Weekly,
+        Monthly
+    }
+
 }
