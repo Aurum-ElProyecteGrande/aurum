@@ -1,8 +1,17 @@
-﻿namespace Aurum.Services.Income
+﻿using Aurum.Repositories.Income.Income;
+
+namespace Aurum.Services.Income
 {
     public class IncomeService : IIncomeService
     {
-        public (DateTime, DateTime) ValidateDates (DateTime? startDate, DateTime? endDate)
+        IIncomeRepo _incomeRepo;
+
+        public IncomeService(IIncomeRepo incomeRepo)
+        {
+            _incomeRepo = incomeRepo;
+        }
+
+        public (DateTime, DateTime) ValidateDates(DateTime? startDate, DateTime? endDate)
         {
             var validStartDate = new DateTime();
             var validEndDate = new DateTime();
@@ -15,5 +24,19 @@
             return (validStartDate, validEndDate);
         }
 
+        public async Task<decimal> GetTotalIncome(int accountId)
+        {
+            var incomes = await _incomeRepo.GetAll(accountId);
+            return incomes
+                .Select(i => i.Amount)
+                .Sum();
+        }
+        public async Task<decimal> GetTotalIncome(int accountId, DateTime endDate)
+        {
+            var incomes = await _incomeRepo.GetAll(accountId, endDate);
+            return incomes
+                .Select(i => i.Amount)
+                .Sum();
+        }
     }
 }
