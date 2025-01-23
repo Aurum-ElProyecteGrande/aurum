@@ -64,5 +64,27 @@ export const layouts = {
             charts2x1[1],
             charts2x1[2]
         ]
+    },
+    "detailed": {
+        possibleCharts: [
+            charts2x1,  //.detailed-1
+            charts2x1,  //.detailed-2
+            charts2x1,  //.detailed-3
+            charts3x3,  //.detailed-4
+            charts3x1,  //.detailed-5
+            charts3x1,  //.detailed-6
+            charts3x1,  //.detailed-7
+            charts3x1   //.detailed-2
+        ],
+        initialCharts: [
+            charts2x1[0],
+            charts2x1[1],
+            charts2x1[2],
+            charts3x3[0],
+            charts3x1[0],
+            charts3x1[0],
+            charts3x1[0],
+            charts3x1[0]
+        ]
     }
 }
