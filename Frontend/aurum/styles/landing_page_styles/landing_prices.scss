@@ -1,0 +1,73 @@
+.landing-prices {
+    padding-block: 5rem;
+    background: url('../../imgs/bg.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+
+    @include respond(phone) {
+        background: none;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 3.75rem;
+        text-transform: capitalize;
+        font-size: 2.1rem;
+    }
+
+    &-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 3rem;
+
+        @include respond(tablet-portrait){
+            grid-template-columns: 1fr;
+            margin: 5rem;
+        }
+    }
+
+    &-card {
+        background-color: $primary;
+        box-shadow: $background-shade 0px 12px 24px 0px;
+        padding-block: 3.75rem;
+        border-radius: 2rem;
+        border: 1px solid $text-shade;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        img {
+            width: 7rem;
+            height: auto;
+        }
+
+        h3 {
+            margin-top: 1.5rem;
+            font-size: 1.7rem;
+            font-weight: 700;
+        }
+
+        span {
+            font-size: 1.55rem;
+            display: block;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(0deg, $accent 0%, $text 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+
+            // Add support for Firefox
+            color: transparent;
+            mask-image: linear-gradient(0deg, $accent 0%, $text 100%);
+            -webkit-mask-image: linear-gradient(0deg, $accent 0%, $text 100%);
+        }
+    }
+
+    &-card:nth-child(2){
+        transform: scale(1.1)
+    }
+
+   
+}
