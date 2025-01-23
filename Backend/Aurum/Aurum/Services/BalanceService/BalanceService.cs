@@ -2,7 +2,7 @@
 using Aurum.Services.ExpenseService;
 using Aurum.Services.Income;
 
-namespace Aurum.Services.BallanceService
+namespace Aurum.Services.BalanceService
 {
     public class BalanceService : IBalanceService
     {

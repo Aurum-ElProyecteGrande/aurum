@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Aurum.Services.AccountService;
-using Aurum.Services.BallanceService;
+using Aurum.Services.BalanceService;
 using Aurum.Services.ExpenseService;
 using Aurum.Services.Income;
 using Moq;
