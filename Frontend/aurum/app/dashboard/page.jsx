@@ -22,10 +22,12 @@ export default function DashboardPage() {
 
   const handleChangeChartClick = (event, segmentIndex, possibleCharts) => {
     let updatedChoosenCharts = [...choosenCharts]
-    let chartIndex = parseInt(event.target.value)
-    updatedChoosenCharts[segmentIndex] = possibleCharts[chartIndex]
+    let chartName = event.target.value
+    updatedChoosenCharts[segmentIndex] = possibleCharts.find(c => c.name === chartName)
     setChoosenCharts(updatedChoosenCharts)
   }
+
+  console.log(choosenCharts)
 
   return (
     <div className="dashboard page">
@@ -40,9 +42,9 @@ export default function DashboardPage() {
             {isEditMode &&
               <form className="change-chart-form">
                 <label>change chart</label>
-                <select name="change-chart" onChange={(e) => handleChangeChartClick(e, segmentIndex, possibleCharts)}>
-                  {possibleCharts.map((chart, chartIndex) => (
-                    <option name={chart.name} key={chart.name} value={chartIndex} >{chart.name}</option>
+                <select value={choosenCharts[segmentIndex].name} name="change-chart" onChange={(e) => handleChangeChartClick(e, segmentIndex, possibleCharts)}>
+                  {possibleCharts.map(chart => (
+                    <option name={chart.name} key={chart.name} value={chart.name} >{chart.name}</option>
                   ))}
                 </select>
               </form>}
