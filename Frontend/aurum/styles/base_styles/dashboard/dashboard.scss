@@ -1,0 +1,147 @@
+@import "../variables.scss";
+
+.dashboard {
+
+    .header {
+        display: flex;
+        flex-direction: row;
+        width: 100vw;
+        height: 10vh;
+        background-color: $primary;
+
+        .menu-button {
+            position: absolute;
+            right: 2vw;
+            align-self: center;
+            background-color: inherit;
+            border: none;
+            color: $text;
+            font-size: 40px;
+            rotate: 90deg;
+            cursor: pointer;
+        }
+    }
+
+    .hamburger-menu {
+        position: absolute;
+        right: 0;
+        z-index: 1;
+        background-color: $background;
+        display: flex;
+        flex-direction: column;
+
+        button {
+            width: 10vw;
+            height: 3vh;
+            cursor: pointer;
+            border-radius: 0;
+            border: none;
+        }
+        button:hover {
+            background-color: $accent;
+            color: $primary
+        }
+
+        .layout-menu {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            right: 100%;
+            bottom: 3vh;
+        }
+    }
+}
+
+.dashboard-container {
+    display: grid;
+    position: absolute;
+    top: 10vh;
+    left: 16vw;
+    width: 84vw;
+    height: 90vh;
+    grid-template-columns: repeat(6, 14vw); 
+    grid-template-rows: repeat(5, 18vh); 
+}
+
+.chart-container {
+    border: 1px solid $primary;
+    border-radius: 16px;
+    margin: 4px;
+    padding: 8px;
+}
+
+//##layouts
+//#basic
+.basic-1 {
+    grid-column: 1/3;
+    grid-row: 1;
+}
+.basic-2 {
+    grid-column: 3/5;
+    grid-row: 1;
+}
+.basic-3 {
+    grid-column: 5/7;
+    grid-row: 1;
+}
+.basic-4 {
+    grid-column: 1/4;
+    grid-row: 2/5;
+}
+.basic-5 {
+    grid-column: 4/7;
+    grid-row: 2/4;
+}
+.basic-6 {
+    grid-column: 1/4;
+    grid-row: 5/6;
+}
+.basic-7 {
+    grid-column: 4/7;
+    grid-row: 4/6;
+}
+
+//#var2
+.var2-1 {
+    grid-column: 1/4;
+    grid-row: 1;
+}
+
+.var2-2 {
+    grid-column: 4/7;
+    grid-row: 1;
+}
+
+.var2-3 {
+    grid-column: 1/4;
+    grid-row: 2/4;
+}
+
+.var2-4 {
+    grid-column: 4/7;
+    grid-row: 2/5;
+}
+
+.var2-5 {
+    grid-column: 1/4;
+    grid-row: 4/5;
+}
+
+.var2-6 {
+    grid-column: 1/3;
+    grid-row: 5/6;
+}
+
+.var2-7 {
+    grid-column: 3/5;
+    grid-row: 5/6;
+}
+.var2-8 {
+    grid-column: 5/7;
+    grid-row: 5/6;
+}
+
+.change-chart-form {
+    position: relative;
+    top: 5vh;
+}
