@@ -5,11 +5,10 @@ export default function ChangeChartForm({ choosenCharts, segmentIndex, possibleC
         let chartName = event.target.value
         updatedChoosenCharts[segmentIndex] = possibleCharts.find(c => c.name === chartName)
         setChoosenCharts(updatedChoosenCharts)
-      }
+    }
 
     return (
         <form className="change-chart-form">
-            <label>change chart</label>
             <select value={choosenCharts[segmentIndex].name} name="change-chart" onChange={(e) => handleChangeChartClick(e, segmentIndex, possibleCharts)}>
                 {possibleCharts.map(chart => (
                     <option name={chart.name} key={chart.name} value={chart.name} >{chart.name}</option>

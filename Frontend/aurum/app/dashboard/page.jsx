@@ -29,7 +29,7 @@ export default function DashboardPage() {
       }
       <div className="dashboard-container">
         {possibleChartsBySegment.map((possibleCharts, segmentIndex) => (
-          <div key={`${possibleCharts}-${segmentIndex}`} className={`${choosenLayout}-${segmentIndex + 1} chart-container`}>
+          <div key={`${possibleCharts}-${segmentIndex}`} className={`${choosenLayout}-${segmentIndex + 1} chart-container ${isEditMode && "edit-mode"}`}>
             {choosenCharts[segmentIndex].chart}
             {isEditMode &&
               <ChangeChartForm choosenCharts={choosenCharts} segmentIndex={segmentIndex} possibleCharts={possibleCharts} setChoosenCharts={setChoosenCharts} />
