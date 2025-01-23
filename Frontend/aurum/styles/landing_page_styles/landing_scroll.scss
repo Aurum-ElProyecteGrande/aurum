@@ -1,0 +1,27 @@
+.landing-scroll{
+    padding-block: 5rem;
+    overflow: hidden;
+    background-color: $background-shade;
+    
+    &-container{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 3rem;
+        animation: scroll 15s linear infinite;
+    }
+
+    img{
+        width: 11rem;
+        height: auto;
+    }
+}
+
+@keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
