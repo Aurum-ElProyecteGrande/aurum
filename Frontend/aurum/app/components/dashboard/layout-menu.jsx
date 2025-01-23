@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { layouts } from "../../../scripts/dashboard_scripts/dashboard_scripts"
 
-export default function LayoutMenu({ setChoosenLayout }) {
+export default function LayoutMenu({ setChoosenLayout, setIsLayoutMenu }) {
 
     const [layoutList, setLayoutList] = useState([])
 
@@ -16,7 +16,7 @@ export default function LayoutMenu({ setChoosenLayout }) {
     }, [layouts])
 
     return (
-        <div className="layout-menu">
+        <div onMouseOver={() => setIsLayoutMenu(true)} onMouseLeave={() => setIsLayoutMenu(false)} className="layout-menu">
             {layoutList.map(layoutName => (
                 <button key={layoutName} onClick={() => setChoosenLayout(layoutName)}>{layoutName}</button>
             ))}

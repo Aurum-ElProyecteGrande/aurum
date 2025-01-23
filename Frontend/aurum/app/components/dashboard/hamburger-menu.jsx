@@ -8,9 +8,9 @@ export default function HamburgerMenu({ isEditMode, setIsEditMode, choosenLayout
     return (
         <div className="hamburger-menu">
             <button onClick={() => setIsEditMode(!isEditMode)}>{isEditMode ? "Normal mode" : "Edit mode"}</button>
-            <button onClick={() => setIsLayoutMenu(!isLayoutMenu)}>Change layout</button>
+            <button onMouseOver={() => setIsLayoutMenu(true)} onMouseLeave={() => setIsLayoutMenu(false)} className={isLayoutMenu ? "active" : ""}>Change layout</button>
             {isLayoutMenu &&
-                <LayoutMenu choosenLayout={choosenLayout} setChoosenLayout={setChoosenLayout} />
+                <LayoutMenu choosenLayout={choosenLayout} setChoosenLayout={setChoosenLayout} setIsLayoutMenu={setIsLayoutMenu} />
             }
         </div>
     )
