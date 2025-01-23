@@ -1,8 +1,13 @@
+import { useState } from "react"
+
 export default function Header({ setIsHamburgerOpen, isHamburgerOpen }) {
 
-    return (
-      <div className="header">
-        <button className="menu-button" onClick={() => setIsHamburgerOpen(!isHamburgerOpen)}> ... </button>
-      </div>
-    )
+  const [username, setUsername] = useState("username")
+
+  return (
+    <div className="header">
+      <div className="welcome">Hi {username}.</div>
+      <button className="menu-button" onClick={() => setIsHamburgerOpen(!isHamburgerOpen)}> ... </button>
+    </div>
+  )
 }

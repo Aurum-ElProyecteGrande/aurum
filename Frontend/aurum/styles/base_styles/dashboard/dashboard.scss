@@ -15,16 +15,25 @@
 
 .dashboard {
     .header {
+        position: relative;
         display: flex;
         flex-direction: row;
-        width: 100vw;
+        justify-content: space-between;
+        width: 84vw;
+        left: 16vw;
         height: 10vh;
         background-color: $primary;
 
+        .welcome{
+            height: 100%;
+            width: 15vw;
+            text-align: center;
+            align-content: center;
+            font-size: 5vh;
+        }
+
         .menu-button {
-            position: absolute;
-            right: 2vw;
-            align-self: center;
+            align-self: center;        
             background-color: inherit;
             border: none;
             color: $text;
