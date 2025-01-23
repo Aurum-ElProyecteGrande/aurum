@@ -1,10 +1,10 @@
-import Chart1 from "../../app/components/charts/chart1";
-import Chart2 from "../../app/components/charts/chart2";
-import Chart3 from "../../app/components/charts/chart3";
-import Chart4 from "../../app/components/charts/chart4";
-import Chart5 from "../../app/components/charts/chart5";
-import Chart6 from "../../app/components/charts/chart6";
-import Chart7 from "../../app/components/charts/chart7";
+import Chart1 from "../../app/components/dashboard/charts/chart1";
+import Chart2 from "../../app/components/dashboard/charts/chart2";
+import Chart3 from "../../app/components/dashboard/charts/chart3";
+import Chart4 from "../../app/components/dashboard/charts/chart4";
+import Chart5 from "../../app/components/dashboard/charts/chart5";
+import Chart6 from "../../app/components/dashboard/charts/chart6";
+import Chart7 from "../../app/components/dashboard/charts/chart7";
 
 const charts2x1 = [
     { name: "chart1", chart: <Chart1 /> },

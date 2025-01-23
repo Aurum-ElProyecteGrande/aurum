@@ -9,6 +9,7 @@
     background-color: $background;
     
     button {
+        border: none;
         font-family: $font;
     }
 }
@@ -35,7 +36,7 @@
         .menu-button-section {
             justify-content: flex-end;
         }
-        
+
         p{
             text-align: center;
             align-content: center;
