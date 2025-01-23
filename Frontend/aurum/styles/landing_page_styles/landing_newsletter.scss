@@ -1,0 +1,56 @@
+.landing-newsletter {
+    padding-block: 5rem;
+    text-align: center;
+    background: url('../../imgs/bg.svg');
+    background-repeat: no-repeat;
+
+    h2 {
+        font-size: 2.5rem;
+        line-height: 1.25;
+        text-transform: capitalize;
+
+        @include respond(phone) {
+            font-size: 2rem;
+        }
+    }
+
+    p {
+        margin-block: 1rem 2rem;
+        width: 75%;
+        margin-inline: auto;
+
+        @include respond(phone) {
+            width: 100%;
+        }
+    }
+
+    form {
+        display: flex;
+        padding: 0.75rem;
+        width: fit-content;
+        margin-inline: auto;
+        gap: 7.85rem;
+        border: 2px solid $text-shade;
+        background-color: $background-shade;
+        
+        @include respond(phone) {
+            gap: 1.5rem;
+        }
+    }
+
+    input {
+        background: transparent;
+        color: $text;
+        border: none;
+        padding-left: 0.75rem;
+        width: 17.5rem;
+
+        &:focus {
+            outline: none;
+        }
+
+        @include respond(phone) {
+            width: auto;
+        }
+    }
+}
