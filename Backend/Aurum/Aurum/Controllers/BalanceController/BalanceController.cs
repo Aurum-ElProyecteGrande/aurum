@@ -2,7 +2,7 @@
 using Aurum.Services.BalanceService;
 using Aurum.Models.IncomeDTOs;
 
-namespace Aurum.Controllers.BallanceController
+namespace Aurum.Controllers.BalanceController
 {
     [ApiController]
     [Route("[controller]")]
