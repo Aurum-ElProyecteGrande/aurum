@@ -3,6 +3,7 @@ using Aurum.Models.IncomeDTOs;
 using System;
 using Aurum.Services.IncomeServices;
 using Aurum.Services.RegularIncomeServices;
+using Aurum.Data.Entities;
 
 namespace Aurum.Controllers.IncomeControllers
 {
@@ -121,12 +122,12 @@ namespace Aurum.Controllers.IncomeControllers
             }
         }
 
-        [HttpPut("regulars/{regularId:int}")]
-        public async Task<IActionResult> UpdateRegular(int regularId, ModifyRegularIncomeDto regularIncome)
+        [HttpPut("regulars")]
+        public async Task<IActionResult> UpdateRegular(RegularIncome regularIncome)
         {
             try
             {
-                var regularIncomeId = await _regularIncomeService.UpdateRegular(regularId, regularIncome);
+                var regularIncomeId = await _regularIncomeService.UpdateRegular(regularIncome);
 
                 if (regularIncomeId == 0) throw new InvalidOperationException ("Invalid regular income input");
 

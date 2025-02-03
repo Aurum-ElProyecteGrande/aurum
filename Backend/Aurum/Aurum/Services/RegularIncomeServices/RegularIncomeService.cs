@@ -18,9 +18,9 @@ namespace Aurum.Services.RegularIncomeServices
         {
             return await _regularIncomeRepo.CreateRegular(income);
         }
-        public async Task<int> UpdateRegular(int regularId, RegularIncome regularIncome)
+        public async Task<int> UpdateRegular(RegularIncome regularIncome)
         {
-            return await _regularIncomeRepo.UpdateRegular(regularId, regularIncome);
+            return await _regularIncomeRepo.UpdateRegular(regularIncome);
         }
         public async Task<bool> DeleteRegular(int regularId)
         {
