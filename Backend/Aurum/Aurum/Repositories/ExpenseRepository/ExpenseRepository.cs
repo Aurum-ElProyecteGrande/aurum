@@ -1,31 +1,55 @@
+using Aurum.Data.Context;
 using Aurum.Models.ExpenseDto;
+using Microsoft.EntityFrameworkCore;
 
 namespace Aurum.Repositories.ExpenseRepository;
 
-public class ExpenseRepository: IExpenseRepository
+public class ExpenseRepository(AurumContext aurumContext): IExpenseRepository
 {
-	public Task<List<Expense>> GetAll(int accountId)
+	private AurumContext _context = aurumContext;
+
+	public async Task<List<Expense>> GetAll(int accountId) =>
+		await _context.Expenses
+			.Where(e => e.AccountId == accountId)
+			.ToListAsync(); 
+
+	public async Task<List<Expense>> GetAll(int accountId, DateTime endDate) =>
+		await _context.Expenses
+			.Where(e => e.AccountId == accountId 
+			            && e.Date <= endDate)
+			.ToListAsync(); 
+
+	public async Task<List<Expense>> GetAll(int accountId, DateTime startDate, DateTime endDate) =>
+		await _context.Expenses
+			.Where(e => e.AccountId == accountId &&
+			            e.Date >= startDate &&
+			            e.Date <= endDate)
+			.ToListAsync(); 
+
+	public async Task<int> Create(Expense expense)
 	{
-		throw new NotImplementedException();
+		_context.Expenses.Add(expense);
+		await _context.SaveChangesAsync();
+
+		return expense.ExpenseId;
 	}
 
-	public Task<List<Expense>> GetAll(int accountId, DateTime endDate)
+	public async Task<bool> Delete(int expenseId)
 	{
-		throw new NotImplementedException();
-	}
-
-	public Task<List<Expense>> GetAll(int accountId, DateTime startDate, DateTime endDate)
-	{
-		throw new NotImplementedException();
-	}
-
-	public Task<int> Create(Expense expense)
-	{
-		throw new NotImplementedException();
-	}
-
-	public Task<bool> Delete(int expenseId)
-	{
-		throw new NotImplementedException();
+		try
+		{
+			var expense = new Expense() { ExpenseId = expenseId };
+			
+			_context.Entry(expense).State = EntityState.Deleted;
+			
+			await _context.SaveChangesAsync();
+			
+			return true;
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine(e);
+			throw new KeyNotFoundException("Recipe not found");
+		}
 	}
 }

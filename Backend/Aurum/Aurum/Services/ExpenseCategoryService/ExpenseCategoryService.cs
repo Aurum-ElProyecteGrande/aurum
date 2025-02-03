@@ -1,3 +1,4 @@
+using Aurum.Data.Entities;
 using Aurum.Models.CategoryDtos;
 using Aurum.Repositories.ExpenseCategoryRepository;
 
@@ -10,8 +11,8 @@ public class ExpenseCategoryService(IExpenseCategoryRepository repository): IExp
 	public async Task<Dictionary<CategoryDto, List<SubCategoryDto>>> GetAllExpenseCategories(int userId)
 	{
 		// Retrieve categories and subcategories
-		var categories = await _repository.GetAllCategory();
-		var subCategories = await _repository.GetAllSubCategory(userId);
+		var categories = await GetAllCategories();
+		var subCategories = await GetAllSubCategories(userId);
 
 		// Validate inputs
 		if (categories.Count == 0 || subCategories.Count == 0)
@@ -37,15 +38,29 @@ public class ExpenseCategoryService(IExpenseCategoryRepository repository): IExp
 		return subCategoryId ?? throw new InvalidOperationException("Failed to acquire SubCategoryId.");
 	}
 
-	private async Task<List<CategoryDto>> GetAllCategories() => 
-		await _repository.GetAllCategory();
+	private async Task<List<CategoryDto>> GetAllCategories()
+	{
+		var categories = await _repository.GetAllCategory();
+		
+		return categories.Select(CreateCategoryDto).ToList();
+	}
 
-	private async Task<List<SubCategoryDto>> GetAllSubCategories(int userId) => 
-		await _repository.GetAllSubCategory(userId);
+	private async Task<List<SubCategoryDto>> GetAllSubCategories(int userId)
+	{
+		var categories = await _repository.GetAllSubCategory(userId);
+		
+		return categories.Select(CreateSubCategoryDto).ToList();
+	}
 	
 	private async Task<int?> GetSubCategoryId(int categoryId,string subCategoryName) => 
 		await _repository.GetSubCategoryByName(categoryId, subCategoryName);
 	
 	private async Task<int?> CreateSubCategory(int categoryId,string subCategoryName) =>
 		await _repository.CreateSubCategory(categoryId, subCategoryName);
+
+	private CategoryDto CreateCategoryDto(ExpenseCategory expenseCategory) => 
+		new CategoryDto(expenseCategory.Name, expenseCategory.ExpenseCategoryId);
+	
+	private SubCategoryDto CreateSubCategoryDto(ExpenseSubCategory expenseSubCategory) => 
+		new SubCategoryDto(expenseSubCategory.Name, expenseSubCategory.ExpenseSubCategoryId,expenseSubCategory.ExpenseCategoryId);
 }
