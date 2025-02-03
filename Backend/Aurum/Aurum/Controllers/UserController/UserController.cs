@@ -1,3 +1,4 @@
+using Aurum.Data.Entities;
 using Aurum.Models.UserDto;
 using Aurum.Repositories.UserRepository;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +32,7 @@ namespace Aurum.Controllers.UserController;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ModifyUserDto user)
+        public async Task<IActionResult> Create(User user)
         {
             try
             {
@@ -47,7 +48,7 @@ namespace Aurum.Controllers.UserController;
         }
 
         [HttpPut("{userId:int}")]
-        public async Task<IActionResult> Update([FromRoute] int userId, ModifyUserDto user)
+        public async Task<IActionResult> Update([FromRoute] int userId, User user)
         {
             try
             {

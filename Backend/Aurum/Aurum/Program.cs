@@ -1,11 +1,12 @@
-using Aurum.Repositories.Income.Income;
-using Aurum.Repositories.Income.IncomeCategory;
+using Aurum.Data.Context;
 using Aurum.Repositories.Income.RegularIncome;
 using Aurum.Models.CustomJsonConverter;
 using Aurum.Models.RegularExpenseDto;
 using Aurum.Models.RegularityEnum;
 using Aurum.Repositories.ExpenseCategoryRepository;
 using Aurum.Repositories.ExpenseRepository;
+using Aurum.Repositories.IncomeRepository.IncomeCategoryRepository;
+using Aurum.Repositories.IncomeRepository.IncomeRepository;
 using Aurum.Repositories.RegularExpenseRepository;
 using Aurum.Services.AccountService;
 using Aurum.Services.BalanceService;
@@ -13,6 +14,7 @@ using Aurum.Services.ExpenseCategoryService;
 using Aurum.Services.ExpenseService;
 using Aurum.Services.Income;
 using Aurum.Services.RegularExpenseService;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +27,17 @@ builder.Services.AddControllers()
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<AurumContext>(options =>
+{
+	options.UseSqlServer(
+		Environment.GetEnvironmentVariable("DbConnectionString"),
+		sqlOptions => sqlOptions.EnableRetryOnFailure(
+			maxRetryCount: 5,  
+			maxRetryDelay: TimeSpan.FromSeconds(10),
+			errorNumbersToAdd: null
+		));
+});
 
 builder.Services.AddScoped<IIncomeRepo, IncomeRepo>();
 builder.Services.AddScoped<IRegularIncomeRepo, RegularIncomeRepo>();

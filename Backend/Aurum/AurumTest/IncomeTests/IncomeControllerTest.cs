@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Aurum.Controllers.Income;
+using Aurum.Data.Entities;
 using Aurum.Models.IncomeDTOs;
-using Aurum.Repositories.Income.Income;
 using Aurum.Repositories.Income.RegularIncome;
-using Aurum.Repositories.Income.Income;
 using Aurum.Repositories.Income.RegularIncome;
+using Aurum.Repositories.IncomeRepository.IncomeRepository;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Aurum.Services.Income;
@@ -35,9 +35,9 @@ namespace AurumTest.IncomeTests
         [Test]
         public async Task CreateInvalidReturnsBadRequest()
         {
-            _incomeRepo.Setup(x => x.Create(It.IsAny<ModifyIncomeDto>())).ReturnsAsync(0);
+            _incomeRepo.Setup(x => x.Create(It.IsAny<Income>())).ReturnsAsync(0);
 
-            var result = await _controller.Create(It.IsAny<ModifyIncomeDto>());
+            var result = await _controller.Create(It.IsAny<Income>());
 
             Assert.IsInstanceOf<BadRequestObjectResult>(result);
         }
@@ -47,9 +47,9 @@ namespace AurumTest.IncomeTests
         {
             int expected = 1;
 
-            _incomeRepo.Setup(x => x.Create(It.IsAny<ModifyIncomeDto>())).ReturnsAsync(expected);
+            _incomeRepo.Setup(x => x.Create(It.IsAny<Income>())).ReturnsAsync(expected);
 
-            var result = await _controller.Create(It.IsAny<ModifyIncomeDto>());
+            var result = await _controller.Create(It.IsAny<Income>());
 
             Assert.IsInstanceOf<OkObjectResult>(result);
 

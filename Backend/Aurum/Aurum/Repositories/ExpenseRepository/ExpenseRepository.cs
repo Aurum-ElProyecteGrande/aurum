@@ -4,22 +4,22 @@ namespace Aurum.Repositories.ExpenseRepository;
 
 public class ExpenseRepository: IExpenseRepository
 {
-	public Task<List<RawExpenseDto>> GetAll(int accountId)
+	public Task<List<Expense>> GetAll(int accountId)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task<List<RawExpenseDto>> GetAll(int accountId, DateTime endDate)
+	public Task<List<Expense>> GetAll(int accountId, DateTime endDate)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task<List<RawExpenseDto>> GetAll(int accountId, DateTime startDate, DateTime endDate)
+	public Task<List<Expense>> GetAll(int accountId, DateTime startDate, DateTime endDate)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task<int> Create(RawExpenseDto expense)
+	public Task<int> Create(Expense expense)
 	{
 		throw new NotImplementedException();
 	}

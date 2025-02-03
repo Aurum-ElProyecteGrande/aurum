@@ -4,17 +4,17 @@ namespace Aurum.Repositories.RegularExpenseRepository;
 
 public class RegularExpenseRepository:IRegularExpenseRepository
 {
-	public Task<List<RawRegularExpenseDto>> GetAllRegular(int accountId)
+	public Task<List<RegularExpense>> GetAllRegular(int accountId)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task<int> Create(RawRegularExpenseDto expense)
+	public Task<int> Create(RegularExpense expense)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task<int> Update(RawRegularExpenseDto expense)
+	public Task<int> Update(RegularExpense expense)
 	{
 		throw new NotImplementedException();
 	}

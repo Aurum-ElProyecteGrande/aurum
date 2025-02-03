@@ -58,7 +58,7 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
         await _repository.Delete(expenseId);
 
     private List<ExpenseDto> CreateExpenseDtoList(
-        List<RawExpenseDto> rawExpenses,
+        List<Expense> rawExpenses,
         Dictionary<CategoryDto, List<SubCategoryDto>> categories)
     {
         var categoryDict = categories.ToDictionary(c => c.Key.CategoryId);
@@ -67,13 +67,13 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
         foreach (var rawExpense in rawExpenses)
         {
             //For faster lookup
-            if (!categoryDict.TryGetValue(rawExpense.CategoryId, out var categoryKvp))
-                throw new KeyNotFoundException($"Category with ID {rawExpense.CategoryId} not found");
+            if (!categoryDict.TryGetValue(rawExpense.ExpenseCategoryId, out var categoryKvp))
+                throw new KeyNotFoundException($"Category with ID {rawExpense.ExpenseCategoryId} not found");
 
             var category = categoryKvp.Key;
             var subCategories = categoryKvp.Value;
 
-            var subCategory = subCategories.FirstOrDefault(s => s.SubCategoryId == rawExpense.SubCategoryId);
+            var subCategory = subCategories.FirstOrDefault(s => s.SubCategoryId == rawExpense.ExpenseSubCategoryId);
 
             var expense = CreateExpenseDto(rawExpense, category, subCategory);
 
@@ -83,7 +83,7 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
         return expenses;
     }
 
-    private ExpenseDto CreateExpenseDto(RawExpenseDto expense, CategoryDto category, SubCategoryDto? subCategory) =>
+    private ExpenseDto CreateExpenseDto(Expense expense, CategoryDto category, SubCategoryDto? subCategory) =>
         new ExpenseDto(
             category,
             subCategory ?? null,
@@ -92,16 +92,15 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
             expense.Date
         );
 
-    private RawExpenseDto CreateRawExpenseDto(ModifyExpenseDto expenseDto, int? subCategoryId) =>
-        new RawExpenseDto(
-            expenseDto.CategoryId,
-            subCategoryId ?? null,
-            expenseDto.Label,
-            expenseDto.Amount,
-            expenseDto.Date
-            );
-
-
+    private Expense CreateRawExpenseDto(ModifyExpenseDto expenseDto, int? subCategoryId) =>
+        new Expense()
+        {
+            ExpenseCategoryId = expenseDto.CategoryId,
+            ExpenseSubCategoryId = subCategoryId ?? null,
+            Label = expenseDto.Label,
+            Amount = expenseDto.Amount,
+            Date = expenseDto.Date
+        };
 
     public async Task<decimal> GetTotalExpense(int accountId)
     {

@@ -27,7 +27,7 @@ public class ExpenseServiceTest
         // Arrange
         _repositoryMock
             .Setup(r => r.GetAll(It.IsAny<int>()))
-            .ReturnsAsync(new List<RawExpenseDto>());
+            .ReturnsAsync(new List<Expense>());
 
         // Act
         var result = await _expenseService.GetAll(1, 1);
@@ -40,9 +40,17 @@ public class ExpenseServiceTest
     public async Task GetAll_NoCategoriesFound_ShouldThrowException()
     {
         // Arrange
-        var rawExpenses = new List<RawExpenseDto>
+        var rawExpenses = new List<Expense>
         {
-            new(1, 2, "Test Expense", 100, DateTime.Now)
+            new()
+            {
+                ExpenseId = 1,
+                ExpenseCategoryId = 1, 
+                ExpenseSubCategoryId = 2,
+                Label = "Test Expense",
+                Amount = 100,
+                Date = DateTime.Now
+            }
         };
 
         _repositoryMock
@@ -60,9 +68,17 @@ public class ExpenseServiceTest
     public async Task GetAll_ValidData_ShouldReturnMappedExpenseDtos()
     {
         // Arrange
-        var rawExpenses = new List<RawExpenseDto>
+        var rawExpenses = new List<Expense>
         {
-            new(1, 2, "Test Expense", 100, DateTime.Now)
+            new()
+            {
+                ExpenseId = 1,
+                ExpenseCategoryId = 1, 
+                ExpenseSubCategoryId = 2,
+                Label = "Test Expense",
+                Amount = 100,
+                Date = DateTime.Now
+            }
         };
 
         var categories = new Dictionary<CategoryDto, List<SubCategoryDto>>
@@ -102,7 +118,7 @@ public class ExpenseServiceTest
 
         _categoryServiceMock.Setup(s => s.AcquireSubCategoryId(It.IsAny<int>(), It.IsAny<string>()))
             .ReturnsAsync(2);
-        _repositoryMock.Setup(r => r.Create(It.IsAny<RawExpenseDto>()))
+        _repositoryMock.Setup(r => r.Create(It.IsAny<Expense>()))
             .ReturnsAsync(1);
 
         // Act
@@ -110,7 +126,7 @@ public class ExpenseServiceTest
 
         // Assert
         _categoryServiceMock.Verify(s => s.AcquireSubCategoryId(1, "SubCategory1"), Times.Once);
-        _repositoryMock.Verify(r => r.Create(It.IsAny<RawExpenseDto>()), Times.Once);
+        _repositoryMock.Verify(r => r.Create(It.IsAny<Expense>()), Times.Once);
         Assert.That(result, Is.EqualTo(1));
     }
 
@@ -120,16 +136,16 @@ public class ExpenseServiceTest
         // Arrange
         var expenseDto = new ModifyExpenseDto(1, 1, null, "Test Expense", 100, DateTime.Now);
 
-        _repositoryMock.Setup(r => r.Create(It.IsAny<RawExpenseDto>()))
+        _repositoryMock.Setup(r => r.Create(It.IsAny<Expense>()))
             .ReturnsAsync(1);
 
         // Act
         var result = await _expenseService.Create(expenseDto);
 
         // Assert
-        _repositoryMock.Verify(r => r.Create(It.Is<RawExpenseDto>(e =>
-            e.SubCategoryId == null &&
-            e.CategoryId == 1 &&
+        _repositoryMock.Verify(r => r.Create(It.Is<Expense>(e =>
+            e.ExpenseSubCategoryId == null &&
+            e.ExpenseCategoryId == 1 &&
             e.Label == "Test Expense" &&
             e.Amount == 100)), Times.Once);
         Assert.That(result, Is.EqualTo(1));
