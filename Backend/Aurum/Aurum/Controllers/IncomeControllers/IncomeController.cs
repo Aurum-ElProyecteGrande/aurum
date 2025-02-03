@@ -104,7 +104,7 @@ namespace Aurum.Controllers.IncomeControllers
         }
 
         [HttpPost("regulars")]
-        public async Task<IActionResult> CreateRegular(ModifyRegularIncomeDto regularIncome)
+        public async Task<IActionResult> CreateRegular(RegularIncome regularIncome)
         {
             try
             {

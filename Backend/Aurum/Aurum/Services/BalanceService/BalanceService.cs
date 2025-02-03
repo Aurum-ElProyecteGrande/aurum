@@ -1,6 +1,6 @@
 ﻿using Aurum.Services.AccountService;
 using Aurum.Services.ExpenseService;
-using Aurum.Services.Income;
+using Aurum.Services.IncomeServices;
 
 namespace Aurum.Services.BalanceService
 {

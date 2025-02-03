@@ -18,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using Aurum.Data.Entities;
 using Microsoft.AspNetCore.Hosting.Server;
 using Aurum.Services.RegularIncomeServices;
+using Aurum.Services.IncomeCategoryServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,6 +57,8 @@ builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IRegularExpenseService, RegularExpenseService>();
 builder.Services.AddScoped<IBalanceService, BalanceService>();
 builder.Services.AddScoped<IRegularIncomeService, RegularIncomeService>(); 
+builder.Services.AddScoped<IIncomeCategoryService, IncomeCategoryService>(); 
+
 
 builder.Services.AddCors(options =>
 {
