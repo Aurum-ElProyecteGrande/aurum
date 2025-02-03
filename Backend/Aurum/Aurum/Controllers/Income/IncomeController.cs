@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Aurum.Models.IncomeDTOs;
 using System;
-using Aurum.Repositories.Income.Income;
 using Aurum.Repositories.Income.RegularIncome;
+using Aurum.Repositories.IncomeRepository.IncomeRepository;
 using Aurum.Services.Income;
 
 namespace Aurum.Controllers.Income
@@ -27,7 +27,7 @@ namespace Aurum.Controllers.Income
         {
             try
             {
-                List<IncomeDto> incomes = new();
+                List<Data.Entities.Income> incomes = new();
 
                 if (startDate is not null && endDate is not null)
                 {
@@ -50,7 +50,7 @@ namespace Aurum.Controllers.Income
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ModifyIncomeDto income)
+        public async Task<IActionResult> Create(Data.Entities.Income income)
         {
             try
             {

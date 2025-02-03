@@ -1,9 +1,9 @@
-using Microsoft.AspNetCore.Mvc;
-using System;
+using Aurum.Data.Entities;
 using Aurum.Models.AccountDto;
 using Aurum.Repositories.AccountRepository;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Aurum.Controllers.Account
+namespace Aurum.Controllers.AccountController
 {
     [ApiController]
     [Route("[controller]")]
@@ -32,7 +32,7 @@ namespace Aurum.Controllers.Account
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ModifyAccountDto account)
+        public async Task<IActionResult> Create(Account account)
         {
             try
             {

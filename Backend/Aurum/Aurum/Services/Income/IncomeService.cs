@@ -1,4 +1,4 @@
-﻿using Aurum.Repositories.Income.Income;
+﻿using Aurum.Repositories.IncomeRepository.IncomeRepository;
 
 namespace Aurum.Services.Income
 {

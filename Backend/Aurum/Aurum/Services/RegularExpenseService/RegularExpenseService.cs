@@ -50,7 +50,7 @@ public class RegularExpenseService(IRegularExpenseRepository repository,IExpense
 		await _repository.Delete(expenseId);
 
 	private List<RegularExpenseDto> CreateRegularExpenseDtoList(
-		List<RawRegularExpenseDto> expenseDtoList,
+		List<RegularExpense> expenseDtoList,
 		Dictionary<CategoryDto, List<SubCategoryDto>> categories
 	)
 	{
@@ -60,13 +60,13 @@ public class RegularExpenseService(IRegularExpenseRepository repository,IExpense
 		foreach (var expenseDto in expenseDtoList)
 		{
 			//For faster lookup time
-			if (!categoryDict.TryGetValue(expenseDto.CategoryId, out var categoryKvp))
-				throw new KeyNotFoundException($"Category with ID {expenseDto.CategoryId} not found");
+			if (!categoryDict.TryGetValue(expenseDto.ExpenseCategoryId, out var categoryKvp))
+				throw new KeyNotFoundException($"Category with ID {expenseDto.ExpenseSubcategoryId} not found");
 
 			var category = categoryKvp.Key;
 			var subCategories = categoryKvp.Value;
 			
-			var subCategory = subCategories.FirstOrDefault(s => s.SubCategoryId == expenseDto.SubcategoryId);
+			var subCategory = subCategories.FirstOrDefault(s => s.SubCategoryId == expenseDto.ExpenseSubcategoryId);
 			
 			var expense = CreateRegularExpenseDto(expenseDto, category, subCategory);
 			expenses.Add(expense);
@@ -74,29 +74,30 @@ public class RegularExpenseService(IRegularExpenseRepository repository,IExpense
 		
 		return expenses;
 	}
-	
-	private RawRegularExpenseDto CreateRawRegularExpenseDto(
+
+	private RegularExpense CreateRawRegularExpenseDto(
 		ModifyRegularExpenseDto expense,
 		int regularId,
 		int? subCategoryId
-		) => 
-		new RawRegularExpenseDto(
-			regularId,
-			expense.AccountId,
-			expense.CategoryId,
-			subCategoryId ?? null,
-			expense.Label,
-			expense.Amount,
-			expense.StartDate,
-			expense.Regularity
-		);
+	) =>
+		new RegularExpense()
+		{
+			RegularExpenseId = regularId,
+			AccountId = expense.AccountId,
+			ExpenseCategoryId = expense.CategoryId,
+			ExpenseSubcategoryId = subCategoryId ?? null,
+			Label = expense.Label,
+			Amount = expense.Amount,
+			StartDate = expense.StartDate,
+			Regularity = expense.Regularity
+		};
 	private RegularExpenseDto CreateRegularExpenseDto(
-		RawRegularExpenseDto expense, 
+		RegularExpense expense, 
 		CategoryDto category, 
 		SubCategoryDto? subCategory
 		) => 
 		new RegularExpenseDto(
-			expense.RegularId,
+			expense.RegularExpenseId,
 			expense.AccountId,
 			category,
 			subCategory ?? null,

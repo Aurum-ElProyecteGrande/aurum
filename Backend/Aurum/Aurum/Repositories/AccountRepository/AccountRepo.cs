@@ -1,3 +1,4 @@
+using Aurum.Data.Entities;
 using Aurum.Models.AccountDto;
 using Aurum.Repositories.AccountRepository;
 
@@ -5,11 +6,11 @@ namespace Aurum.Repositories.AccountRepo
 {
     public class AccountRepo : IAccountRepo
     {
-        public async Task<List<AccountDto>> GetAll(int accountId)
+        public async Task<List<Account>> GetAll(int accountId)
         {
             throw new NotImplementedException();
         }
-        public async Task<int> Create(ModifyAccountDto account)
+        public async Task<int> Create(Account account)
         {
             throw new NotImplementedException();
         }
