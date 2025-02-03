@@ -1,5 +1,4 @@
 using Aurum.Data.Context;
-using Aurum.Repositories.Income.RegularIncome;
 using Aurum.Models.CustomJsonConverter;
 using Aurum.Models.RegularExpenseDto;
 using Aurum.Models.RegularityEnum;
@@ -7,36 +6,41 @@ using Aurum.Repositories.ExpenseCategoryRepository;
 using Aurum.Repositories.ExpenseRepository;
 using Aurum.Repositories.IncomeRepository.IncomeCategoryRepository;
 using Aurum.Repositories.IncomeRepository.IncomeRepository;
+using Aurum.Repositories.IncomeRepository.RegularIncomeRepository;
 using Aurum.Repositories.RegularExpenseRepository;
 using Aurum.Services.AccountService;
 using Aurum.Services.BalanceService;
 using Aurum.Services.ExpenseCategoryService;
 using Aurum.Services.ExpenseService;
-using Aurum.Services.Income;
+using Aurum.Services.IncomeServices;
 using Aurum.Services.RegularExpenseService;
 using Microsoft.EntityFrameworkCore;
+using Aurum.Data.Entities;
+using Microsoft.AspNetCore.Hosting.Server;
+using Aurum.Services.RegularIncomeServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers()
-	.AddJsonOptions(options => 
-	{ 
-		options.JsonSerializerOptions.Converters.Add(new CaseInsensitiveEnumConverter<Regularity>()); 
-	});
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new CaseInsensitiveEnumConverter<Regularity>());
+    });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AurumContext>(options =>
 {
-	options.UseSqlServer(
-		Environment.GetEnvironmentVariable("DbConnectionString"),
-		sqlOptions => sqlOptions.EnableRetryOnFailure(
-			maxRetryCount: 5,  
-			maxRetryDelay: TimeSpan.FromSeconds(10),
-			errorNumbersToAdd: null
-		));
+    options.UseSqlServer(
+        "Server=localhost,1433;Database=Aurum;User Id=sa;Password=yourStrong(!)Password;Encrypt=false;",
+    //	Environment.GetEnvironmentVariable("DbConnectionString"),
+    sqlOptions => sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds(10),
+                errorNumbersToAdd: null
+            ));
 });
 
 builder.Services.AddScoped<IIncomeRepo, IncomeRepo>();
@@ -51,16 +55,17 @@ builder.Services.AddScoped<IExpenseCategoryService, ExpenseCategoryService>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IRegularExpenseService, RegularExpenseService>();
 builder.Services.AddScoped<IBalanceService, BalanceService>();
+builder.Services.AddScoped<IRegularIncomeService, RegularIncomeService>(); 
 
 builder.Services.AddCors(options =>
 {
-	options.AddPolicy("AllowFrontEnd",
-		policy =>
-		{
-			policy.WithOrigins("http://localhost:3000")
-				.AllowAnyHeader()
-				.AllowAnyMethod();
-		});
+    options.AddPolicy("AllowFrontEnd",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
 });
 
 var app = builder.Build();
@@ -68,8 +73,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-	app.UseSwagger();
-	app.UseSwaggerUI();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 app.UseCors("AllowFrontEnd");
 

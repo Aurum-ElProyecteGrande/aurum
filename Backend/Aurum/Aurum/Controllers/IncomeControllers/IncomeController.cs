@@ -1,24 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Aurum.Models.IncomeDTOs;
 using System;
-using Aurum.Repositories.Income.RegularIncome;
-using Aurum.Repositories.IncomeRepository.IncomeRepository;
-using Aurum.Services.Income;
+using Aurum.Services.IncomeServices;
+using Aurum.Services.RegularIncomeServices;
 
-namespace Aurum.Controllers.Income
+namespace Aurum.Controllers.IncomeControllers
 {
     [ApiController]
     [Route("[controller]")]
     public class IncomeController : ControllerBase
     {
-        private IIncomeRepo _incomeRepo;
-        private IRegularIncomeRepo _regularIncomeRepo;
         private IIncomeService _incomeService;
-        public IncomeController(IIncomeRepo incomeRepo, IRegularIncomeRepo regularIncomeRepo, IIncomeService incomeService)
+        private IRegularIncomeService _regularIncomeService;
+        public IncomeController(IIncomeService incomeService, IRegularIncomeService regularIncomeService)
         {
-            _incomeRepo = incomeRepo;
-            _regularIncomeRepo = regularIncomeRepo;
             _incomeService = incomeService;
+            _regularIncomeService = regularIncomeService;
         }
 
 
@@ -33,11 +30,11 @@ namespace Aurum.Controllers.Income
                 {
                     var (validStartDate, validEndDate) = _incomeService.ValidateDates(startDate, endDate);
 
-                    incomes = await _incomeRepo.GetAll(accountId, validStartDate, validEndDate);
+                    incomes = await _incomeService.GetAll(accountId, validStartDate, validEndDate);
                 }
                 else
                 {
-                    incomes = await _incomeRepo.GetAll(accountId);
+                    incomes = await _incomeService.GetAll(accountId);
                 }
 
                 return Ok(incomes);
@@ -54,7 +51,7 @@ namespace Aurum.Controllers.Income
         {
             try
             {
-                var incomeId = await _incomeRepo.Create(income);
+                var incomeId = await _incomeService.Create(income);
 
                 if (incomeId == 0) throw new InvalidOperationException ("Invalid income input");
 
@@ -74,7 +71,7 @@ namespace Aurum.Controllers.Income
         {
             try
             {
-                var isDeleted = await _incomeRepo.Delete(incomeId);
+                var isDeleted = await _incomeService.Delete(incomeId);
 
                 if (!isDeleted) throw new InvalidOperationException ($"Could not delete income with id {incomeId}");
 
@@ -93,7 +90,7 @@ namespace Aurum.Controllers.Income
         {
             try
             {
-                var regularIncomes = _regularIncomeRepo.GetAllRegular(accountId);
+                var regularIncomes = _regularIncomeService.GetAllRegular(accountId);
 
                 return Ok(regularIncomes);
             }
@@ -110,7 +107,7 @@ namespace Aurum.Controllers.Income
         {
             try
             {
-                var regularIncomeId = await _regularIncomeRepo.CreateRegular(regularIncome);
+                var regularIncomeId = await _regularIncomeService.CreateRegular(regularIncome);
 
                 if (regularIncomeId == 0) throw new InvalidOperationException ("Invalid regular income input");
 
@@ -129,7 +126,7 @@ namespace Aurum.Controllers.Income
         {
             try
             {
-                var regularIncomeId = await _regularIncomeRepo.UpdateRegular(regularId, regularIncome);
+                var regularIncomeId = await _regularIncomeService.UpdateRegular(regularId, regularIncome);
 
                 if (regularIncomeId == 0) throw new InvalidOperationException ("Invalid regular income input");
 
@@ -148,7 +145,7 @@ namespace Aurum.Controllers.Income
         {
             try
             {
-                var isDeleted = await _regularIncomeRepo.DeleteRegular(regularId);
+                var isDeleted = await _regularIncomeService.DeleteRegular(regularId);
 
                 if (!isDeleted) throw new InvalidOperationException ($"Could not delete income with id {regularId}");
 
