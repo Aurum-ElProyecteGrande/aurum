@@ -9,7 +9,7 @@ public class User
 	public string DisplayName { get; set; }
 	public string Email { get; set; }
 	public string Password { get; set; }
-	public DateTime CreatedAt { get; } = DateTime.UtcNow;
+	public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 	public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
 	public ICollection<Account> Accounts { get; set; } = [];

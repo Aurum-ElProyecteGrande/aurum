@@ -10,7 +10,7 @@ public class Account
 	public string DisplayName { get; set; }
 	public decimal Amount { get; set; }
 	public int CurrencyId { get; set; }
-	public DateTime CreatedAt { get; } = DateTime.UtcNow;
+	public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 	public DateTime UpdatedAt { get; set; } = DateTime.UtcNow; 
 	
 	public ICollection<Income> Incomes { get; set; } = [];
