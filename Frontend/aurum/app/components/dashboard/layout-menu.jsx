@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { layouts } from "../../../scripts/dashboard_scripts/dashboard_scripts"
+import { layouts } from "../../../scripts/dashboard_scripts/layouts"
 
 export default function LayoutMenu({ setChoosenLayout, setIsLayoutMenu }) {
 
@@ -10,8 +10,6 @@ export default function LayoutMenu({ setChoosenLayout, setIsLayoutMenu }) {
         for (let layoutName in layouts) {
             updatedLayoutList.push(layoutName)
         }
-        console.log("layouts", layouts)
-        console.log("layoutslist", layoutList)
         setLayoutList(updatedLayoutList)
     }, [layouts])
 
