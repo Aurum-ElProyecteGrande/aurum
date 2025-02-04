@@ -5,23 +5,21 @@ import { FaGithub, FaLinkedin, FaDiscord, FaFacebookF, FaInstagram } from "react
 
 const LandingFooter = () => {
 	return (
-		<footer className="landing-footer">
+		<footer id="footer" className="landing-footer">
 			<div className="landing-footer-container wrapper">
 				<div className="landing-footer-column">
 					<LandingLogo />
 					<p>
-						Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis pariatur
-						accusamus in sed tenetur illum, beatae nesciunt magnam distinctio natus
-						dicta eos, labore aperiam alias, nobis iure quibusdam placeat nemo?
+						Simplifying the way you manage your money, one expense at a time. Join us and take control of your finances.
 					</p>
 				</div>
 				<div className="landing-footer-column">
-					<h3>Lorem ipsum</h3>
-					<Link href="#">A</Link>
-					<Link href="#">B</Link>
-					<Link href="#">C</Link>
-					<Link href="#">D</Link>
-					<Link href="#">E</Link>
+					<h3>Site map</h3>
+					<div className="site-map">
+						<Link href="#prices">Prices</Link>
+						<Link href="#views">Views</Link>
+						<Link href="#footer">Socials</Link>
+					</div>
 				</div>
 				<div className="landing-footer-column">
 					<h3>Socials</h3>

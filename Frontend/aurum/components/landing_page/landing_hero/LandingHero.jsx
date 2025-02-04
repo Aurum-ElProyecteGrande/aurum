@@ -4,7 +4,7 @@ import LandingHeroImg from '../landing_hero_img/LandingHeroImg'
 const LandingHero = () => {
   return (
     <section className="landing-hero">
-      <div className="landing-hero-container wrapper">
+      <div className="landing-hero-container wrapper" data-aos="fade-left">
         <div className="landing-hero-left">
           <LandingHeroImg />
         </div>
@@ -13,10 +13,10 @@ const LandingHero = () => {
           Simplify. Track. <span className='accent-text'>Gold</span>
           </h1>
           <p>
-           Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur enim adipisci, cum explicabo error nobis deleniti nemo totam doloribus exercitationem consequuntur, dolores nesciunt. Nobis fugit expedita eveniet, error hic inventore.
+          Effortlessly track your expenses with Aurum—your smart companion for smarter financial decisions. Stay organized, save more, and take control of your financial future.
           </p>
           <button className="fancy-button">
-            ACTION CALL TEXT
+          Get Started Today
           </button>
         </div>
       </div>

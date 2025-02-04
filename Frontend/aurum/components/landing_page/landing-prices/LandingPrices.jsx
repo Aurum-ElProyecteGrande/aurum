@@ -1,27 +1,32 @@
 import React from 'react'
 import LandingPriceCard from '../landing-price_card/LandingPriceCard'
-import Logo1 from '@/imgs/aurum_logo_1.png'
-import Logo2 from '@/imgs/aurum_logo_2.png'
+import { freePlanFeatures, proPlanFeatures, familyPlanFeatures } from '@/scripts/landing_page_scripts/landing_page'
+import { GiFamilyHouse } from "react-icons/gi";
+import { FaGift, FaTrophy } from "react-icons/fa6";
+
 
 const LandingPrices = () => {
   return (
-    <section className="landing-prices">
+    <section id="prices" className="landing-prices" data-aos="fade-up">
       <h2>SAMPLE HEADER FOR INFO CARDS</h2>
       <div className="landing-prices-container wrapper">
         <LandingPriceCard
-          img={Logo1}
-          name="Option A"
-          price="111"
+          img={FaGift}
+          name="Free plan"
+          price="0.00$"
+          list = {freePlanFeatures}
         />
         <LandingPriceCard
-          img={Logo2}
-          name="Option B"
-          price="333"
+          img={FaTrophy}
+          name="Pro plan"
+          price="69.99$ / year"
+          list = {proPlanFeatures}
         />
         <LandingPriceCard
-          img={Logo1}
-          name="Option C"
-          price="222"
+          img={GiFamilyHouse}
+          name="Family plan"
+          price="99.99$ / year"       
+          list = {familyPlanFeatures}
         />
       </div>
     </section>

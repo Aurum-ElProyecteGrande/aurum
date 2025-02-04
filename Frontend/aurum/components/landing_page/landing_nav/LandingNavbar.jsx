@@ -19,19 +19,13 @@ const LandingNavbar = () => {
 				<LandingLogo />
 				<ul className={`${showNav ? "show" : ""}`}>
 					<li onClick={() => setShowNav(false)}>
-						<Link href="#">A</Link>
+						<Link href="#prices">Prices</Link>
 					</li>
 					<li onClick={() => setShowNav(false)}>
-						<Link href="#">B</Link>
+						<Link href="#views">Views</Link>
 					</li>
 					<li onClick={() => setShowNav(false)}>
-						<Link href="#">C</Link>
-					</li>
-					<li onClick={() => setShowNav(false)}>
-						<Link href="#">D</Link>
-					</li>
-					<li onClick={() => setShowNav(false)}>
-						<Link href="#">E</Link>
+						<Link href="#footer">Socials</Link>
 					</li>
 				</ul>
 				<div className="landing-navbar-buttons">
