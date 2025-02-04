@@ -1,4 +1,4 @@
-namespace Aurum.Models.ExpenseDto;
+namespace Aurum.Data.Entities;
 
 public class Expense
 {

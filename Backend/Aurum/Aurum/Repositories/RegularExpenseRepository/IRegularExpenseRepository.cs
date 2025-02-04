@@ -1,3 +1,4 @@
+using Aurum.Data.Entities;
 using Aurum.Models.RegularExpenseDto;
 
 namespace Aurum.Repositories.RegularExpenseRepository;

@@ -1,4 +1,5 @@
 using Aurum.Data.Context;
+using Aurum.Data.Entities;
 using Aurum.Models.ExpenseDto;
 using Microsoft.EntityFrameworkCore;
 

@@ -15,7 +15,7 @@ public class ExpenseCategoryRepository(AurumContext aurumContext): IExpenseCateg
 
 	public async Task<List<ExpenseSubCategory>> GetAllSubCategory(int userId) => 
 		await _context.ExpenseSubCategories
-			.Where(s => s.UserId == userId)
+			.Where(s => s.IsBase || s.UserId == userId)
 			.ToListAsync();
 
 	public async Task<int?> GetSubCategoryByName(int categoryId, string subCategoryName)
