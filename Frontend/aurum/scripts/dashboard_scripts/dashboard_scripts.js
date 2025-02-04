@@ -35,3 +35,10 @@ export const fetchAccounts = async (userId) => {
     const accounts = await response.json()
     return accounts
 }
+
+export const fetchBalance = async (accId) => {
+    const response = await fetch(`${apiUrl}/balance/${accId}`)
+    if (!response.ok) throw new Error(`Fetching balance for account: ${accId} went wrong`)
+    const balance = await response.json()
+    return balance 
+}

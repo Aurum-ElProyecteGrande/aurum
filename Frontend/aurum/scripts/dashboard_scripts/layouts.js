@@ -1,6 +1,6 @@
 import ExpenseLineChart from "../../app/components/dashboard/charts/expense-line-chart";
 import IncomeLineChart from "../../app/components/dashboard/charts/income-line-chart";
-import Chart3 from "../../app/components/dashboard/charts/chart3";
+import AccountBallances from "../../app/components/dashboard/charts/account-ballances";
 import Chart4 from "../../app/components/dashboard/charts/chart4";
 import Chart5 from "../../app/components/dashboard/charts/chart5";
 import Chart6 from "../../app/components/dashboard/charts/chart6";
@@ -9,7 +9,7 @@ import Chart7 from "../../app/components/dashboard/charts/chart7";
 const charts2x1 = [
     { name: "chart5", chart: <Chart5 /> },
     { name: "chart5", chart: <Chart5 /> },
-    { name: "chart3", chart: <Chart3 /> }
+    { name: "account-ballances", chart: <AccountBallances /> }
 ]
 const charts3x3 = [
     { name: "chart4", chart: <Chart4 /> }

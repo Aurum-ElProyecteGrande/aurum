@@ -3,35 +3,30 @@
 import { useEffect, useState } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { fetchIncomeByDate, fetchAccounts } from "@/scripts/dashboard_scripts/dashboard_scripts";
+import ChangeChartType from "./chart-utils/change-chart-type";
+import ChangeDaysShown from "./chart-utils/change-days-shown";
 
-
-export default function IncomeLineChart({ isEditMode }) {
+export default function IncomeLineChart({ isEditMode, accounts }) {
 
     const [incomesByDateString, setIncomesByDateString] = useState([])
     const [startDate, setStartDate] = useState(new Date())
     const [today, setToday] = useState(new Date())
     const [chartData, setChartData] = useState([])
     const [rawChartData, setRawChartData] = useState([])
-    const [accounts, setAccounts] = useState([])
-    const [curAccount, setCurAccount] = useState()
-    const daysShown = 10
-
-    const userId = 1 //FROM CREDENTIALS probably?
+    const [curAccount, setCurAccount] = useState(accounts[0])
+    const [daysShown, setDaysShown] = useState(10)
 
     useEffect(() => {
         let nDaysAgo = new Date()
         nDaysAgo.setDate(nDaysAgo.getDate() - daysShown);
         setStartDate(nDaysAgo)
-    }, [])
+    }, [daysShown])
 
     useEffect(() => {
-        const getAccounts = async () => {
-            const updatedAccounts = await fetchAccounts(userId)
-            setAccounts(updatedAccounts)
-            setCurAccount(updatedAccounts[0])
+        if (accounts) {
+            setCurAccount(accounts[0])
         }
-        getAccounts()
-    }, [])
+    }, [accounts])
 
     useEffect(() => {
         const getIncomes = async (accId) => {
@@ -90,6 +85,10 @@ export default function IncomeLineChart({ isEditMode }) {
         setCurAccount(updatedCurAcc)
     }
 
+    const handleChangeDays = (e) => {
+        setDaysShown(e.target.value)
+    }
+
     return (
         <div className="chart">
             <div className="chart-title">Incomes in Last 10 days</div>
@@ -106,13 +105,10 @@ export default function IncomeLineChart({ isEditMode }) {
                 </LineChart>
             </ResponsiveContainer>
             {isEditMode &&
-                <form className="change-chart-type-form">
-                    {curAccount && <select value={curAccount.displayName} name="change-chart" onChange={(e) => handleChangeType(e)}>
-                        {accounts && accounts.map(acc => (
-                            <option name={acc.displayName} key={acc.displayName} value={acc.displayName} >{acc.displayName}</option>
-                        ))}
-                    </select>}
-                </form>
+                <div className="change-chart-types-container">
+                    <ChangeChartType handleChangeType={handleChangeType} accounts={accounts} curAccount={curAccount} />
+                    <ChangeDaysShown handleChangeDays={handleChangeDays} daysShown={daysShown} />
+                </div>
             }
         </div>
     )

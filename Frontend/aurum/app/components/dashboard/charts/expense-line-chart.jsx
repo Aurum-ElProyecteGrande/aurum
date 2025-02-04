@@ -2,36 +2,31 @@
 
 import { useEffect, useState } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { fetchAccounts, fetchExpenses } from "@/scripts/dashboard_scripts/dashboard_scripts";
+import { fetchExpenses } from "@/scripts/dashboard_scripts/dashboard_scripts";
+import ChangeChartType from "./chart-utils/change-chart-type";
+import ChangeDaysShown from "./chart-utils/change-days-shown";
 
-
-export default function ExpenseLineChart({ isEditMode }) {
+export default function ExpenseLineChart({ isEditMode, accounts }) {
 
     const [expensesByDateString, setExpensesByDateString] = useState([])
     const [startDate, setStartDate] = useState(new Date())
     const [today, setToday] = useState(new Date())
     const [chartData, setChartData] = useState([])
     const [rawChartData, setRawChartData] = useState([])
-    const [accounts, setAccounts] = useState([])
     const [curAccount, setCurAccount] = useState()
-    const daysShown = 10
-
-    const userId = 1 //FROM CREDENTIALS probably?
+    const [daysShown, setDaysShown] = useState(10)
 
     useEffect(() => {
         let nDaysAgo = new Date()
         nDaysAgo.setDate(today.getDate() - daysShown);
         setStartDate(nDaysAgo)
-    }, [])
+    }, [daysShown])
 
     useEffect(() => {
-        const getAccounts = async () => {
-            const updatedAccounts = await fetchAccounts(userId)
-            setAccounts(updatedAccounts)
-            setCurAccount(updatedAccounts[0])
+        if (accounts) {
+            setCurAccount(accounts[0])
         }
-        getAccounts()
-    }, [])
+    }, [accounts])
 
     useEffect(() => {
         const getExpenses = async (accId) => {
@@ -91,6 +86,10 @@ export default function ExpenseLineChart({ isEditMode }) {
         setCurAccount(updatedCurAcc)
     }
 
+    const handleChangeDays = (e) => {
+        setDaysShown(e.target.value)
+    }
+
     return (
         <div className="chart">
             <div className="chart-title">Expenses in Last 10 days</div>
@@ -103,17 +102,14 @@ export default function ExpenseLineChart({ isEditMode }) {
                         contentStyle={{ backgroundColor: "#333333", borderColor: "#F9D342", color: "#F4F4F4" }}
                     />
                     <Legend />
-                    <Line type="monotone" dataKey="expense" stroke="#F9D342" name={curAccount && curAccount.displayName}/>
+                    <Line type="monotone" dataKey="expense" stroke="#F9D342" name={curAccount && curAccount.displayName} />
                 </LineChart>
             </ResponsiveContainer>
             {isEditMode &&
-                <form className="change-chart-type-form">
-                    {curAccount && <select value={curAccount.displayName} name="change-chart" onChange={(e) => handleChangeType(e)}>
-                        {accounts && accounts.map(acc => (
-                            <option name={acc.displayName} key={acc.displayName} value={acc.displayName} >{acc.displayName}</option>
-                        ))}
-                    </select>}
-                </form>
+                <div className="change-chart-types-container">
+                    <ChangeChartType handleChangeType={handleChangeType} accounts={accounts} curAccount={curAccount} />
+                    <ChangeDaysShown handleChangeDays={handleChangeDays} daysShown={daysShown} />
+                </div>
             }
         </div>
     )
