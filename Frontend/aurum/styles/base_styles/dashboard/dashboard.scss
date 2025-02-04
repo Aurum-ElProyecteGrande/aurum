@@ -20,9 +20,9 @@
         display: flex;
         flex-direction: row;
         justify-content: space-evenly;
-        width: 84vw;
-        left: 16vw;
-        height: 10vh;
+        width: 86vw;
+        left: 14vw;
+        height: 7vh;
         background-color: $primary;
 
         section {
@@ -61,6 +61,7 @@
         background-color: $background;
         display: flex;
         flex-direction: column;
+        height: 6vh;
 
         .active{
             background-color: $accent;
@@ -69,7 +70,7 @@
 
         button {
             width: 10vw;
-            height: 3vh;
+            min-height: 3vh;
             cursor: pointer;
             border-radius: 0;
             border: none;
@@ -85,6 +86,7 @@
             position: relative;
             right: 100%;
             bottom: 3vh;
+            background-color: none;
         }
     }
 }
@@ -92,8 +94,8 @@
 .dashboard-container {
     display: grid;
     position: absolute;
-    top: 10vh;
-    left: 16vw;
+    top: 8.5vh;
+    left: 15vw;
     width: 84vw;
     height: 90vh;
     grid-template-columns: repeat(6, 14vw); 
@@ -101,33 +103,81 @@
 }
 
 .chart-container {
+    background-color: #3d63a41a;    
     display: flex;
     flex-direction: column;
+    align-items: center;
     border: 1px solid $primary;
     border-radius: 16px;
-    margin: 4px;
-    padding: 8px;
+    margin: 6px;
+    padding: 4px;
 
     .chart {
-        flex-grow: 1;
-    }
-
-    form {
-        position: absolute;
-        justify-self:flex-end;
-        align-self:last baseline;
         display: flex;
         flex-direction: column;
-        width: 8vw;
-        justify-content: center;
-        align-items: center;
+        height: 100%;
+        width: 100%;
 
-        select {
-            cursor: pointer;
+        .change-chart-type-form {
+            position: relative;
+            transform: translate(0.5vw, -3vh);
         }
     }
+
+    .chart-title{
+        position:sticky;
+        top:0;
+        color: $text;
+        justify-self: flex-start;
+        text-align: center;
+        margin-bottom: 2vh;
+    }
+    .chart-body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-grow: 0.8;
+    }
+}
+
+.change-chart-form {
+    position: sticky;
+    left: 90%;
+    bottom: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 8vw;
+    justify-content: center;
+    align-items: center;
+
+    select {
+        width: 8vw;
+    }
+}
+
+.change-chart-type-form select {
+    border: 1px solid $accent;
+    background-color: $background;
+    border-radius: 6px;
+    color: $text;
+}
+
+.change-chart-form select {
+    border: 1px solid $primary;
+    background-color: $background;
+    border-radius: 6px;
+    color: $text;
+}
+
+form select {
+    text-align: center;
+}
+
+form select:hover {
+    cursor: pointer
 }
 
 .chart-container.edit-mode:hover{
     border: 1px solid $accent;
+    background-color: #f9d4421a;
 }
