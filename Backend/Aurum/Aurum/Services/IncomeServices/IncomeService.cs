@@ -1,6 +1,7 @@
-﻿using Aurum.Repositories.IncomeRepository.IncomeRepository;
+﻿using Aurum.Data.Entities;
+using Aurum.Repositories.IncomeRepository.IncomeRepository;
 
-namespace Aurum.Services.Income
+namespace Aurum.Services.IncomeServices
 {
     public class IncomeService : IIncomeService
     {
@@ -37,6 +38,40 @@ namespace Aurum.Services.Income
             return incomes
                 .Select(i => i.Amount)
                 .Sum();
+        }
+
+        public async Task<List<Income>> GetAll(int accountId)
+        {
+
+            return await _incomeRepo.GetAll(accountId);
+
+        }
+        public async Task<List<Income>> GetAll(int accountId, DateTime endDate)
+        {
+            return await _incomeRepo.GetAll(accountId, endDate);
+
+        }
+        public async Task<List<Income>> GetAll(int accountId, DateTime startDate, DateTime endDate)
+        {
+            return await _incomeRepo.GetAll(accountId, startDate, endDate);
+
+        }
+        public async Task<int> Create(Income income)
+        {
+
+            var incomeId = await _incomeRepo.Create(income);
+
+            if (incomeId == 0) throw new InvalidOperationException("Invalid income input");
+
+            return incomeId;
+        }
+        public async Task<bool> Delete(int incomeId)
+        {
+            var isDeleted = await _incomeRepo.Delete(incomeId);
+
+            if (!isDeleted) throw new InvalidOperationException($"Could not delete income with id {incomeId}");
+
+            return isDeleted;
         }
     }
 }

@@ -1,11 +1,18 @@
-﻿namespace Aurum.Repositories.IncomeRepository.IncomeCategoryRepository
+﻿using Aurum.Data.Context;
+using Aurum.Data.Entities;
+
+namespace Aurum.Repositories.IncomeRepository.IncomeCategoryRepository
 {
     public class IncomeCategoryRepo : IIncomeCategoryRepo
     {
-        public async Task<List<Data.Entities.IncomeCategory>> GetAllCategory()
+        private AurumContext _dbContext;
+
+        public IncomeCategoryRepo(AurumContext dbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
         }
+        public async Task<List<IncomeCategory>> GetAllCategory() => _dbContext.IncomeCategories
+            .ToList();
 
     }
 }

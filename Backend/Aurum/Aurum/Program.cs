@@ -12,21 +12,24 @@ using Aurum.Repositories.ExpenseCategoryRepository;
 using Aurum.Repositories.ExpenseRepository;
 using Aurum.Repositories.IncomeRepository.IncomeCategoryRepository;
 using Aurum.Repositories.IncomeRepository.IncomeRepository;
+using Aurum.Repositories.IncomeRepository.RegularIncomeRepository;
 using Aurum.Repositories.RegularExpenseRepository;
 using Aurum.Services.AccountService;
 using Aurum.Services.BalanceService;
 using Aurum.Services.ExpenseCategoryService;
 using Aurum.Services.ExpenseService;
-using Aurum.Services.Income;
+using Aurum.Services.IncomeServices;
 using Aurum.Services.RegularExpenseService;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting.Server;
+using Aurum.Services.RegularIncomeServices;
+using Aurum.Services.IncomeCategoryServices;
 using Aurum.Services.UserServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers()
-  docker-db
 	.AddJsonOptions(options => 
 	{ 
 		options.JsonSerializerOptions.Converters.Add(new CaseInsensitiveEnumConverter<Regularity>());
@@ -61,6 +64,8 @@ builder.Services.AddScoped<IExpenseCategoryService, ExpenseCategoryService>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IRegularExpenseService, RegularExpenseService>();
 builder.Services.AddScoped<IBalanceService, BalanceService>();
+builder.Services.AddScoped<IRegularIncomeService, RegularIncomeService>(); 
+builder.Services.AddScoped<IIncomeCategoryService, IncomeCategoryService>(); 
 builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddCors(options =>

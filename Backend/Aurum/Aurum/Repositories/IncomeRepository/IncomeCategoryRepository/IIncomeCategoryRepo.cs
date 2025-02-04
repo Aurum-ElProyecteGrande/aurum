@@ -1,8 +1,9 @@
-﻿namespace Aurum.Repositories.IncomeRepository.IncomeCategoryRepository
+﻿using Aurum.Data.Entities;
+
+namespace Aurum.Repositories.IncomeRepository.IncomeCategoryRepository
 {
     public interface IIncomeCategoryRepo
     {
-        Task<List<Data.Entities.IncomeCategory>> GetAllCategory();
-
+        Task<List<IncomeCategory>> GetAllCategory();
     }
 }
