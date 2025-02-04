@@ -1,8 +1,6 @@
 using Aurum.Models.RegularityEnum;
 
-namespace Aurum.Models.RegularExpenseDto;
-
-using Aurum.Models.RegularityEnum;
+namespace Aurum.Data.Entities;
 
 public class RegularExpense
 {

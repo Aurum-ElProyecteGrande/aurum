@@ -1,26 +1,43 @@
+using Aurum.Data.Context;
+using Aurum.Data.Entities;
 using Aurum.Models.CategoryDtos;
+using Microsoft.EntityFrameworkCore;
 
 namespace Aurum.Repositories.ExpenseCategoryRepository;
 
-public class ExpenseCategoryRepository: IExpenseCategoryRepository
+public class ExpenseCategoryRepository(AurumContext aurumContext): IExpenseCategoryRepository
 {
-	public Task<List<CategoryDto>> GetAllCategory()
-	{
-		throw new NotImplementedException();
-	}
+	private readonly AurumContext _context = aurumContext;
 
-	public Task<List<SubCategoryDto>> GetAllSubCategory(int userId)
-	{
-		throw new NotImplementedException();
-	}
+	public async Task<List<ExpenseCategory>> GetAllCategory() =>
+		await _context.ExpenseCategories.ToListAsync();
+		
 
-	public Task<int?> GetSubCategoryByName(int categoryId, string subCategoryName)
-	{
-		throw new NotImplementedException();
-	}
+	public async Task<List<ExpenseSubCategory>> GetAllSubCategory(int userId) => 
+		await _context.ExpenseSubCategories
+			.Where(s => s.IsBase || s.UserId == userId)
+			.ToListAsync();
 
-	public Task<int> CreateSubCategory(int categoryId, string subCategoryName)
+	public async Task<int?> GetSubCategoryByName(int categoryId, string subCategoryName)
 	{
-		throw new NotImplementedException();
+		var category = await _context.ExpenseCategories
+			.Where(c => c.ExpenseCategoryId == categoryId && c.ExpenseSubCategories
+				.Any(s => s.Name.Equals(subCategoryName, StringComparison.OrdinalIgnoreCase)))
+			.FirstOrDefaultAsync();
+
+		return category?.ExpenseCategoryId;
+	}
+	public async Task<int> CreateSubCategory(int categoryId, string subCategoryName)
+	{
+		var subCategory = new ExpenseSubCategory()
+		{
+			ExpenseCategoryId = categoryId,
+			Name = subCategoryName
+		};
+		
+		_context.ExpenseSubCategories.Add(subCategory);
+		await _context.SaveChangesAsync();
+
+		return subCategory.ExpenseSubCategoryId;
 	}
 }

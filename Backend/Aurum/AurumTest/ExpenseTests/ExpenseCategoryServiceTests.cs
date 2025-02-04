@@ -1,3 +1,4 @@
+using Aurum.Data.Entities;
 using Aurum.Models.CategoryDtos;
 using Aurum.Repositories.ExpenseCategoryRepository;
 using Aurum.Services.ExpenseCategoryService;
@@ -22,12 +23,40 @@ public class ExpenseCategoryServiceTests
 	{
 		// Arrange
 		var userId = 1;
-		var categories = new List<CategoryDto>
+		var categories = new List<ExpenseCategory>
+		{
+			new ()
+			{
+				Name = "Category1",
+				ExpenseCategoryId = 1,
+			},new ()
+			{
+				Name = "Category2",
+				ExpenseCategoryId = 2,
+			}
+		};
+		var subCategories = new List<ExpenseSubCategory>
+		{
+			new ()
+			{
+				Name = "Category1",
+				ExpenseCategoryId = 1, 
+				ExpenseSubCategoryId = 1
+			},
+			new ()
+			{
+				Name = "Category2",
+				ExpenseCategoryId = 2, 
+				ExpenseSubCategoryId = 2
+			}
+		};
+		
+		var resultCategories = new List<CategoryDto>
 		{
 			new CategoryDto("Category1", 1),
 			new CategoryDto("Category2", 2)
 		};
-		var subCategories = new List<SubCategoryDto>
+		var resultSubCategories = new List<SubCategoryDto>
 		{
 			new SubCategoryDto ("Category1", 1, 1),
 			new SubCategoryDto("Category2", 2, 2)
@@ -47,8 +76,8 @@ public class ExpenseCategoryServiceTests
         Assert.Multiple(() =>
         {
 			Assert.That(result, Has.Count.EqualTo(2));
-            Assert.That(result.ContainsKey(categories[0]), Is.True);
-            Assert.That(result.ContainsKey(categories[1]), Is.True);
+            Assert.That(result.ContainsKey(resultCategories[0]), Is.True);
+            Assert.That(result.ContainsKey(resultCategories[1]), Is.True);
         });
     }
 	

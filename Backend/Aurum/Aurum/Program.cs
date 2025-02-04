@@ -1,8 +1,13 @@
+using System.Text.Json;
 using Aurum.Data.Context;
+using Aurum.Data.Entities;
 using Aurum.Repositories.Income.RegularIncome;
 using Aurum.Models.CustomJsonConverter;
 using Aurum.Models.RegularExpenseDto;
 using Aurum.Models.RegularityEnum;
+using Aurum.Repositories.AccountRepo;
+using Aurum.Repositories.AccountRepository;
+using Aurum.Repositories.CurrencyRepository;
 using Aurum.Repositories.ExpenseCategoryRepository;
 using Aurum.Repositories.ExpenseRepository;
 using Aurum.Repositories.IncomeRepository.IncomeCategoryRepository;
@@ -21,10 +26,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.Converters.Add(new CaseInsensitiveEnumConverter<Regularity>());
-    });
+  docker-db
+	.AddJsonOptions(options => 
+	{ 
+		options.JsonSerializerOptions.Converters.Add(new CaseInsensitiveEnumConverter<Regularity>());
+		options.JsonSerializerOptions.Converters.Add(new CategoryDictionaryConverter());
+	});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -41,6 +48,8 @@ builder.Services.AddDbContext<AurumContext>(options =>
 });
 
 builder.Services.AddScoped<IIncomeRepo, IncomeRepo>();
+builder.Services.AddScoped<IAccountRepo, AccountRepo>();
+builder.Services.AddScoped<ICurrencyRepo, CurrencyRepo>();
 builder.Services.AddScoped<IRegularIncomeRepo, RegularIncomeRepo>();
 builder.Services.AddScoped<IIncomeCategoryRepo, IncomeCategoryRepo>();
 builder.Services.AddScoped<IExpenseCategoryRepository, ExpenseCategoryRepository>();

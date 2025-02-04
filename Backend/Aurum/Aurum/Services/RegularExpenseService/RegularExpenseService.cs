@@ -1,3 +1,4 @@
+using Aurum.Data.Entities;
 using Aurum.Models.CategoryDtos;
 using Aurum.Models.ExpenseDto;
 using Aurum.Models.ExpenseDtos;
