@@ -26,6 +26,7 @@ using Aurum.Services.RegularIncomeServices;
 using Aurum.Services.IncomeCategoryServices;
 using Aurum.Services.UserServices;
 using Aurum.Repositories.UserRepository;
+using Aurum.Services.CurrencyServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,6 +70,8 @@ builder.Services.AddScoped<IRegularIncomeService, RegularIncomeService>();
 builder.Services.AddScoped<IIncomeCategoryService, IncomeCategoryService>(); 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
+builder.Services.AddScoped<ICurrencyService, CurrencyService>();
+
 
 builder.Services.AddCors(options =>
 {
