@@ -18,6 +18,8 @@
         margin-block: 1rem 2rem;
         width: 75%;
         margin-inline: auto;
+        line-height: 1.2;
+        font-size: 1.1rem;
 
         @include respond(phone) {
             width: 100%;
@@ -32,6 +34,11 @@
         gap: 7.85rem;
         border: 2px solid $text-shade;
         background-color: $background-shade;
+        transition: all 0.2s ease;
+
+        &:focus-within{
+            border: 2px solid $primary;
+        }
         
         @include respond(phone) {
             gap: 1.5rem;

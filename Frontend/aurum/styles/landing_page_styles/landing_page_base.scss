@@ -20,6 +20,7 @@
     transition: all 0.3s ease;
     display: inline-block;
     border: 1px solid transparent;
+    box-shadow: 2px 2px 4px $background-shade;
 
     &:hover {
         background-color: transparent;
@@ -50,6 +51,7 @@
     display: inline-block;
     border: 1px solid transparent;
     color: $background;
+    box-shadow: 2px 2px 4px $background-shade;
 
     &:hover {
         background-color: transparent;
@@ -68,6 +70,7 @@
     font-size: 1.5rem;
     letter-spacing: 5px;
     color: $background;
+    
 
     &:after {
         position: absolute;

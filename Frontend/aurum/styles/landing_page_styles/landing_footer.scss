@@ -16,7 +16,7 @@
     }
 
     img{
-        width: 9rem;
+        width: 11rem;
         height: auto;
         margin-bottom: 1rem;
     }
@@ -38,6 +38,16 @@
             &:hover{
                 color: $accent;
             }
+        }
+
+        p{
+            line-height: 1.2;
+        }
+
+        .site-map{
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
     }
 
