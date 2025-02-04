@@ -5,6 +5,7 @@ using Aurum.Models.RegularExpenseDto;
 using Aurum.Repositories.ExpenseRepository;
 using Aurum.Services.ExpenseCategoryService;
 using System.Linq;
+using Aurum.Data.Entities;
 
 namespace Aurum.Services.ExpenseService;
 

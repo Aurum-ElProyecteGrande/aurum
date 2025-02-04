@@ -1,6 +1,7 @@
 using Aurum.Data.Entities;
 using Aurum.Models.AccountDto;
 using Aurum.Repositories.AccountRepository;
+using Aurum.Services.AccountService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aurum.Controllers.AccountController
@@ -9,19 +10,19 @@ namespace Aurum.Controllers.AccountController
     [Route("[controller]")]
     public class AccountController : ControllerBase
     {
-        private readonly IAccountRepo _accountRepo;
+        private readonly IAccountService _accountService;
 
-        public AccountController(IAccountRepo accountRepo)
+        public AccountController(IAccountService accountService)
         {
-            _accountRepo = accountRepo;
+            _accountService = accountService;
         }
 
         [HttpGet("{userId:int}")]
-        public async Task<IActionResult> GetAll([FromRoute]int userId)
+        public async Task<IActionResult> GetAll([FromRoute] int userId)
         {
             try
             {
-                var accounts = await _accountRepo.GetAll(userId);
+                var accounts = await _accountService.GetAll(userId);
                 return Ok(accounts);
             }
             catch (Exception ex)
@@ -36,11 +37,7 @@ namespace Aurum.Controllers.AccountController
         {
             try
             {
-                var accountId = await _accountRepo.Create(account);
-
-                if (accountId == 0)
-                    throw new InvalidOperationException("Failed to create account. Invalid input.");
-
+                var accountId = await _accountService.Create(account);
                 return Ok(accountId);
             }
             catch (Exception ex)
@@ -50,14 +47,13 @@ namespace Aurum.Controllers.AccountController
             }
         }
 
-        [HttpPut("{accountId:int}")]
-        public async Task<IActionResult> Update([FromRoute]int accountId, ModifyAccountDto account)
+        [HttpPut()]
+        public async Task<IActionResult> Update(Account account)
         {
             try
             {
-                var updatedId = await _accountRepo.Update(accountId, account);
-
-                return Ok($"Account with ID {updatedId} was successfully updated.");
+                var updatedId = await _accountService.Update(account);
+                return Ok(updatedId);
             }
             catch (Exception ex)
             {
@@ -67,15 +63,11 @@ namespace Aurum.Controllers.AccountController
         }
 
         [HttpDelete("{accountId:int}")]
-        public async Task<IActionResult> Delete([FromRoute]int accountId)
+        public async Task<IActionResult> Delete([FromRoute] int accountId)
         {
             try
             {
-                var isDeleted = await _accountRepo.Delete(accountId);
-
-                if (!isDeleted)
-                    throw new InvalidOperationException($"Failed to delete account with ID {accountId}.");
-
+                var isDeleted = await _accountService.Delete(accountId);
                 return Ok(isDeleted);
             }
             catch (Exception ex)

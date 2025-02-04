@@ -1,7 +1,13 @@
+using System.Text.Json;
 using Aurum.Data.Context;
+using Aurum.Data.Entities;
+using Aurum.Repositories.Income.RegularIncome;
 using Aurum.Models.CustomJsonConverter;
 using Aurum.Models.RegularExpenseDto;
 using Aurum.Models.RegularityEnum;
+using Aurum.Repositories.AccountRepo;
+using Aurum.Repositories.AccountRepository;
+using Aurum.Repositories.CurrencyRepository;
 using Aurum.Repositories.ExpenseCategoryRepository;
 using Aurum.Repositories.ExpenseRepository;
 using Aurum.Repositories.IncomeRepository.IncomeCategoryRepository;
@@ -15,19 +21,20 @@ using Aurum.Services.ExpenseService;
 using Aurum.Services.IncomeServices;
 using Aurum.Services.RegularExpenseService;
 using Microsoft.EntityFrameworkCore;
-using Aurum.Data.Entities;
 using Microsoft.AspNetCore.Hosting.Server;
 using Aurum.Services.RegularIncomeServices;
 using Aurum.Services.IncomeCategoryServices;
+using Aurum.Services.UserServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.Converters.Add(new CaseInsensitiveEnumConverter<Regularity>());
-    });
+	.AddJsonOptions(options => 
+	{ 
+		options.JsonSerializerOptions.Converters.Add(new CaseInsensitiveEnumConverter<Regularity>());
+		options.JsonSerializerOptions.Converters.Add(new CategoryDictionaryConverter());
+	});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -35,16 +42,17 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AurumContext>(options =>
 {
     options.UseSqlServer(
-        "Server=localhost,1433;Database=Aurum;User Id=sa;Password=yourStrong(!)Password;Encrypt=false;",
-    //	Environment.GetEnvironmentVariable("DbConnectionString"),
-    sqlOptions => sqlOptions.EnableRetryOnFailure(
-                maxRetryCount: 5,
-                maxRetryDelay: TimeSpan.FromSeconds(10),
-                errorNumbersToAdd: null
-            ));
+        Environment.GetEnvironmentVariable("DbConnectionString"),
+        sqlOptions => sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null
+        ));
 });
 
 builder.Services.AddScoped<IIncomeRepo, IncomeRepo>();
+builder.Services.AddScoped<IAccountRepo, AccountRepo>();
+builder.Services.AddScoped<ICurrencyRepo, CurrencyRepo>();
 builder.Services.AddScoped<IRegularIncomeRepo, RegularIncomeRepo>();
 builder.Services.AddScoped<IIncomeCategoryRepo, IncomeCategoryRepo>();
 builder.Services.AddScoped<IExpenseCategoryRepository, ExpenseCategoryRepository>();
@@ -58,7 +66,7 @@ builder.Services.AddScoped<IRegularExpenseService, RegularExpenseService>();
 builder.Services.AddScoped<IBalanceService, BalanceService>();
 builder.Services.AddScoped<IRegularIncomeService, RegularIncomeService>(); 
 builder.Services.AddScoped<IIncomeCategoryService, IncomeCategoryService>(); 
-
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddCors(options =>
 {
