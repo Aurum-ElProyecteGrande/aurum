@@ -50,7 +50,7 @@ public class ExpenseRepository(AurumContext aurumContext): IExpenseRepository
 		catch (Exception e)
 		{
 			Console.WriteLine(e);
-			throw new KeyNotFoundException("Recipe not found");
+			throw new KeyNotFoundException("Expense not found");
 		}
 	}
 }

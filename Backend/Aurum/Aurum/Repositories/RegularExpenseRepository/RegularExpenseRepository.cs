@@ -1,27 +1,59 @@
+using Aurum.Data.Context;
 using Aurum.Data.Entities;
 using Aurum.Models.RegularExpenseDto;
+using Microsoft.EntityFrameworkCore;
 
 namespace Aurum.Repositories.RegularExpenseRepository;
 
-public class RegularExpenseRepository:IRegularExpenseRepository
+public class RegularExpenseRepository(AurumContext aurumContext) : IRegularExpenseRepository
 {
-	public Task<List<RegularExpense>> GetAllRegular(int accountId)
+	private AurumContext _context = aurumContext;
+
+	public async Task<List<RegularExpense>> GetAllRegular(int accountId) =>
+		await _context.RegularExpenses
+			.Where(r => r.AccountId == accountId)
+			.ToListAsync();
+
+	public async Task<int> Create(RegularExpense expense)
 	{
-		throw new NotImplementedException();
+		_context.RegularExpenses.Add(expense);
+		await _context.SaveChangesAsync();
+
+		return expense.RegularExpenseId;
 	}
 
-	public Task<int> Create(RegularExpense expense)
+	public async Task<int> Update(RegularExpense expense)
 	{
-		throw new NotImplementedException();
+		try
+		{
+			_context.RegularExpenses.Update(expense);
+			await _context.SaveChangesAsync();
+
+			return expense.RegularExpenseId;
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine(e);
+			throw new KeyNotFoundException("Expense not found");
+		}
 	}
 
-	public Task<int> Update(RegularExpense expense)
+	public async Task<bool> Delete(int regularId)
 	{
-		throw new NotImplementedException();
-	}
-
-	public Task<bool> Delete(int regularId)
-	{
-		throw new NotImplementedException();
+		try
+		{
+			var expense = new RegularExpense() { RegularExpenseId = regularId };
+			
+			_context.Entry(expense).State = EntityState.Deleted;
+			
+			await _context.SaveChangesAsync();
+			
+			return true;
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine(e);
+			throw new KeyNotFoundException("Expense not found");
+		}
 	}
 }
