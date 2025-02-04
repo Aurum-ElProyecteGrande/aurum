@@ -5,9 +5,10 @@ namespace Aurum.Repositories.AccountRepository
 {
     public interface IAccountRepo
     {
-        Task<List<Account>> GetAll(int accountId); 
-        Task<int> Create(Account account); 
-        Task<int> Update(int accountId, ModifyAccountDto account); 
-        Task<bool> Delete(int accountId); 
+        Task<Account> Get(int accountId);
+        Task<List<Account>> GetAll(int userId);
+        Task<int> Create(Account account);
+        Task<int> Update(Account account);
+        Task<bool> Delete(int accountId);
     }
 }

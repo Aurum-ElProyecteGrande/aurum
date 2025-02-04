@@ -1,10 +1,8 @@
-using Aurum.Data.Entities;
-using Aurum.Models.AccountDto;
-using Aurum.Models.UserDto;
+﻿using Aurum.Data.Entities;
 
-namespace Aurum.Repositories.UserRepository
+namespace Aurum.Services.UserServices
 {
-    public interface IUserRepo
+    public interface IUserService
     {
         Task<User> Get(int userId);
         Task<int> Create(User user);

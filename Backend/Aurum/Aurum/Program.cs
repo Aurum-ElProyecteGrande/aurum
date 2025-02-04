@@ -15,28 +15,29 @@ using Aurum.Services.ExpenseService;
 using Aurum.Services.Income;
 using Aurum.Services.RegularExpenseService;
 using Microsoft.EntityFrameworkCore;
+using Aurum.Services.UserServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers()
-	.AddJsonOptions(options => 
-	{ 
-		options.JsonSerializerOptions.Converters.Add(new CaseInsensitiveEnumConverter<Regularity>()); 
-	});
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new CaseInsensitiveEnumConverter<Regularity>());
+    });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AurumContext>(options =>
 {
-	options.UseSqlServer(
-		Environment.GetEnvironmentVariable("DbConnectionString"),
-		sqlOptions => sqlOptions.EnableRetryOnFailure(
-			maxRetryCount: 5,  
-			maxRetryDelay: TimeSpan.FromSeconds(10),
-			errorNumbersToAdd: null
-		));
+    options.UseSqlServer(
+        Environment.GetEnvironmentVariable("DbConnectionString"),
+        sqlOptions => sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null
+        ));
 });
 
 builder.Services.AddScoped<IIncomeRepo, IncomeRepo>();
@@ -51,16 +52,17 @@ builder.Services.AddScoped<IExpenseCategoryService, ExpenseCategoryService>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IRegularExpenseService, RegularExpenseService>();
 builder.Services.AddScoped<IBalanceService, BalanceService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddCors(options =>
 {
-	options.AddPolicy("AllowFrontEnd",
-		policy =>
-		{
-			policy.WithOrigins("http://localhost:3000")
-				.AllowAnyHeader()
-				.AllowAnyMethod();
-		});
+    options.AddPolicy("AllowFrontEnd",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
 });
 
 var app = builder.Build();
@@ -68,8 +70,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-	app.UseSwagger();
-	app.UseSwaggerUI();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 app.UseCors("AllowFrontEnd");
 
