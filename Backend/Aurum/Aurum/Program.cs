@@ -1,7 +1,7 @@
 using System.Text.Json;
 using Aurum.Data.Context;
 using Aurum.Data.Entities;
-using Aurum.Repositories.Income.RegularIncome;
+using Aurum.Repositories.IncomeRepository.RegularIncomeRepository;
 using Aurum.Models.CustomJsonConverter;
 using Aurum.Models.RegularExpenseDto;
 using Aurum.Models.RegularityEnum;
@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Hosting.Server;
 using Aurum.Services.RegularIncomeServices;
 using Aurum.Services.IncomeCategoryServices;
 using Aurum.Services.UserServices;
+using Aurum.Repositories.UserRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,6 +68,7 @@ builder.Services.AddScoped<IBalanceService, BalanceService>();
 builder.Services.AddScoped<IRegularIncomeService, RegularIncomeService>(); 
 builder.Services.AddScoped<IIncomeCategoryService, IncomeCategoryService>(); 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepo, UserRepo>();
 
 builder.Services.AddCors(options =>
 {
