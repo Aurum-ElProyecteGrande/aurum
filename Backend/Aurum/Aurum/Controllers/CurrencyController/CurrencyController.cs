@@ -1,31 +1,32 @@
 using Aurum.Repositories.CurrencyRepository;
+using Aurum.Services.CurrencyServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aurum.Controllers.CurrencyController;
 
-    [ApiController]
-    [Route("[controller]")]
-    public class CurrencyController : ControllerBase
+[ApiController]
+[Route("[controller]")]
+public class CurrencyController : ControllerBase
+{
+    private readonly ICurrencyService _currencyService;
+
+    public CurrencyController(ICurrencyService currencyService)
     {
-        private readonly ICurrencyRepo _currencyRepo;
+        _currencyService = currencyService;
+    }
 
-        public CurrencyController(ICurrencyRepo currencyRepo)
-        {
-            _currencyRepo = currencyRepo;
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        try
+        { 
+            var currencies = await _currencyService.GetAll();
+            return Ok(currencies);
         }
-
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        catch (Exception ex)
         {
-            try
-            {
-                var currencies = await _currencyRepo.GetAll();
-                return Ok(currencies);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return BadRequest(ex.Message);
-            }
+            Console.WriteLine(ex.Message);
+            return BadRequest(ex.Message);
         }
     }
+}
