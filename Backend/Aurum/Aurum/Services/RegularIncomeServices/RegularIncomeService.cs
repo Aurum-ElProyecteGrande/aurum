@@ -16,15 +16,27 @@ namespace Aurum.Services.RegularIncomeServices
         }
         public async Task<int> CreateRegular(RegularIncome income)
         {
-            return await _regularIncomeRepo.CreateRegular(income);
+            var regularIncomeId = await _regularIncomeRepo.CreateRegular(income);
+
+            if (regularIncomeId == 0) throw new InvalidOperationException("Invalid regular income input");
+
+            return regularIncomeId;
         }
         public async Task<int> UpdateRegular(RegularIncome regularIncome)
         {
-            return await _regularIncomeRepo.UpdateRegular(regularIncome);
+            var regularIncomeId = await _regularIncomeRepo.UpdateRegular(regularIncome);
+
+            if (regularIncomeId == 0) throw new InvalidOperationException("Invalid regular income input");
+
+            return regularIncomeId;
         }
         public async Task<bool> DeleteRegular(int regularId)
         {
-            return await _regularIncomeRepo.DeleteRegular(regularId);
+            var isDeleted = await _regularIncomeRepo.DeleteRegular(regularId);
+
+            if (!isDeleted) throw new InvalidOperationException($"Could not delete income with id {regularId}");
+
+            return isDeleted;
         }
     }
 }

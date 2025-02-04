@@ -25,12 +25,11 @@ namespace Aurum.Controllers.IncomeControllers
         {
             try
             {
-                List<Data.Entities.Income> incomes = new();
+                List<Income> incomes = new();
 
                 if (startDate is not null && endDate is not null)
                 {
                     var (validStartDate, validEndDate) = _incomeService.ValidateDates(startDate, endDate);
-
                     incomes = await _incomeService.GetAll(accountId, validStartDate, validEndDate);
                 }
                 else
@@ -48,22 +47,17 @@ namespace Aurum.Controllers.IncomeControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Data.Entities.Income income)
+        public async Task<IActionResult> Create(Income income)
         {
             try
             {
                 var incomeId = await _incomeService.Create(income);
-
-                if (incomeId == 0) throw new InvalidOperationException ("Invalid income input");
-
                 return Ok(incomeId);
-
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return BadRequest(ex.Message);
-
             }
         }
 
@@ -73,9 +67,6 @@ namespace Aurum.Controllers.IncomeControllers
             try
             {
                 var isDeleted = await _incomeService.Delete(incomeId);
-
-                if (!isDeleted) throw new InvalidOperationException ($"Could not delete income with id {incomeId}");
-
                 return Ok(isDeleted);
             }
             catch (Exception ex)
@@ -92,14 +83,12 @@ namespace Aurum.Controllers.IncomeControllers
             try
             {
                 var regularIncomes = _regularIncomeService.GetAllRegular(accountId);
-
                 return Ok(regularIncomes);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return BadRequest(ex.Message);
-
             }
         }
 
@@ -109,16 +98,12 @@ namespace Aurum.Controllers.IncomeControllers
             try
             {
                 var regularIncomeId = await _regularIncomeService.CreateRegular(regularIncome);
-
-                if (regularIncomeId == 0) throw new InvalidOperationException ("Invalid regular income input");
-
                 return Ok(regularIncomeId);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return BadRequest(ex.Message);
-
             }
         }
 
@@ -128,16 +113,12 @@ namespace Aurum.Controllers.IncomeControllers
             try
             {
                 var regularIncomeId = await _regularIncomeService.UpdateRegular(regularIncome);
-
-                if (regularIncomeId == 0) throw new InvalidOperationException ("Invalid regular income input");
-
                 return Ok(regularIncomeId);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return BadRequest(ex.Message);
-
             }
         }
 
@@ -147,16 +128,12 @@ namespace Aurum.Controllers.IncomeControllers
             try
             {
                 var isDeleted = await _regularIncomeService.DeleteRegular(regularId);
-
-                if (!isDeleted) throw new InvalidOperationException ($"Could not delete income with id {regularId}");
-
                 return Ok(isDeleted);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return BadRequest(ex.Message);
-
             }
         }
     }
