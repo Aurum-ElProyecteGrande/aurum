@@ -1,24 +1,46 @@
-using Aurum.Models.AccountDto;
-using Aurum.Repositories.AccountRepository;
+using Aurum.Data.Context;
+using Aurum.Data.Entities;
 
 namespace Aurum.Repositories.UserRepository;
 
-public class UserRepo : IAccountRepo
+public class UserRepo : IUserRepo
 {
-    public Task<List<AccountDto>> GetAll(int accountId)
+    private AurumContext _dbContext;
+
+    public UserRepo(AurumContext dbContext)
     {
-        throw new NotImplementedException();
+        _dbContext = dbContext;
     }
-    public Task<int> Create(ModifyAccountDto account)
+    public async Task<User> Get(int userId) => _dbContext.Users
+        .FirstOrDefault(u => u.UserId == userId);
+
+
+    public async Task<int> Create(User user)
     {
-        throw new NotImplementedException();
+        await _dbContext.Users.AddAsync(user);
+        await _dbContext.SaveChangesAsync();
+        return user.UserId;
     }
-    public Task<int> Update(int accountId, ModifyAccountDto account)
+
+    public async Task<int> Update(User user)
     {
-        throw new NotImplementedException();
+        _dbContext.Users.Update(user);
+        await _dbContext.SaveChangesAsync();
+        return user.UserId;
     }
-    public Task<bool> Delete(int accountId)
+
+    public async Task<bool> Delete(int userId)
     {
-        throw new NotImplementedException();
+        var userToDelete = _dbContext.Users.FirstOrDefault(u => u.UserId == userId);
+
+        if (userToDelete is not null)
+        {
+            _dbContext.Users.Remove(userToDelete);
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        return false;
+
     }
 }

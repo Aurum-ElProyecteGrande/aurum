@@ -1,19 +1,19 @@
 ﻿using Aurum.Models.CategoryDtos;
-using Aurum.Repositories.Income.IncomeCategory;
-using Aurum.Services.Income;
+using Aurum.Repositories.IncomeRepository.IncomeCategoryRepository;
+using Aurum.Services.IncomeCategoryServices;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aurum.Controllers.Categories
+namespace Aurum.Controllers.IncomeCategoriyControllers
 {
     [ApiController]
     [Route("/categories/income")]
     public class IncomeCategoryController : ControllerBase
     {
-        private IIncomeCategoryRepo _incomeCategoryRepo;
+        private IIncomeCategoryService _incomeCategoryService;
 
-        public IncomeCategoryController(IIncomeCategoryRepo incomeCategoryRepo)
+        public IncomeCategoryController(IIncomeCategoryService incomeCategoryService)
         {
-            _incomeCategoryRepo = incomeCategoryRepo;
+            _incomeCategoryService = incomeCategoryService;
         }
 
         [HttpGet]
@@ -21,7 +21,7 @@ namespace Aurum.Controllers.Categories
         {
             try
             {
-                var incomeCategories = await _incomeCategoryRepo.GetAllCategory();
+                var incomeCategories = await _incomeCategoryService.GetAllCategory();
 
                 return Ok(incomeCategories);
             }

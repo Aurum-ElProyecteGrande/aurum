@@ -1,0 +1,15 @@
+@import "../variables.scss";
+
+.sidebar {
+    position: absolute;
+    top:0;
+    background-color: $primary;
+    height: 100vh;
+    width: 14vw;
+    font-size: 4vh;
+
+    .button-container {
+        position: relative;
+        margin-top: 10vh;
+    }
+}

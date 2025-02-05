@@ -3,7 +3,8 @@ import "./globals.scss";
 
 const leagueSpartan = League_Spartan({
   subsets: ['latin'],
-  weight: ['300','400','500','600', '700','800','900'], //Light, Regular, Medium, SemiBold, Bold, ExtraBold, Black
+  weight: ['300', '400', '500', '600', '700', '800', '900'], //Light, Regular, Medium, SemiBold, Bold, ExtraBold, Black
+
 });
 
 export const metadata = {
@@ -15,7 +16,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        {children}
+      {children}
       </body>
     </html>
   );
