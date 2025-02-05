@@ -59,6 +59,8 @@ video {
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     text-size-adjust: none;
+    text-decoration: none;
+    scroll-behavior: smooth;
 }
 
 footer,
@@ -99,4 +101,11 @@ table {
 
 input {
     border-radius: 0;
+}
+
+button{
+    color: $text;
+    border: none;
+    margin: 0;
+    padding: 0;
 }

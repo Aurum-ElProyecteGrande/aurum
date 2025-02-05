@@ -1,0 +1,74 @@
+.landing-footer{
+    padding-block: 5rem;
+    background-color: $background-shade;
+
+    &-container{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 3rem;
+
+        @include respond(tablet-portrait){
+            grid-template-columns: 1fr;
+            margin: 5rem;
+        }
+
+       
+    }
+
+    img{
+        width: 11rem;
+        height: auto;
+        margin-bottom: 1rem;
+    }
+
+    h3{
+        font-weight: 700;
+        font-size: 1.35rem;
+        margin-bottom: 0.75rem;
+    }
+
+    &-column{
+        text-transform: uppercase;
+        display: block;
+        margin-inline:auto;
+
+        a{
+            transition: all 0.3s ease;
+    
+            &:hover{
+                color: $accent;
+            }
+        }
+
+        p{
+            line-height: 1.2;
+        }
+
+        .site-map{
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+    }
+
+    &-icons{
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: .75rem
+    }
+
+    &-icon{
+        padding: 0.75rem;
+        background-color: $background;
+        display: grid;
+        place-content: center;
+        border-radius: 0.35rem;
+        border: 1px solid transparent;
+        transition: all 0.3s ease;
+
+        &:hover{
+            border-color: $accent;
+        }
+    }
+}
