@@ -69,10 +69,12 @@ main {
     display: block;
 }
 
+
 body {
     background-color: $background;
     line-height: 1;
 }
+
 
 h1,
 h2,
@@ -83,10 +85,12 @@ h6 {
     color: $heading-text;
 }
 
+
 ol,
 ul {
     list-style: none;
 }
+
 
 table {
     border-collapse: collapse;
