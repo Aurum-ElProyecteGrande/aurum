@@ -25,7 +25,7 @@ namespace Aurum.Controllers.IncomeControllers
         {
             try
             {
-                List<Income> incomes = new();
+                List<IncomeDto> incomes = new();
 
                 if (startDate is not null && endDate is not null)
                 {
@@ -47,7 +47,7 @@ namespace Aurum.Controllers.IncomeControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Income income)
+        public async Task<IActionResult> Create(ModifyIncomeDto income)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace Aurum.Controllers.IncomeControllers
         }
 
         [HttpPost("regulars")]
-        public async Task<IActionResult> CreateRegular(RegularIncome regularIncome)
+        public async Task<IActionResult> CreateRegular(ModifyRegularIncomeDto regularIncome)
         {
             try
             {
@@ -108,7 +108,7 @@ namespace Aurum.Controllers.IncomeControllers
         }
 
         [HttpPut("regulars")]
-        public async Task<IActionResult> UpdateRegular(RegularIncome regularIncome)
+        public async Task<IActionResult> UpdateRegular(ModifyRegularIncomeDto regularIncome)
         {
             try
             {
