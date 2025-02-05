@@ -7,7 +7,7 @@ import Header from "../components/dashboard/header";
 import ChangeChartForm from "../components/dashboard/change-chart-form";
 import Sidebar from "../components/sidebar";
 import { layouts } from "../../scripts/dashboard_scripts/layouts"
-import { fetchAccounts } from "@/scripts/dashboard_scripts/dashboard_scripts";
+import { fetchAccounts, fetchExpenses } from "@/scripts/dashboard_scripts/dashboard_scripts";
 
 export default function DashboardPage() {
 
@@ -20,16 +20,17 @@ export default function DashboardPage() {
   //chart states
   const [accounts, setAccounts] = useState([])
   const userId = 1 //FROM CREDENTIALS probably?
-  
-  //chart effects
-    useEffect(() => {
-        const getAccounts = async () => {
-            const updatedAccounts = await fetchAccounts(userId)
-            setAccounts(updatedAccounts)
-        }
-        getAccounts()
-    }, [])
 
+  //chart effects
+  useEffect(() => {
+    const getAccounts = async () => {
+      const updatedAccounts = await fetchAccounts(userId)
+      setAccounts(updatedAccounts)
+    }
+    getAccounts()
+  }, [])
+
+  //\
 
   useEffect(() => {
     setPossibleChartsBySegment(layouts[choosenLayout].possibleCharts)

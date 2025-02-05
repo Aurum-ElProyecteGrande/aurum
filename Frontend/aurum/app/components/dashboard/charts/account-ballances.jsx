@@ -13,6 +13,13 @@ export default function AccountBalances({ isEditMode, accounts }) {
                     name: acc.displayName, balance: await fetchBalance(acc.accountId)
                 }))
             )
+
+            if (updatedBalances.length > 3) {
+                const topBalances = [...updatedBalances.sort((a, b) => a.balance - b.balance)]
+                updatedBalances = []
+                updatedBalances.push(topBalances[0], topBalances[1], topBalances[2])
+            }
+
             setBalances(updatedBalances)
         }
         if (accounts) {
@@ -23,13 +30,15 @@ export default function AccountBalances({ isEditMode, accounts }) {
 
     return (
         <div className="chart">
-            <div className="chart-title">Account Balances</div>
+            <div className="chart-title">
+                <p>Account ballances</p>
+            </div>
             <div className="chart-body">
                 <div className="account-balance-container">
                     {balances && balances.map(balance => (
                         <div key={balance.name} className="row">
                             <div>{balance.name}</div>
-                            <div>{balance.balance.toLocaleString('hu-HU', { style: 'currency', currency: 'HUF' })}</div>
+                            <div className="ballance">{balance.balance.toLocaleString('hu-HU', { style: 'currency', currency: 'HUF' })}</div>
                         </div>
                     ))}
                 </div>

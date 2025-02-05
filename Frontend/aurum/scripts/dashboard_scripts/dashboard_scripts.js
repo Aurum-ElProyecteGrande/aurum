@@ -8,8 +8,7 @@ export const fetchExpenses = async (accId) => {
 }
 
 export const fetchExpensesByDate = async (accId, startDate, endDate) => {
-    console.log(`${apiUrl}/expenses/${accId}/${startDate}-${endDate}`)
-    const response = await fetch(`${apiUrl}/expenses/${accId}/${startDate}-${endDate}`)
+    const response = await fetch(`${apiUrl}/expenses/${accId}/${startDate}/${endDate}`)
     if (!response.ok) throw new Error(`Fetching expenses for account: ${accId} went wrong`)
     const expenses = await response.json()
     return expenses

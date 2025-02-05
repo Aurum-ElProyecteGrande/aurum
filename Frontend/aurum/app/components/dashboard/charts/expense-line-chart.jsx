@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { fetchExpenses } from "@/scripts/dashboard_scripts/dashboard_scripts";
+import { fetchExpenses, fetchExpensesByDate } from "@/scripts/dashboard_scripts/dashboard_scripts";
 import ChangeChartType from "./chart-utils/change-chart-type";
 import ChangeDaysShown from "./chart-utils/change-days-shown";
 
@@ -30,7 +30,7 @@ export default function ExpenseLineChart({ isEditMode, accounts }) {
 
     useEffect(() => {
         const getExpenses = async (accId) => {
-            const updatedExpenses = await fetchExpenses(accId)
+            const updatedExpenses = await fetchExpensesByDate(accId, startDate.toISOString().slice(0, 10), today.toISOString().slice(0, 10))
             let expensesByDate = Object.groupBy(updatedExpenses, ({ date }) => date)
             let updatedExpenseByDateString = []
             for (const key in expensesByDate) {
@@ -92,7 +92,9 @@ export default function ExpenseLineChart({ isEditMode, accounts }) {
 
     return (
         <div className="chart">
-            <div className="chart-title">Expenses in Last 10 days</div>
+            <div className="chart-title">
+                <p>Expenses in last {daysShown} days #{curAccount && curAccount.displayName}</p>
+            </div>
             <ResponsiveContainer width="100%" height={200} className="chart-body">
                 <LineChart data={rawChartData}>
                     <CartesianGrid strokeDasharray="3 3" />

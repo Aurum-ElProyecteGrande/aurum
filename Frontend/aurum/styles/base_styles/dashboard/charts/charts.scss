@@ -24,17 +24,23 @@
     }
 
     .chart-title{
-        position:sticky;
-        color: $text;
+  //      position:sticky;
+       display: flex;
+       justify-content: center;
+       align-items: center;
         justify-self: flex-start;
-        text-align: center;
-        justify-content: center;
         font-size: 2vh;
+        height: 2.5vh;
         margin-bottom: 2vh;
         background: rgb(51,51,51);
         background: linear-gradient(90deg, rgba(51,51,51,0) 20%, rgba(61,98,164,1) 50%, rgba(51,51,51,0) 80%);
+        
+        p{
+            color: $text;
+        }
     }
     .chart-body {
+        position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -93,6 +99,50 @@
         font-size: 3vh;
         margin-bottom: 0.5vh;
         justify-content: space-between;
+        border-bottom: 1px solid $accent-shade;
+    
+        .ballance {
+            color: $accent;
+        }
+    }
+}
 
+//transactions
+.transaction-container{
+    display: flex;
+    flex-direction: column;
+    
+
+
+    .row {
+        display: flex;
+        flex-direction: row;
+        width: 36vw;
+        font-size: 2.5vh;
+        margin-bottom: 0.5vh;
+        justify-content: space-between;
+        border-bottom: 1px solid $accent-shade;
+    
+        .expense {
+            color: $text
+        }
+         .income {
+            color: $accent;
+        }
+
+        .date{
+            font-weight: 300;
+            width: 8vw;
+        }
+        .amount {
+            width: 9vw;
+            text-align: right;
+        }
+        .label {
+            font-weight: 300;
+            text-align: left;
+            width: 15vw;
+
+        }
     }
 }

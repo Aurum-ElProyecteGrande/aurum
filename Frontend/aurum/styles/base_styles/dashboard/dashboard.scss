@@ -46,10 +46,10 @@
         .menu-button {
             background-color: inherit;
             justify-content: flex-end;
+            align-self: center;
             border: none;
             color: $text;
             font-size: 40px;
-            rotate: 90deg;
             cursor: pointer;
         }
     }
@@ -62,6 +62,7 @@
         display: flex;
         flex-direction: column;
         height: 6vh;
+        box-shadow: 0px 0px 3px $accent;
 
         .active{
             background-color: $accent;
@@ -74,6 +75,7 @@
             cursor: pointer;
             border-radius: 0;
             border: none;
+            background-color: $background
         }
         button:hover {
             background-color: $accent;
@@ -87,6 +89,8 @@
             right: 100%;
             bottom: 3vh;
             background-color: none;
+            box-shadow: 0px 0px 3px $accent;
+
         }
     }
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { CiMenuKebab } from "react-icons/ci";
 
 export default function Header({ setIsHamburgerOpen, isHamburgerOpen, isEditMode }) {
 
@@ -27,7 +28,7 @@ export default function Header({ setIsHamburgerOpen, isHamburgerOpen, isEditMode
         <p>{isEditMode ? "Edit charts" : ""}</p>
       </section>
       <section className="menu-button-section">
-        <button id="hamburger-menu-button" className="menu-button" onClick={() => setIsHamburgerOpen(!isHamburgerOpen)}> ... </button>
+          <CiMenuKebab id="hamburger-menu-button" className="menu-button" onClick={() => setIsHamburgerOpen(!isHamburgerOpen)}/>
       </section>
     </div>
   )
