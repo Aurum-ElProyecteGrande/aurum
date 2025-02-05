@@ -1,10 +1,9 @@
-@import "./variables.scss";
-
 *,
 *:before,
 *:after {
     box-sizing: border-box;
 }
+
 html,
 body,
 div,
@@ -61,6 +60,7 @@ video {
     -webkit-font-smoothing: antialiased;
     text-size-adjust: none;
 }
+
 footer,
 header,
 nav,
@@ -68,10 +68,14 @@ section,
 main {
     display: block;
 }
+
+
 body {
     background-color: $background;
     line-height: 1;
 }
+
+
 h1,
 h2,
 h3,
@@ -80,14 +84,19 @@ h5,
 h6 {
     color: $heading-text;
 }
+
+
 ol,
 ul {
     list-style: none;
 }
+
+
 table {
     border-collapse: collapse;
     border-spacing: 0;
 }
+
 input {
     border-radius: 0;
 }

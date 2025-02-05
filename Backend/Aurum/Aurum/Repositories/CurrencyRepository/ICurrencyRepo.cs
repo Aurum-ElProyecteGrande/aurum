@@ -1,3 +1,4 @@
+using Aurum.Data.Entities;
 using Aurum.Models.CurrencyDto;
 
 namespace Aurum.Repositories.CurrencyRepository
@@ -5,6 +6,6 @@ namespace Aurum.Repositories.CurrencyRepository
 {
     public interface ICurrencyRepo
     {
-        Task<List<CurrencyDto>> GetAll();
+        Task<List<Currency>> GetAll();
     }
 }

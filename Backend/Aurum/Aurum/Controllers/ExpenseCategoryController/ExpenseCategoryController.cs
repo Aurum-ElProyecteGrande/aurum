@@ -13,8 +13,8 @@ public class ExpenseCategoryController(IExpenseCategoryService service): Control
 		try
 		{
 			var categories = await _service.GetAllExpenseCategories(userId);
-			if (categories.Count == 0)
-				throw new InvalidOperationException("No expense categories found");
+			// if (categories.Count == 0)
+			// 	throw new InvalidOperationException("No expense categories found");
 			
 			return Ok(categories);
 		}

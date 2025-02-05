@@ -1,0 +1,74 @@
+﻿using Aurum.Data.Entities;
+using Aurum.Models.IncomeDTOs;
+using Aurum.Models.RegularityEnum;
+using Aurum.Repositories.IncomeRepository.RegularIncomeRepository;
+using Aurum.Services.IncomeCategoryServices;
+
+namespace Aurum.Services.RegularIncomeServices
+{
+    public class RegularIncomeService : IRegularIncomeService
+    {
+        IRegularIncomeRepo _regularIncomeRepo;
+        IIncomeCategoryService _incomeCategoryService;
+
+        public RegularIncomeService(IRegularIncomeRepo regularIncomeRepo, IIncomeCategoryService incomeCategoryService)
+        {
+            _regularIncomeRepo = regularIncomeRepo;
+            _incomeCategoryService = incomeCategoryService;
+        }
+        public async Task<List<RegularIncomeDto>> GetAllRegular(int accountId)
+        {
+            var incomes = await _regularIncomeRepo.GetAllRegular(accountId);
+            List<RegularIncomeDto> incomeDtos = new();
+            foreach (var income in incomes)
+            {
+                incomeDtos.Add(await ConvertRegularIncomeToDto(income));
+            }
+            return incomeDtos;
+        }
+        public async Task<int> CreateRegular(ModifyRegularIncomeDto income)
+        {
+            var regularIncomeId = await _regularIncomeRepo.CreateRegular(ConvertModifyDtoToIncome(income));
+
+            if (regularIncomeId == 0) throw new InvalidOperationException("Invalid regular income input");
+
+            return regularIncomeId;
+        }
+        public async Task<int> UpdateRegular(ModifyRegularIncomeDto regularIncome)
+        {
+            var regularIncomeId = await _regularIncomeRepo.UpdateRegular(ConvertModifyDtoToIncome(regularIncome));
+
+            if (regularIncomeId == 0) throw new InvalidOperationException("Invalid regular income input");
+
+            return regularIncomeId;
+        }
+        public async Task<bool> DeleteRegular(int regularId)
+        {
+            var isDeleted = await _regularIncomeRepo.DeleteRegular(regularId);
+
+            if (!isDeleted) throw new InvalidOperationException($"Could not delete income with id {regularId}");
+
+            return isDeleted;
+        }
+
+        private async Task<RegularIncomeDto> ConvertRegularIncomeToDto(RegularIncome income)
+        {
+            var categories = await _incomeCategoryService.GetAllCategory();
+            var category = categories.First(c => c.IncomeCategoryId == income.IncomeCategoryId);
+            return new(income.RegularIncomeId, income.AccountId, new(category.Name, category.IncomeCategoryId), income.Label, income.Amount, income.StartDate, income.Regularity);
+        }
+
+        private RegularIncome ConvertModifyDtoToIncome(ModifyRegularIncomeDto income) =>
+            new RegularIncome()
+            {
+                AccountId = income.AccountId,
+                IncomeCategoryId = income.CategoryId,
+                Label = income.Label,
+                Amount = income.Amount,
+                StartDate = income.StartDate,
+                Regularity = income.Regularity
+            };
+
+
+    }
+}

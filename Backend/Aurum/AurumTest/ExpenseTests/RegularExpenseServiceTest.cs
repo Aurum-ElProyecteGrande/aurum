@@ -1,4 +1,5 @@
 using Aurum.Controllers.RegularExpressController;
+using Aurum.Data.Entities;
 using Aurum.Models.CategoryDtos;
 using Aurum.Models.RegularityEnum;
 using Aurum.Models.RegularExpenseDto;
@@ -31,9 +32,19 @@ public class RegularExpenseServiceTest
         // Arrange
         var accountId = 1;
         var userId = 1;
-        var rawExpenses = new List<RawRegularExpenseDto>
+        var rawExpenses = new List<RegularExpense>
         {
-            new RawRegularExpenseDto(1, accountId, 1, null, "Expense 1", 100, DateTime.Now, Regularity.Monthly)
+            new RegularExpense()
+            {
+                RegularExpenseId = 1,
+                AccountId = accountId,
+                ExpenseCategoryId = 1,
+                ExpenseSubcategoryId = null,
+                Label = "Expense 1",
+                Amount = 100, 
+                StartDate = DateTime.Now, 
+                Regularity = Regularity.Monthly   
+            }
         };
         var categories = new Dictionary<CategoryDto, List<SubCategoryDto>>
         {
@@ -67,9 +78,19 @@ public class RegularExpenseServiceTest
         // Arrange
         var accountId = 1;
         var userId = 1;
-        var rawExpenses = new List<RawRegularExpenseDto>
+        var rawExpenses = new List<RegularExpense>
         {
-            new RawRegularExpenseDto(1, accountId, 1, null, "Expense 1", 100, DateTime.Now, Regularity.Monthly)
+            new RegularExpense()
+            {
+                RegularExpenseId = 1,
+                AccountId = accountId,
+                ExpenseCategoryId = 1,
+                ExpenseSubcategoryId = null,
+                Label = "Expense 1",
+                Amount = 100, 
+                StartDate = DateTime.Now, 
+                Regularity = Regularity.Monthly   
+            }
         };
         var categories = new Dictionary<CategoryDto, List<SubCategoryDto>>(); // No categories
 
@@ -96,7 +117,7 @@ public class RegularExpenseServiceTest
             .Setup(c => c.AcquireSubCategoryId(expenseDto.CategoryId, expenseDto.SubCategoryName))
             .ReturnsAsync(null!);
         _repositoryMock
-            .Setup(r => r.Create(It.IsAny<RawRegularExpenseDto>()))
+            .Setup(r => r.Create(It.IsAny<RegularExpense>()))
             .ReturnsAsync(createdId);
 
         // Act
@@ -132,7 +153,7 @@ public class RegularExpenseServiceTest
             .Setup(c => c.AcquireSubCategoryId(expenseDto.CategoryId, expenseDto.SubCategoryName))
             .ReturnsAsync(null!);
         _repositoryMock
-            .Setup(r => r.Update(It.IsAny<RawRegularExpenseDto>()))
+            .Setup(r => r.Update(It.IsAny<RegularExpense>()))
             .ReturnsAsync(updatedId);
 
         // Act

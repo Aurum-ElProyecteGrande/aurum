@@ -1,0 +1,28 @@
+﻿networks:
+  aurum-network:
+    name: aurum-network
+
+services:
+  aurum:
+    image: aurum
+    build:
+      context: .
+      dockerfile: Aurum/Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    networks:
+      - aurum-network
+    environment:
+      - DbConnectionString=${DbConnectionString}
+  db:
+    image: mcr.microsoft.com/mssql/server:latest
+    container_name: aurum_db
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "1433:1433"
+    networks:
+      - aurum-network

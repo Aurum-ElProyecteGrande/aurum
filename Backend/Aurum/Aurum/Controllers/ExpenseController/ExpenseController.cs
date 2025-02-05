@@ -1,3 +1,4 @@
+using System.Globalization;
 using Aurum.Models.ExpenseDto;
 using Aurum.Services.ExpenseCategoryService;
 using Aurum.Services.ExpenseService;
@@ -26,7 +27,7 @@ public class ExpenseController(IExpenseService service):ControllerBase
 	}
 	
 	//TODO userId should be replaced from the authentication context
-	[HttpGet("/expenses/{accountId:int}/{startDate:datetime}-{endDate:datetime}")]
+	[HttpGet("/expenses/{accountId:int}/{startDate:datetime}/{endDate:datetime}")]
 	public async Task<IActionResult> GetAllWithDate([FromRoute]int accountId, [FromRoute]DateTime startDate, [FromRoute]DateTime endDate, [FromQuery]int userId)
 	{
 		try

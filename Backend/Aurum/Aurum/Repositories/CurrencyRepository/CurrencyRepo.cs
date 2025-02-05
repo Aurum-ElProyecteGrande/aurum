@@ -1,11 +1,17 @@
+using Aurum.Data.Context;
+using Aurum.Data.Entities;
 using Aurum.Models.CurrencyDto;
 
 namespace Aurum.Repositories.CurrencyRepository;
 
 public class CurrencyRepo : ICurrencyRepo
 {
-    public Task<List<CurrencyDto>> GetAll()
+    AurumContext _dbContext;
+
+    public CurrencyRepo(AurumContext aurumContext)
     {
-        throw new NotImplementedException();
+        _dbContext = aurumContext;
     }
+    public async Task<List<Currency>> GetAll() => _dbContext.Currencies
+        .ToList();
 }

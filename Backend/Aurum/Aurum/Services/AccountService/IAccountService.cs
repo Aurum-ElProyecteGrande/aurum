@@ -1,7 +1,14 @@
-﻿namespace Aurum.Services.AccountService
+﻿using Aurum.Data.Entities;
+using Aurum.Models.AccountDto;
+
+namespace Aurum.Services.AccountService
 {
     public interface IAccountService
     {
         Task<decimal> GetInitialAmount(int accountId);
+        Task<List<Account>> GetAll(int userId);
+        Task<int> Create(Account account);
+        Task<int> Update(Account account);
+        Task<bool> Delete(int accountId);
     }
 }
