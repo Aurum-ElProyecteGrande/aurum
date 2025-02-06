@@ -60,8 +60,6 @@ export default function LastTransactions({ isEditMode, accounts }) {
         setTransactions(updatedTransactions)
     }, [expenses, incomes])
 
-    console.log(transactions)
-
     return (
         <div className="chart">
             <div className="chart-title">

@@ -1,6 +1,6 @@
 @import "../variables.scss";
 @import "./layouts/basic.scss";
-@import "./layouts/var2.scss";
+@import "./layouts/scientic.scss";
 @import "./layouts/detailed.scss";
 
 .page {
@@ -19,7 +19,7 @@
         position: relative;
         display: flex;
         flex-direction: row;
-        justify-content: space-evenly;
+        justify-content: space-between;
         width: 86vw;
         left: 14vw;
         height: 7vh;
@@ -32,6 +32,63 @@
         }
         .sub-title-section {
             justify-content: center;
+            width: 22vw;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
+            .save-container {
+                position: relative;
+                display: inline-block;
+                overflow: hidden;
+                width: 10vw;
+                height: 7vh;
+                display: flex;
+                flex-direction:row;
+                justify-content: space-evenly;
+                align-items: center;
+
+                .save {
+                    position: absolute;
+                    left:0.5vw;
+                    height: 7vh;
+                    transition: transform 0.5s;
+
+                }
+                .label{
+                    position: absolute;
+                    left: 0;
+                    transform: translateX(-100%);
+                    white-space: nowrap;
+                    opacity: 0;
+                    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+                }
+            }
+
+
+.save-container:hover .label {
+    transform:  translateX(60%);
+    opacity: 1;
+    color: $accent
+  }
+  .save-container:hover .save {
+    transform: scale(1.8);
+    color: $accent;
+  }
+  .save-container:hover {
+    cursor: pointer;
+  }
+
+        }
+        .choosen-layout {
+            justify-content: center;
+            div{
+                align-self: center;
+                font-size: 2.5vh;
+                letter-spacing: 0.5vw;
+                border-bottom: 1px solid $accent;
+                margin: 0;
+            }
         }
         .menu-button-section {
             justify-content: flex-end;
