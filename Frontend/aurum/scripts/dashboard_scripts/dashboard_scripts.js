@@ -68,3 +68,7 @@ export const getIndexOfPossibleChart = (chartName) => {
     }
     return false
 }
+
+export const displayHuf =(amount) => {
+    return amount.toLocaleString('hu-HU', { style: 'currency', currency: 'HUF' })
+}

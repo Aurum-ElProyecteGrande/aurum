@@ -27,8 +27,16 @@
         flex-direction: row;
         justify-content: space-between;
         z-index: 1;
-        background: rgb(61,98,164);
-        background: linear-gradient(90deg, rgba(61,98,164,1) 0%, rgba(56,74,106,1) 15%, rgba(52,55,59,1) 100%);
+
+        justify-self: center;
+        width: 95%;
+        background-color: #3d63a456;    
+   border: 1px solid $primary;
+    border-radius: 16px;
+    padding-left: 4px;
+    padding-right: 4px;
+        //background: rgb(61,98,164);
+        //background: linear-gradient(90deg, rgba(61,98,164,1) 0%, rgba(56,74,106,1) 15%, rgba(52,55,59,1) 100%);
 
         section {
             display: flex;
@@ -89,15 +97,15 @@
   .save-container:hover {
     cursor: pointer;
   }
-
         }
+
         .choosen-layout {
             justify-content: center;
             div{
                 align-self: center;
                 font-size: 2.5vh;
                 letter-spacing: 0.5vw;
-                border-bottom: 1px solid $accent;
+     //           border-bottom: 1px solid $accent;
                 margin: 0;
             }
         }
@@ -124,7 +132,8 @@
 
     .hamburger-menu {
         position: absolute;
-        right: 0;
+        right: 3rem;
+        top:2.5rem;
         z-index: 1;
         background-color: $background;
         display: flex;
@@ -134,7 +143,7 @@
 
         .active{
             background-color: $accent;
-            color: $primary
+            color: $primary;
         }
 
         button {

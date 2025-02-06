@@ -27,7 +27,7 @@ export default function DashboardPage() {
   const [incomes, setIncomes] = useState([])
   const userId = 1 //from credentials probably? TODO
 
-  const chartProps = {isEditMode, accounts, expenses, incomes, userId}
+  const chartProps = { isEditMode, accounts, expenses, incomes, userId }
 
   //chart effects
   useEffect(() => {
@@ -113,7 +113,6 @@ export default function DashboardPage() {
 
   return (
     <div className="dashboard page">
-
       <Header
         setIsHamburgerOpen={setIsHamburgerOpen}
         isHamburgerOpen={isHamburgerOpen}
@@ -130,20 +129,9 @@ export default function DashboardPage() {
       }
       <div className="dashboard-container">
         {choosenCharts && choosenCharts.map((choosenChart, segmentIndex) => (
-          <div key={segmentIndex}
-            className={`${chosenLayout}-${segmentIndex + 1} chart-container ${isEditMode && "edit-mode"}`}>
-            {React.cloneElement(
-              choosenChart.chart,
-               {...chartProps} )
-            }
-            {isEditMode &&
-              <ChangeChartForm
-                choosenCharts={choosenCharts}
-                segmentIndex={segmentIndex}
-                possibleCharts={possibleChartsBySegment[segmentIndex]}
-                setChoosenCharts={setChoosenCharts} />
-            }
-          </div>
+          <React.Fragment key={segmentIndex}>
+            {React.cloneElement(choosenChart.chart, { ...chartProps, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts })}
+          </React.Fragment>
         ))}
       </div>
     </div>

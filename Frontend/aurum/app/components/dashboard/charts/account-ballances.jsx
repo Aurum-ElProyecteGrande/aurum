@@ -1,8 +1,8 @@
 import { fetchBalance } from "@/scripts/dashboard_scripts/dashboard_scripts"
-import { Ballet } from "next/font/google"
 import { useEffect, useState } from "react"
+import ChangeChartForm from '../change-chart-form';
 
-export default function AccountBalances({ accounts }) {
+export default function AccountBalances({ isEditMode, accounts, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts }) {
 
     const [balances, setBalances] = useState([])
 
@@ -31,20 +31,40 @@ export default function AccountBalances({ accounts }) {
 
 
     return (
-        <div className="chart">
-            <div className="chart-title">
-                <p>Account ballances</p>
-            </div>
-            <div className="chart-body">
-                <div className="account-balance-container">
-                    {balances && balances.map(balance => (
-                        <div key={balance.name} className="row">
-                            <div>{balance.name}</div>
-                            <div className="ballance">{balance.balance.toLocaleString('hu-HU', { style: 'currency', currency: 'HUF' })}</div>
-                        </div>
-                    ))}
+
+        <div key={segmentIndex} className={`${chosenLayout}-${segmentIndex + 1} chart-container ${isEditMode && "edit-mode"}`}>
+
+            <div className='chart-title-container'>
+                {isEditMode &&
+                    <div className="change-chart-types-container">
+                        <ChangeChartForm
+                            choosenCharts={choosenCharts}
+                            segmentIndex={segmentIndex}
+                            possibleCharts={possibleChartsBySegment[segmentIndex]}
+                            setChoosenCharts={setChoosenCharts} />
+                    </div>
+                }
+                <div className="chart-title">
+                    <p>Account ballances</p>
                 </div>
             </div>
+
+            <div className="chart">
+
+                <div className="chart-body">
+                    <div className="account-balance-container">
+                        {balances && balances.map(balance => (
+                            <div key={balance.name} className="row">
+                                <div>{balance.name}</div>
+                                <div className="ballance">{balance.balance.toLocaleString('hu-HU', { style: 'currency', currency: 'HUF' })}</div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+
+
         </div>
     )
 }

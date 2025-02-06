@@ -5,8 +5,9 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import { fetchIncomeByDate, fetchAccounts } from "@/scripts/dashboard_scripts/dashboard_scripts";
 import ChangeChartType from "./chart-utils/change-chart-type";
 import ChangeDaysShown from "./chart-utils/change-days-shown";
+import ChangeChartForm from '../change-chart-form';
 
-export default function IncomeLineChart({ isEditMode, accounts }) {
+export default function IncomeLineChart({ isEditMode, accounts, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts }) {
 
     const [incomesByDateString, setIncomesByDateString] = useState([])
     const [startDate, setStartDate] = useState(new Date())
@@ -90,28 +91,42 @@ export default function IncomeLineChart({ isEditMode, accounts }) {
     }
 
     return (
-        <div className="chart">
-            <div className="chart-title">
-                <p>Incomes in last {daysShown} days #{curAccount && curAccount.displayName}</p>
-            </div>
-            <ResponsiveContainer width="100%" height={200} className="chart-body">
-                <LineChart data={rawChartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip
-                        contentStyle={{ backgroundColor: "#333333", borderColor: "#F9D342", color: "#F4F4F4" }}
-                    />
-                    <Legend />
-                    <Line type="monotone" dataKey="income" stroke="#F9D342" />
-                </LineChart>
-            </ResponsiveContainer>
-            {isEditMode &&
-                <div className="change-chart-types-container">
-                    <ChangeChartType handleChangeType={handleChangeType} accounts={accounts} curAccount={curAccount} />
-                    <ChangeDaysShown handleChangeDays={handleChangeDays} daysShown={daysShown} />
+
+        <div key={segmentIndex} className={`${chosenLayout}-${segmentIndex + 1} chart-container ${isEditMode && "edit-mode"}`}>
+
+            <div className='chart-title-container'>
+                {isEditMode &&
+                    <div className="change-chart-types-container">
+                        <ChangeChartType handleChangeType={handleChangeType} accounts={accounts} curAccount={curAccount} />
+                        <ChangeDaysShown handleChangeDays={handleChangeDays} daysShown={daysShown} />
+                        <ChangeChartForm
+                            choosenCharts={choosenCharts}
+                            segmentIndex={segmentIndex}
+                            possibleCharts={possibleChartsBySegment[segmentIndex]}
+                            setChoosenCharts={setChoosenCharts} />
+                    </div>
+                }
+                <div className="chart-title">
+                    <p>Incomes in last {daysShown} days #{curAccount && curAccount.displayName}</p>
                 </div>
-            }
+            </div>
+
+            <div className="chart">
+
+                <ResponsiveContainer width="100%" height={200} className="chart-body">
+                    <LineChart data={rawChartData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" />
+                        <YAxis />
+                        <Tooltip
+                            contentStyle={{ backgroundColor: "#333333", borderColor: "#F9D342", color: "#F4F4F4" }}
+                        />
+                        <Legend />
+                        <Line type="monotone" dataKey="income" stroke="#F9D342" />
+                    </LineChart>
+                </ResponsiveContainer>
+            </div>
+
         </div>
     )
 }

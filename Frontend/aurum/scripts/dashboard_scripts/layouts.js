@@ -5,7 +5,7 @@ import LastTransactions from "../../app/components/dashboard/charts/last-transac
 import ExpenseByCategory from "../../app/components/dashboard/charts/expense-by-category";
 import IncomesByCategory from "@/app/components/dashboard/charts/income-by-category";
 import Chart6 from "../../app/components/dashboard/charts/chart6";
-import Chart7 from "../../app/components/dashboard/charts/chart7";
+import AccountsThisMonth from "../../app/components/dashboard/charts/accounts-this-month";
 
 const charts2x1 = [
     { name: "expense-by-category", chart: <ExpenseByCategory /> },
@@ -21,7 +21,7 @@ const charts3x2 = [
     { name: "chart6", chart: <Chart6 /> }
 ]
 const charts3x1 = [
-    { name: "chart7", chart: <Chart7 /> }
+    { name: "accounts-this-month", chart: <AccountsThisMonth /> }
 ]
 
 export const allCharts = [
