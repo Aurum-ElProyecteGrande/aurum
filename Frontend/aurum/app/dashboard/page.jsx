@@ -85,6 +85,7 @@ export default function DashboardPage() {
 
   return (
     <div className="dashboard page">
+
       <Header
         setIsHamburgerOpen={setIsHamburgerOpen}
         isHamburgerOpen={isHamburgerOpen}
