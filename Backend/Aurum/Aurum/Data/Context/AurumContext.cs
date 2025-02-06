@@ -17,4 +17,7 @@ public class AurumContext(DbContextOptions<AurumContext> options):DbContext(opti
 	public DbSet<RegularExpense> RegularExpenses { get; set; }
 	public DbSet<RegularIncome> RegularIncomes { get; set; }
 	public DbSet<User> Users { get; set; }
+	public DbSet<BasicLayout> BasicLayouts{ get; set; }
+	public DbSet<ScienticLayout> ScienticLayouts{ get; set; }
+	public DbSet<DetailedLayout> DetailedLayouts { get; set; }
 }

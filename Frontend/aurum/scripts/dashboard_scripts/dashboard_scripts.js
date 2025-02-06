@@ -1,3 +1,5 @@
+import { allCharts } from "./layouts"
+
 const apiUrl = "http://localhost:8080"
 
 export const fetchExpenses = async (accId) => {
@@ -39,5 +41,30 @@ export const fetchBalance = async (accId) => {
     const response = await fetch(`${apiUrl}/balance/${accId}`)
     if (!response.ok) throw new Error(`Fetching balance for account: ${accId} went wrong`)
     const balance = await response.json()
-    return balance 
+    return balance
+}
+
+export const fetchLayouts = async (userId) => {
+    const response = await fetch(`${apiUrl}/Layout/${userId}`)
+    const layouts = await response.json()
+    return layouts
+}
+
+export const fetchPostLayout = async (layoutDto) => {
+    const response = await fetch(`${apiUrl}/Layout/${layoutDto.layoutName}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(layoutDto)
+    })
+}
+
+export const getIndexOfPossibleChart = (chartName) => {
+    for (const charts of allCharts) {
+        for (let i = 0; i < charts.length; i++) {
+            if (charts[i].name == chartName) return i
+        }
+    }
+    return false
 }

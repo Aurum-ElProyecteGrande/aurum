@@ -23,6 +23,13 @@ const charts3x1 = [
     { name: "chart7", chart: <Chart7 /> }
 ]
 
+export const allCharts = [
+    charts2x1,
+    charts3x3,
+    charts3x2,
+    charts3x1
+]
+
 export const layouts = {
     "basic": {
         possibleCharts: [
@@ -44,16 +51,16 @@ export const layouts = {
             charts3x2[1]
         ]
     },
-    "var2": {
+    "scientic": {
         possibleCharts: [
-            charts3x1,  //.var2-1
-            charts3x1,  //.var2-2
-            charts3x2,  //.var2-3
-            charts3x3,  //.var2-4
-            charts3x1,  //.var2-5
-            charts2x1,  //.var2-6
-            charts2x1,  //.var2-7
-            charts2x1,  //.var2-8
+            charts3x1,  //.scientic-1
+            charts3x1,  //.scientic-2
+            charts3x2,  //.scientic-3
+            charts3x3,  //.scientic-4
+            charts3x1,  //.scientic-5
+            charts2x1,  //.scientic-6
+            charts2x1,  //.scientic-7
+            charts2x1,  //.scientic-8
         ],
         initialCharts: [
             charts3x1[0],
