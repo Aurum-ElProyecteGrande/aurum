@@ -23,8 +23,8 @@ public class AccountServiceTest
     [Test]
     public async Task ExistingAccountId_ReturnsAccount()
     {
-        var accountId = 1;
-        var account = new Account { AccountId = accountId };
+        int accountId = 1;
+        Account account = new Account { AccountId = accountId };
 
         _accountRepoMock.Setup(repo => repo.Get(accountId)).ReturnsAsync(account);
 
@@ -33,7 +33,7 @@ public class AccountServiceTest
         Assert.Multiple(() =>
         {
             Assert.NotNull(result);
-            Assert.AreEqual(accountId, result.AccountId);
+            Assert.That(result.AccountId, Is.EqualTo(accountId));
             _accountRepoMock.Verify(repo => repo.Get(It.IsAny<int>()), Times.Once);
         });
     }
@@ -116,7 +116,7 @@ public class AccountServiceTest
         int accountId = 1;
         Account account = new Account { AccountId = accountId };
 
-        _accountRepoMock.Setup(repo => repo.Create(account)).ReturnsAsync(1);
+        _accountRepoMock.Setup(repo => repo.Create(account)).ReturnsAsync(accountId);
 
         var result = await _accountService.Create(account);
         

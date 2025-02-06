@@ -114,7 +114,7 @@ public class UserServiceTest
     }
 
     [Test]
-    public async Task ZeroUserId_ThrowsException()
+    public async Task ZeroUserId_ThrowsException_OnUpdate()
     {
         int userId = 0;
         User user = new User { UserId = userId };
@@ -123,4 +123,32 @@ public class UserServiceTest
         
         Assert.ThrowsAsync<Exception>(async () => await _userService.Update(user));
     }
+
+    [Test]
+    public async Task ValidUserId_DeletesUserAndReturnsTrue()
+    {
+        int userId = 1;
+        User user = new User { UserId = 1 };
+
+        _userRepoMock.Setup(repo => repo.Delete(userId)).ReturnsAsync(true);
+
+        var result = await _userService.Delete(userId);
+        
+        Assert.Multiple(() =>
+        {
+            Assert.IsTrue(result);
+            _userRepoMock.Verify(repo => repo.Delete(userId), Times.Once);
+        });
+    }
+
+    [Test]
+    public async Task InvalidUserId_ThrowsInvalidOperationException()
+    {
+        int userId = 99;
+
+        _userRepoMock.Setup(repo => repo.Delete(userId)).ReturnsAsync(false);
+
+        Assert.ThrowsAsync<InvalidOperationException>(async () => await _userService.Delete(userId));
+    }
+    
 }
