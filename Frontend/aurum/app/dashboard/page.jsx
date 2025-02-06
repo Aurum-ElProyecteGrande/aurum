@@ -30,9 +30,8 @@ export default function DashboardPage() {
       setAccounts(updatedAccounts)
     }
     getAccounts()
-  }, [])
+  }, [userId])
   //\
-
   // save layout
   const loadLayouts = async () => {
     return setUserInitialChartNames(await fetchLayouts(userId))

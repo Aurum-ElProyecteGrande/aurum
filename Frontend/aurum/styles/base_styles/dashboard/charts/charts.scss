@@ -31,7 +31,7 @@
         justify-self: flex-start;
         font-size: 2vh;
         height: 2.5vh;
-        margin-bottom: 2vh;
+        margin-bottom: 1vh;
         background: rgb(51,51,51);
         background: linear-gradient(90deg, rgba(51,51,51,0) 20%, rgba(61,98,164,1) 50%, rgba(51,51,51,0) 80%);
         
@@ -112,8 +112,6 @@
     display: flex;
     flex-direction: column;
     
-
-
     .row {
         display: flex;
         flex-direction: row;
@@ -144,5 +142,31 @@
             width: 15vw;
 
         }
+    }
+}
+
+//expense by category
+.expense-by-category-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.expense-by-category {
+    width: 2vw;
+}
+.pie-chart-tooltip {
+    right: 3vw;
+    position: relative;
+    display: flex;
+    height: fit-content;
+    flex-direction: column;
+    padding: 1vh;    
+
+    .row {
+        width: 12vw;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: 0.5vh;
     }
 }
