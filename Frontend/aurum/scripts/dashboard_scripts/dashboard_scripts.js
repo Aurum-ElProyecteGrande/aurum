@@ -1,6 +1,6 @@
 import { allCharts } from "./layouts"
 
-const apiUrl = "http://localhost:8080"
+const apiUrl="/api"
 
 export const fetchExpenses = async (accId) => {
     const response = await fetch(`${apiUrl}/expenses/${accId}`)

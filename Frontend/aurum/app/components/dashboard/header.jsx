@@ -4,8 +4,8 @@ import { FaRegSave } from "react-icons/fa";
 
 
 export default function Header({ setIsHamburgerOpen, isHamburgerOpen, isEditMode, chosenLayout, saveChoosenChartsForUser }) {
- 
-  const [username, setUsername] = useState("username")
+
+  const [username, setUsername] = useState("Gele")
 
   useEffect(() => {
     const handleClick = (e) => {
@@ -24,8 +24,8 @@ export default function Header({ setIsHamburgerOpen, isHamburgerOpen, isEditMode
 
   return (
     <div className="header">
-      <section className="welcome">
-        <p>hi {username}.</p>
+      <section >
+        <p className="welcome">hi {username}.</p>
       </section>
       {isEditMode ?
         <section className="sub-title-section">

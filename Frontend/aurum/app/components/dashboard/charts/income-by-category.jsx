@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
-import { fetchIncomeByDate } from '@/scripts/dashboard_scripts/dashboard_scripts';
 
 const COLORS = ['#3D62A4', '#F9D342', '#5E946A ', '#C56A64'];
 
-export default function IncomesByCategory({ isEditMode, accounts, isLoading, setIsLoading }) {
+export default function IncomesByCategory({ isEditMode, incomes }) {
 
     const [incomesByCategory, setIncomesByCategory] = useState([])
     const [filteredIncomesByCategory, setFilteredIncomesByCategory] = useState([])
@@ -24,15 +23,7 @@ export default function IncomesByCategory({ isEditMode, accounts, isLoading, set
     useEffect(() => {
         const getIncomesByCategory = async () => {
 
-            let updatedIncomes = []
-
-            setIsLoading(true)
-
-            await Promise.all(accounts.map(async (acc) => {
-                updatedIncomes.push(...await fetchIncomeByDate(acc.accountId, startDate.toISOString().slice(0, 10), today.toISOString().slice(0, 10)))
-            }))
-            
-            setIsLoading(false)
+            let updatedIncomes = [...incomes].filter(e => new Date(e.date) >= startDate && new Date(e.date) <= today)
 
             updatedIncomes = updatedIncomes.map(i => {
                 return { amount: i.amount, category: i.category.name }
@@ -52,10 +43,10 @@ export default function IncomesByCategory({ isEditMode, accounts, isLoading, set
 
             setIncomesByCategory(updatedIncomesByCategory)
         }
-        if (accounts[0] && !isLoading) {
+        if (incomes[0]) {
             getIncomesByCategory()
         }
-    }, [accounts, isLoading])
+    }, [incomes])
 
 
 

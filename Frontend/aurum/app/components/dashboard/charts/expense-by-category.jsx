@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
-import { fetchExpensesByDate } from '@/scripts/dashboard_scripts/dashboard_scripts';
 
 const COLORS = ['#3D62A4', '#F9D342', '#5E946A ', '#C56A64'];
 
-export default function ExpenseByCategory({ isEditMode, accounts, isLoading, setIsLoading }) {
+export default function ExpenseByCategory({ isEditMode, expenses }) {
 
     const [expensesByCategory, setExpensesByCategory] = useState([])
     const [filteredExpensesByCategory, setFilteredExpensesByCategory] = useState([])
@@ -23,14 +22,8 @@ export default function ExpenseByCategory({ isEditMode, accounts, isLoading, set
 
     useEffect(() => {
         const getExpensesByCategory = async () => {
-            let updatedExpenses = []
-            setIsLoading(true)
-            await Promise.all(accounts.map(async (acc) => {
-                updatedExpenses.push(...await fetchExpensesByDate(acc.accountId, startDate.toISOString().slice(0, 10), today.toISOString().slice(0, 10)))
-            }))
 
-            setIsLoading(false)
-            console.log(updatedExpenses)
+            let updatedExpenses = [...expenses].filter(e => new Date(e.date) >= startDate && new Date(e.date) <= today)
 
             updatedExpenses = updatedExpenses.map(e => {
                 return { amount: e.amount, category: e.category.name }
@@ -50,10 +43,10 @@ export default function ExpenseByCategory({ isEditMode, accounts, isLoading, set
 
             setExpensesByCategory(updatedExpensesByCategory)
         }
-        if (accounts && !isLoading) {
+        if (expenses[0]) {
             getExpensesByCategory()
         }
-    }, [accounts, isLoading ])
+    }, [expenses])
 
 
     useEffect(() => {
@@ -66,6 +59,8 @@ export default function ExpenseByCategory({ isEditMode, accounts, isLoading, set
             setFilteredExpensesByCategory(updatedFiltered)
         }
     }, [expensesByCategory])
+
+
 
     return (
         <div className="chart">

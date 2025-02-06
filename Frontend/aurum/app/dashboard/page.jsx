@@ -5,9 +5,10 @@ import { useState, useEffect } from "react";
 import HamburgerMenu from "../components/dashboard/hamburger-menu";
 import Header from "../components/dashboard/header";
 import ChangeChartForm from "../components/dashboard/change-chart-form";
+import TransactionSidebar from "@/components/transactions/transaction_sidebar/TransactionSidebar";
 import Sidebar from "../components/sidebar";
 import { layouts } from "../../scripts/dashboard_scripts/layouts"
-import { fetchAccounts, fetchLayouts, fetchPostLayout } from "@/scripts/dashboard_scripts/dashboard_scripts";
+import { fetchAccounts, fetchExpenses, fetchIncome, fetchLayouts, fetchPostLayout } from "@/scripts/dashboard_scripts/dashboard_scripts";
 import { getIndexOfPossibleChart } from "@/scripts/dashboard_scripts/dashboard_scripts";
 
 export default function DashboardPage() {
@@ -22,7 +23,11 @@ export default function DashboardPage() {
 
   //chart states
   const [accounts, setAccounts] = useState([])
+  const [expenses, setExpenses] = useState([])
+  const [incomes, setIncomes] = useState([])
   const userId = 1 //from credentials probably? TODO
+
+  const chartProps = {isEditMode, accounts, expenses, incomes, userId}
 
   //chart effects
   useEffect(() => {
@@ -30,8 +35,31 @@ export default function DashboardPage() {
       const updatedAccounts = await fetchAccounts(userId)
       setAccounts(updatedAccounts)
     }
-    getAccounts()
+    if (userId) {
+      getAccounts()
+    }
   }, [userId])
+
+  useEffect(() => {
+    const getTransactions = async () => {
+      const updatedExpenses = []
+      await Promise.all(accounts.map(async (acc) => {
+        updatedExpenses.push(...await fetchExpenses(acc.accountId))
+      }))
+
+      const updatedIncomes = []
+      await Promise.all(accounts.map(async (acc) => {
+        updatedIncomes.push(...await fetchIncome(acc.accountId))
+      }))
+
+      setExpenses(updatedExpenses)
+      setIncomes(updatedIncomes)
+    }
+
+    if (accounts[0]) {
+      getTransactions()
+    }
+  }, [accounts])
   //\
   // save layout
   const loadLayouts = async () => {
@@ -92,7 +120,7 @@ export default function DashboardPage() {
         isEditMode={isEditMode}
         chosenLayout={chosenLayout}
         saveChoosenChartsForUser={saveChoosenChartsForUser} />
-      <Sidebar />
+      <TransactionSidebar />
       {isHamburgerOpen &&
         <HamburgerMenu
           isEditMode={isEditMode}
@@ -106,7 +134,7 @@ export default function DashboardPage() {
             className={`${chosenLayout}-${segmentIndex + 1} chart-container ${isEditMode && "edit-mode"}`}>
             {React.cloneElement(
               choosenChart.chart,
-              { isEditMode, accounts, isLoading, setIsLoading })
+               {...chartProps} )
             }
             {isEditMode &&
               <ChangeChartForm
@@ -123,6 +151,7 @@ export default function DashboardPage() {
 }
 
 
+//              { isEditMode, accounts, expenses, incomes })
 
 
 /*

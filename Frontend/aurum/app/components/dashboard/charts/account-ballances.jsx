@@ -2,7 +2,7 @@ import { fetchBalance } from "@/scripts/dashboard_scripts/dashboard_scripts"
 import { Ballet } from "next/font/google"
 import { useEffect, useState } from "react"
 
-export default function AccountBalances({ isEditMode, accounts }) {
+export default function AccountBalances({ accounts }) {
 
     const [balances, setBalances] = useState([])
 
@@ -14,10 +14,12 @@ export default function AccountBalances({ isEditMode, accounts }) {
                 }))
             )
 
+            updatedBalances = [...updatedBalances.sort((a, b) => b.balance - a.balance)]
+
             if (updatedBalances.length > 3) {
-                const topBalances = [...updatedBalances.sort((a, b) => a.balance - b.balance)]
-                updatedBalances = []
-                updatedBalances.push(topBalances[0], topBalances[1], topBalances[2])
+                let topBalances = []
+                topBalances.push(topBalances[0], topBalances[1], topBalances[2])
+                return setBalances(topBalances)
             }
 
             setBalances(updatedBalances)
