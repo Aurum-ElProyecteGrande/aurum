@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
-import { fetchExpensesByDate } from '@/scripts/dashboard_scripts/dashboard_scripts';
+import { fetchIncomeByDate } from '@/scripts/dashboard_scripts/dashboard_scripts';
 
 const COLORS = ['#3D62A4', '#F9D342', '#5E946A ', '#C56A64'];
 
-export default function ExpenseByCategory({ isEditMode, accounts, isLoading, setIsLoading }) {
+export default function IncomesByCategory({ isEditMode, accounts, isLoading, setIsLoading }) {
 
-    const [expensesByCategory, setExpensesByCategory] = useState([])
-    const [filteredExpensesByCategory, setFilteredExpensesByCategory] = useState([])
+    const [incomesByCategory, setIncomesByCategory] = useState([])
+    const [filteredIncomesByCategory, setFilteredIncomesByCategory] = useState([])
     const [startDate, setStartDate] = useState(new Date())
     const [today, setToday] = useState(new Date())
     const [daysCalculated, setDaysCalculated] = useState(30)
@@ -22,74 +22,77 @@ export default function ExpenseByCategory({ isEditMode, accounts, isLoading, set
 
 
     useEffect(() => {
-        const getExpensesByCategory = async () => {
-            let updatedExpenses = []
+        const getIncomesByCategory = async () => {
+
+            let updatedIncomes = []
+
             setIsLoading(true)
+
             await Promise.all(accounts.map(async (acc) => {
-                updatedExpenses.push(...await fetchExpensesByDate(acc.accountId, startDate.toISOString().slice(0, 10), today.toISOString().slice(0, 10)))
+                updatedIncomes.push(...await fetchIncomeByDate(acc.accountId, startDate.toISOString().slice(0, 10), today.toISOString().slice(0, 10)))
             }))
-
+            
             setIsLoading(false)
-            console.log(updatedExpenses)
 
-            updatedExpenses = updatedExpenses.map(e => {
-                return { amount: e.amount, category: e.category.name }
+            updatedIncomes = updatedIncomes.map(i => {
+                return { amount: i.amount, category: i.category.name }
             })
 
-            let rowExpensesByCategory = Object.groupBy(updatedExpenses, ({ category }) => category)
-            let updatedExpensesByCategory = []
+            let rowIncomesByCategory = Object.groupBy(updatedIncomes, ({ category }) => category)
+            let updatedIncomesByCategory = []
 
-            for (const category in rowExpensesByCategory) {
-                updatedExpensesByCategory.push(
-                    rowExpensesByCategory[category].reduce((a, c) => {
+            for (const category in rowIncomesByCategory) {
+                updatedIncomesByCategory.push(
+                    rowIncomesByCategory[category].reduce((a, c) => {
                         a.categorySum += c.amount
                         return a
                     }, { category, categorySum: 0 })
                 )
             }
 
-            setExpensesByCategory(updatedExpensesByCategory)
+            setIncomesByCategory(updatedIncomesByCategory)
         }
-        if (accounts && !isLoading) {
-            getExpensesByCategory()
+        if (accounts[0] && !isLoading) {
+            getIncomesByCategory()
         }
-    }, [accounts, isLoading ])
+    }, [accounts, isLoading])
+
 
 
     useEffect(() => {
-        if (expensesByCategory) {
+        if (incomesByCategory) {
             let updatedFiltered = []
-            let sortedExpensesByCategory = expensesByCategory.sort((a, b) => b.categorySum - a.categorySum)
+            let sortedIncomesByCategory = incomesByCategory.sort((a, b) => b.categorySum - a.categorySum)
             for (let i = 0; i < maxShownCategory; i++) {
-                updatedFiltered.push(sortedExpensesByCategory[i])
+                updatedFiltered.push(sortedIncomesByCategory[i])
             }
-            setFilteredExpensesByCategory(updatedFiltered)
+            setFilteredIncomesByCategory(updatedFiltered)
         }
-    }, [expensesByCategory])
+    }, [incomesByCategory])
 
     return (
         <div className="chart">
             <div className="chart-title">
-                <p>Expenses by category in last {daysCalculated} days</p>
+                <p>Incomes by category in last {daysCalculated} days</p>
             </div>
             <div className='expense-by-category-container'>
                 <ResponsiveContainer width="30%" height="100%" className="expense-by-category">
                     <PieChart width={10} height={40}>
                         <Pie
-                            data={filteredExpensesByCategory}
+                            data={filteredIncomesByCategory}
                             cx="50%"
                             cy="45%"
                             outerRadius={35}
                             dataKey="categorySum"
                         >
-                            {filteredExpensesByCategory.map((entry, index) => (
+                            {filteredIncomesByCategory.map((entry, index) => (
                                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                             ))}
                         </Pie>
                     </PieChart>
                 </ResponsiveContainer>
                 <div className='pie-chart-tooltip'>
-                    {filteredExpensesByCategory[0] && filteredExpensesByCategory.map((ec, i) => (
+                    {filteredIncomesByCategory[0] && filteredIncomesByCategory.map((ec, i) => (
                         <div key={ec.category} className='row' style={{ borderBottom: `1px solid ${COLORS[i % COLORS.length]}` }}>
                             <div className='label' style={{ color: COLORS[i % COLORS.length] }}>{ec.category}</div>
                             <div className='value'>{ec.categorySum.toLocaleString('hu-HU', { style: 'currency', currency: 'HUF' })}</div>

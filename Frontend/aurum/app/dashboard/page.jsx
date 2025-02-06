@@ -18,6 +18,7 @@ export default function DashboardPage() {
   const [isEditMode, setIsEditMode] = useState(false)
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false)
   const [userInitialChartNames, setUserInitialChartNames] = useState()
+  const [isLoading, setIsLoading] = useState(false)
 
   //chart states
   const [accounts, setAccounts] = useState([])
@@ -104,7 +105,7 @@ export default function DashboardPage() {
             className={`${chosenLayout}-${segmentIndex + 1} chart-container ${isEditMode && "edit-mode"}`}>
             {React.cloneElement(
               choosenChart.chart,
-              { isEditMode, accounts })
+              { isEditMode, accounts, isLoading, setIsLoading })
             }
             {isEditMode &&
               <ChangeChartForm

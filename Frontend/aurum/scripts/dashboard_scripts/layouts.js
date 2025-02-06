@@ -3,12 +3,13 @@ import IncomeLineChart from "../../app/components/dashboard/charts/income-line-c
 import AccountBallances from "../../app/components/dashboard/charts/account-ballances";
 import LastTransactions from "../../app/components/dashboard/charts/last-transactions";
 import ExpenseByCategory from "../../app/components/dashboard/charts/expense-by-category";
+import IncomesByCategory from "@/app/components/dashboard/charts/income-by-category";
 import Chart6 from "../../app/components/dashboard/charts/chart6";
 import Chart7 from "../../app/components/dashboard/charts/chart7";
 
 const charts2x1 = [
     { name: "expense-by-category", chart: <ExpenseByCategory /> },
-    { name: "expense-by-category", chart: <ExpenseByCategory /> },
+    { name: "income-by-category", chart: <IncomesByCategory /> },
     { name: "account-ballances", chart: <AccountBallances /> }
 ]
 const charts3x3 = [
