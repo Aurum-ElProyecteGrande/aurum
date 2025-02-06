@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react"
+import { CiMenuKebab } from "react-icons/ci";
+import { FaRegSave } from "react-icons/fa";
 
-export default function Header({ setIsHamburgerOpen, isHamburgerOpen, isEditMode }) {
 
+export default function Header({ setIsHamburgerOpen, isHamburgerOpen, isEditMode, chosenLayout, saveChoosenChartsForUser }) {
+ 
   const [username, setUsername] = useState("username")
 
   useEffect(() => {
@@ -18,16 +21,29 @@ export default function Header({ setIsHamburgerOpen, isHamburgerOpen, isEditMode
     )
   }, [])
 
+
   return (
     <div className="header">
-      <section>
+      <section className="welcome">
         <p>hi {username}.</p>
       </section>
-      <section className="sub-title-section">
-        <p>{isEditMode ? "Edit charts" : ""}</p>
-      </section>
+      {isEditMode ?
+        <section className="sub-title-section">
+          <p>Edit charts</p>
+          <div className="save-container" onClick={() => saveChoosenChartsForUser()}>
+            <FaRegSave className="save" />
+            <div className="label">Save layout</div>
+          </div>
+        </section>
+        :
+        <section className="choosen-layout">
+          <div>
+            {chosenLayout} layout
+          </div>
+        </section>
+      }
       <section className="menu-button-section">
-        <button id="hamburger-menu-button" className="menu-button" onClick={() => setIsHamburgerOpen(!isHamburgerOpen)}> ... </button>
+        <CiMenuKebab id="hamburger-menu-button" className="menu-button" onClick={() => setIsHamburgerOpen(!isHamburgerOpen)} />
       </section>
     </div>
   )

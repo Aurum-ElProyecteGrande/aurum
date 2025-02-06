@@ -27,16 +27,18 @@ using Aurum.Services.IncomeCategoryServices;
 using Aurum.Services.UserServices;
 using Aurum.Repositories.UserRepository;
 using Aurum.Services.CurrencyServices;
+using Aurum.Repositories.LayoutRepository;
+using Aurum.Services.LayoutServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers()
-	.AddJsonOptions(options => 
-	{ 
-		options.JsonSerializerOptions.Converters.Add(new CaseInsensitiveEnumConverter<Regularity>());
-		options.JsonSerializerOptions.Converters.Add(new CategoryDictionaryConverter());
-	});
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new CaseInsensitiveEnumConverter<Regularity>());
+        options.JsonSerializerOptions.Converters.Add(new CategoryDictionaryConverter());
+    });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -44,8 +46,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AurumContext>(options =>
 {
     options.UseSqlServer(
-        Environment.GetEnvironmentVariable("DbConnectionString"),
-        sqlOptions => sqlOptions.EnableRetryOnFailure(
+  Environment.GetEnvironmentVariable("DbConnectionString"),
+sqlOptions => sqlOptions.EnableRetryOnFailure(
             maxRetryCount: 5,
             maxRetryDelay: TimeSpan.FromSeconds(10),
             errorNumbersToAdd: null
@@ -66,11 +68,14 @@ builder.Services.AddScoped<IExpenseCategoryService, ExpenseCategoryService>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IRegularExpenseService, RegularExpenseService>();
 builder.Services.AddScoped<IBalanceService, BalanceService>();
-builder.Services.AddScoped<IRegularIncomeService, RegularIncomeService>(); 
-builder.Services.AddScoped<IIncomeCategoryService, IncomeCategoryService>(); 
+builder.Services.AddScoped<IRegularIncomeService, RegularIncomeService>();
+builder.Services.AddScoped<IIncomeCategoryService, IncomeCategoryService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<ICurrencyService, CurrencyService>();
+
+builder.Services.AddScoped<ILayoutRepo, LayoutRepo>();
+builder.Services.AddScoped<ILayoutService, LayoutService>();
 
 
 builder.Services.AddCors(options =>

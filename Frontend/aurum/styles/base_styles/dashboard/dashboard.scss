@@ -1,6 +1,6 @@
 @import "../variables.scss";
 @import "./layouts/basic.scss";
-@import "./layouts/var2.scss";
+@import "./layouts/scientic.scss";
 @import "./layouts/detailed.scss";
 
 .page {
@@ -19,11 +19,16 @@
         position: relative;
         display: flex;
         flex-direction: row;
-        justify-content: space-evenly;
+        justify-content: space-between;
         width: 86vw;
         left: 14vw;
         height: 7vh;
-        background-color: $primary;
+        z-index: 1;
+        
+        background: rgb(61,98,164);
+background: linear-gradient(90deg, rgba(61,98,164,1) 0%, rgba(56,74,106,1) 15%, rgba(52,55,59,1) 100%);
+
+//        background-color: $primary;
 
         section {
             display: flex;
@@ -32,6 +37,63 @@
         }
         .sub-title-section {
             justify-content: center;
+            width: 22vw;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
+            .save-container {
+                position: relative;
+                display: inline-block;
+                overflow: hidden;
+                width: 10vw;
+                height: 7vh;
+                display: flex;
+                flex-direction:row;
+                justify-content: space-evenly;
+                align-items: center;
+
+                .save {
+                    position: absolute;
+                    left:0.5vw;
+                    height: 7vh;
+                    transition: transform 0.5s;
+
+                }
+                .label{
+                    position: absolute;
+                    left: 0;
+                    transform: translateX(-100%);
+                    white-space: nowrap;
+                    opacity: 0;
+                    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+                }
+            }
+
+
+.save-container:hover .label {
+    transform:  translateX(60%);
+    opacity: 1;
+    color: $accent
+  }
+  .save-container:hover .save {
+    transform: scale(1.8);
+    color: $accent;
+  }
+  .save-container:hover {
+    cursor: pointer;
+  }
+
+        }
+        .choosen-layout {
+            justify-content: center;
+            div{
+                align-self: center;
+                font-size: 2.5vh;
+                letter-spacing: 0.5vw;
+                border-bottom: 1px solid $accent;
+                margin: 0;
+            }
         }
         .menu-button-section {
             justify-content: flex-end;
@@ -46,10 +108,10 @@
         .menu-button {
             background-color: inherit;
             justify-content: flex-end;
+            align-self: center;
             border: none;
             color: $text;
             font-size: 40px;
-            rotate: 90deg;
             cursor: pointer;
         }
     }
@@ -62,6 +124,7 @@
         display: flex;
         flex-direction: column;
         height: 6vh;
+        box-shadow: 0px 0px 3px $accent;
 
         .active{
             background-color: $accent;
@@ -74,6 +137,7 @@
             cursor: pointer;
             border-radius: 0;
             border: none;
+            background-color: $background
         }
         button:hover {
             background-color: $accent;
@@ -87,6 +151,8 @@
             right: 100%;
             bottom: 3vh;
             background-color: none;
+            box-shadow: 0px 0px 3px $accent;
+
         }
     }
 }

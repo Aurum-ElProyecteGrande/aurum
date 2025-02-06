@@ -91,7 +91,9 @@ export default function IncomeLineChart({ isEditMode, accounts }) {
 
     return (
         <div className="chart">
-            <div className="chart-title">Incomes in Last 10 days</div>
+            <div className="chart-title">
+                <p>Incomes in last {daysShown} days #{curAccount && curAccount.displayName}</p>
+            </div>
             <ResponsiveContainer width="100%" height={200} className="chart-body">
                 <LineChart data={rawChartData}>
                     <CartesianGrid strokeDasharray="3 3" />
