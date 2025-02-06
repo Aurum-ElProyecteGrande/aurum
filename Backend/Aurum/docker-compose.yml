@@ -5,9 +5,6 @@
 services:
   aurum:
     image: aurum
-    build:
-      context: .
-      dockerfile: Aurum/Dockerfile
     ports:
       - "8080:80"
     depends_on:
