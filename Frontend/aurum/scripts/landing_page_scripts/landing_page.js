@@ -61,13 +61,14 @@ export const familyPlanFeatures = [
 	"Collaborative goal setting",
 ];
 
-const API_BASE_URL = "http://localhost:5025/";
 
 export async function fetchTest() {
-	const response = await fetch(`${API_BASE_URL}income/1`);
+	const response = await fetch(`/api/expenses/13?userid=10`);
 	if (!response.ok) {
 		console.error(`Error: ${response.status} ${response.statusText}`);
 		return null; // Return a fallback value if desired
 	}
+	else
+		console.log("All good")
 	return await response.json();
 }

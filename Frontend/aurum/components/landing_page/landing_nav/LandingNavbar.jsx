@@ -8,10 +8,16 @@ import { fetchTest } from "@/scripts/landing_page_scripts/landing_page";
 const LandingNavbar = () => {
 	const [showNav, setShowNav] = useState(false);
 
+
 	useEffect(() => {
-	  fetchTest();
-	}, [])
-	
+		const fetchData = async () => {
+			const data = await fetchTest();
+			console.log(data);
+		};
+
+		fetchData();
+	}, []);
+
 
 	return (
 		<header className="landing-header">
