@@ -36,7 +36,7 @@ function TransactionSidebar() {
                         </Link>
                     </li>
                     <li>
-                        <Link href="#">
+                        <Link href="/">
                             <div className='transactions-sidebar-menu-item'>
                                 <MdLogout />
                                 <p>Logout</p>
