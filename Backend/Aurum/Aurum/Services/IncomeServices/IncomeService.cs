@@ -11,18 +11,13 @@ namespace Aurum.Services.IncomeServices
         {
             _incomeRepo = incomeRepo;
         }
-
+        
         public (DateTime, DateTime) ValidateDates(DateTime? startDate, DateTime? endDate)
         {
-            var validStartDate = new DateTime();
-            var validEndDate = new DateTime();
+            if (!startDate.HasValue || !endDate.HasValue)
+                throw new ArgumentNullException("Start date and end date must not be null");
 
-            if (startDate.HasValue) validStartDate = startDate.Value;
-            if (endDate.HasValue) validEndDate = endDate.Value;
-
-            if (!startDate.HasValue || !endDate.HasValue) throw new NullReferenceException("Missing date");
-
-            return (validStartDate, validEndDate);
+            return (startDate.Value, endDate.Value);
         }
 
         public async Task<decimal> GetTotalIncome(int accountId)
@@ -35,6 +30,12 @@ namespace Aurum.Services.IncomeServices
         public async Task<decimal> GetTotalIncome(int accountId, DateTime endDate)
         {
             var incomes = await _incomeRepo.GetAll(accountId, endDate);
+  
+            if (incomes == null)
+            {
+                return 0m;
+            }
+            
             return incomes
                 .Select(i => i.Amount)
                 .Sum();
