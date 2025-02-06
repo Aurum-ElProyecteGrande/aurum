@@ -4,8 +4,13 @@
 @import "./layouts/detailed.scss";
 
 .page {
-    height: 100vh;
-    width: 100vw;
+    display: grid;
+    grid-template-areas:
+        "sidebar header"
+        "sidebar main";
+    grid-template-rows: auto 1fr;
+    grid-template-columns: auto 1fr;
+    height: 100svh;
     background-color: $background;
     
     button {
@@ -16,28 +21,30 @@
 
 .dashboard {
     .header {
+        grid-area: header;
         position: relative;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        width: 86vw;
-        left: 14vw;
-        height: 7vh;
         z-index: 1;
-        
         background: rgb(61,98,164);
-background: linear-gradient(90deg, rgba(61,98,164,1) 0%, rgba(56,74,106,1) 15%, rgba(52,55,59,1) 100%);
-
-//        background-color: $primary;
+        background: linear-gradient(90deg, rgba(61,98,164,1) 0%, rgba(56,74,106,1) 15%, rgba(52,55,59,1) 100%);
 
         section {
             display: flex;
             width: 28vw;
             height: 100%;
+
+            p {
+                font-size: 3vh;
+            }
+        }
+        .welcome {
+            margin-left: 2vw;
         }
         .sub-title-section {
             justify-content: center;
-            width: 22vw;
+            width: 18vw;
             display: flex;
             flex-direction: row;
             justify-content: space-between;
@@ -47,7 +54,6 @@ background: linear-gradient(90deg, rgba(61,98,164,1) 0%, rgba(56,74,106,1) 15%, 
                 display: inline-block;
                 overflow: hidden;
                 width: 10vw;
-                height: 7vh;
                 display: flex;
                 flex-direction:row;
                 justify-content: space-evenly;
@@ -158,10 +164,11 @@ background: linear-gradient(90deg, rgba(61,98,164,1) 0%, rgba(56,74,106,1) 15%, 
 }
 
 .dashboard-container {
+    grid-area: main;
     display: grid;
     position: absolute;
-    top: 8.5vh;
-    left: 15vw;
+    top: 7vh;
+    left: 13vw;
     width: 84vw;
     height: 90vh;
     grid-template-columns: repeat(6, 14vw); 

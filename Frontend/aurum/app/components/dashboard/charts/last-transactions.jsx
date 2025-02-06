@@ -1,64 +1,50 @@
 import { fetchExpenses, fetchIncome } from "@/scripts/dashboard_scripts/dashboard_scripts"
-import { trackSynchronousPlatformIOAccessInDev } from "next/dist/server/app-render/dynamic-rendering"
 import { useEffect, useState } from "react"
 
-export default function LastTransactions({ isEditMode, accounts }) {
+export default function LastTransactions({ accounts, expenses, incomes }) {
 
-    const [expenses, setExpenses] = useState([])
-    const [incomes, setIncomes] = useState([])
     const [transactions, setTransactions] = useState([])
     const maxTransactions = 15
 
 
     useEffect(() => {
-        const getExpenses = async () => {
-            let updatedExpenses = []
-            await Promise.all(accounts.map(async (acc) => {
-                updatedExpenses.push(...await fetchExpenses(acc.accountId))
-            }))
+        const getTransactions = async () => {
+            let updatedExpenses = [...expenses]
             updatedExpenses = updatedExpenses.map(e => {
                 return {
                     ...e,
                     isExpense: true
                 }
             })
-            setExpenses(updatedExpenses)
-        }
 
-        const getIncomes = async () => {
-            let updatedIncomes = []
-            await Promise.all(accounts.map(async (acc) => {
-                updatedIncomes.push(...await fetchIncome(acc.accountId))
-            }))
+            let updatedIncomes = [...incomes]
             updatedIncomes = updatedIncomes.map(i => {
                 return {
                     ...i,
                     isExpense: false
                 }
             })
-            setIncomes(updatedIncomes)
-        }
-        if (accounts) {
-            getExpenses()
-            getIncomes()
-        }
-    }, [accounts])
 
-    useEffect(() => {
-        let allTransactions = []
-        allTransactions.push(...expenses)
-        allTransactions.push(...incomes)
+            const updatedTransactions = [...updatedExpenses, ...updatedIncomes]
+
+            setTransactions(sortAndFilterTransactions(updatedTransactions))
+        }
+        if (expenses[0] && incomes[0]) {
+            getTransactions()
+        }
+    }, [expenses, incomes])
+
+    const sortAndFilterTransactions = (txs) => {
+        let allTransactions = [...txs]
         allTransactions = allTransactions.sort((a, b) => new Date(a.date) - new Date(b.date))
 
         let updatedTransactions = []
         for (let i = 0; i < maxTransactions; i++) {
             updatedTransactions.push(allTransactions[i])
         }
-
         updatedTransactions = updatedTransactions.reverse()
-
-        setTransactions(updatedTransactions)
-    }, [expenses, incomes])
+        return updatedTransactions
+    }
 
     return (
         <div className="chart">
