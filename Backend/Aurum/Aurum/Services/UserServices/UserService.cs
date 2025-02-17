@@ -19,30 +19,37 @@ namespace Aurum.Services.UserServices
 
             return user;
         }
-        public async Task<int> Create(User user)
+        public async Task<bool> Update(User user)
         {
-            var userId = await _userRepo.Create(user);
+            var updatedUser = await userManager.FindByIdAsync(user.UserId.ToString());
+    
+            if (updatedUser == null)
+                throw new ArgumentException($"Could not find user with id: {user.UserId}");
 
-            if (userId == 0) throw new Exception("Error while creating user");
-
-            return userId;
+            updatedUser.Email = user.Email;
+            updatedUser.UserName = user.Username;
+            
+            var result = await userManager.UpdateAsync(updatedUser);
+            
+            if (result.Succeeded)
+                return true;
+            
+            throw new InvalidOperationException($"Failed to update user with ID {user.UserId}");
         }
-        public async Task<int> Update(User user)
+        
+        public async Task<bool> Delete(string userId)
         {
-            var userId = await _userRepo.Update(user);
+            var user = await userManager.FindByIdAsync(userId);
+    
+            if (user == null )
+                throw new InvalidOperationException($"Failed to delete account with ID {userId}.");
+            
+            var result = await userManager.DeleteAsync(user);
 
-            if (userId == 0) throw new Exception("Error while updating user");
-
-            return userId;
-
-        }
-        public async Task<bool> Delete(int userId)
-        {
-            var isDeleted = await _userRepo.Delete(userId);
-
-            if (!isDeleted) throw new InvalidOperationException($"Failed to delete account with ID {userId}.");
-
-            return isDeleted;
+            if (result.Succeeded)
+                return true;
+            
+            throw new InvalidOperationException($"Failed to delete user with ID {userId}");
         }
         
         public async Task<AuthResult> RegisterAsync(string email, string username, string password, string role)
