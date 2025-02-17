@@ -56,6 +56,50 @@ namespace Aurum.Migrations
                     b.ToTable("Accounts");
                 });
 
+            modelBuilder.Entity("Aurum.Data.Entities.BasicLayout", b =>
+                {
+                    b.Property<int>("BasicLayoutId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BasicLayoutId"));
+
+                    b.Property<string>("Chart1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Chart2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Chart3")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Chart4")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Chart5")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Chart6")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Chart7")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BasicLayoutId");
+
+                    b.ToTable("BasicLayouts");
+                });
+
             modelBuilder.Entity("Aurum.Data.Entities.Currency", b =>
                 {
                     b.Property<int>("CurrencyId")
@@ -79,6 +123,58 @@ namespace Aurum.Migrations
                     b.HasKey("CurrencyId");
 
                     b.ToTable("Currencies");
+                });
+
+            modelBuilder.Entity("Aurum.Data.Entities.DetailedLayout", b =>
+                {
+                    b.Property<int>("DetailedLayoutId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DetailedLayoutId"));
+
+                    b.Property<string>("Chart1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Chart2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Chart3")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Chart4")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Chart5")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Chart6")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Chart7")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Chart8")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Chart9")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DetailedLayoutId");
+
+                    b.ToTable("DetailedLayouts");
                 });
 
             modelBuilder.Entity("Aurum.Data.Entities.Expense", b =>
@@ -287,6 +383,54 @@ namespace Aurum.Migrations
                     b.HasIndex("IncomeCategoryId");
 
                     b.ToTable("RegularIncomes");
+                });
+
+            modelBuilder.Entity("Aurum.Data.Entities.ScienticLayout", b =>
+                {
+                    b.Property<int>("ScienticLayoutId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ScienticLayoutId"));
+
+                    b.Property<string>("Chart1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Chart2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Chart3")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Chart4")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Chart5")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Chart6")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Chart7")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Chart8")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ScienticLayoutId");
+
+                    b.ToTable("ScienticLayouts");
                 });
 
             modelBuilder.Entity("Aurum.Data.Entities.User", b =>

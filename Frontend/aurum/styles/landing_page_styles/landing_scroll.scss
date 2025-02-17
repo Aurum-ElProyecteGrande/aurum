@@ -1,0 +1,18 @@
+.landing-scroll {
+  padding-block: 5rem;
+  overflow: hidden;
+  background-color: $background-shade;
+
+  &-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+  }
+
+  img {
+    width: 11rem;
+    height: auto;
+  }
+}
+

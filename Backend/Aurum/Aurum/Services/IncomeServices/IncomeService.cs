@@ -1,15 +1,24 @@
 ﻿using Aurum.Data.Entities;
+using Aurum.Models.IncomeDTOs;
 using Aurum.Repositories.IncomeRepository.IncomeRepository;
+using Aurum.Services.AccountService;
+using Aurum.Services.IncomeCategoryServices;
+using Microsoft.Identity.Client;
+using System.Linq;
 
 namespace Aurum.Services.IncomeServices
 {
     public class IncomeService : IIncomeService
     {
         IIncomeRepo _incomeRepo;
+        IIncomeCategoryService _incomeCategoryService;
+        IAccountService _accountService;
 
-        public IncomeService(IIncomeRepo incomeRepo)
+        public IncomeService(IIncomeRepo incomeRepo, IIncomeCategoryService incomeCategoryService, IAccountService accountService)
         {
             _incomeRepo = incomeRepo;
+            _incomeCategoryService = incomeCategoryService;
+            _accountService = accountService;
         }
         
         public (DateTime, DateTime) ValidateDates(DateTime? startDate, DateTime? endDate)
@@ -41,13 +50,18 @@ namespace Aurum.Services.IncomeServices
                 .Sum();
         }
 
-        public async Task<List<Income>> GetAll(int accountId)
+        public async Task<List<IncomeDto>> GetAll(int accountId)
         {
-
-            return await _incomeRepo.GetAll(accountId);
-
+            var incomes = await _incomeRepo.GetAll(accountId);
+            List<IncomeDto> incomeDtos = new();
+            foreach (var income in incomes)
+            {
+                incomeDtos.Add(await ConvertIncomeToDto(income));
+            }
+            return incomeDtos;
         }
-        public async Task<List<Income>> GetAll(int accountId, DateTime endDate)
+        
+        public async Task<List<IncomeDto>> GetAll(int accountId, DateTime endDate)
         {
             return await _incomeRepo.GetAll(accountId, endDate);
         }
@@ -68,13 +82,37 @@ namespace Aurum.Services.IncomeServices
         
         public async Task<int> Create(Income income)
         {
+            var incomes = await _incomeRepo.GetAll(accountId, endDate);
+            List<IncomeDto> incomeDtos = new();
+            foreach (var income in incomes)
+            {
+                incomeDtos.Add(await ConvertIncomeToDto(income));
+            }
+            return incomeDtos;
+        }
+        
+        public async Task<List<IncomeDto>> GetAll(int accountId, DateTime startDate, DateTime endDate)
+        {
+            var incomes = await _incomeRepo.GetAll(accountId, startDate, endDate);
+            List<IncomeDto> incomeDtos = new();
+            foreach (var income in incomes)
+            {
+                incomeDtos.Add(await ConvertIncomeToDto(income));
+            }
+            return incomeDtos;
 
-            var incomeId = await _incomeRepo.Create(income);
+        }
+        
+        public async Task<int> Create(ModifyIncomeDto income)
+        {
+
+            var incomeId = await _incomeRepo.Create(ConvertModifyDtoToIncome(income));
 
             if (incomeId == 0) throw new InvalidOperationException("Invalid income input");
 
             return incomeId;
         }
+        
         public async Task<bool> Delete(int incomeId)
         {
             var isDeleted = await _incomeRepo.Delete(incomeId);
@@ -83,5 +121,23 @@ namespace Aurum.Services.IncomeServices
 
             return isDeleted;
         }
+
+        private async Task<IncomeDto> ConvertIncomeToDto(Income income)
+        {
+            var categories = await _incomeCategoryService.GetAllCategory();
+            var category = categories.First(c => c.IncomeCategoryId == income.IncomeCategoryId);
+            return new(new(category.Name, category.IncomeCategoryId), income.Label, income.Amount, income.Date);
+        }
+
+        private Income ConvertModifyDtoToIncome(ModifyIncomeDto income) =>
+            new Income()
+            {
+                AccountId = income.AccountId,
+                IncomeCategoryId = income.CategoryId,
+                Label = income.Label,
+                Amount = income.Amount,
+                Date = income.Date
+            };
+
     }
 }
