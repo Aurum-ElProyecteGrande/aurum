@@ -20,18 +20,13 @@ namespace Aurum.Services.IncomeServices
             _incomeCategoryService = incomeCategoryService;
             _accountService = accountService;
         }
-
+        
         public (DateTime, DateTime) ValidateDates(DateTime? startDate, DateTime? endDate)
         {
-            var validStartDate = new DateTime();
-            var validEndDate = new DateTime();
+            if (!startDate.HasValue || !endDate.HasValue)
+                throw new ArgumentNullException("Start date and end date must not be null");
 
-            if (startDate.HasValue) validStartDate = startDate.Value;
-            if (endDate.HasValue) validEndDate = endDate.Value;
-
-            if (!startDate.HasValue || !endDate.HasValue) throw new NullReferenceException("Missing date");
-
-            return (validStartDate, validEndDate);
+            return (startDate.Value, endDate.Value);
         }
 
         public async Task<decimal> GetTotalIncome(int accountId)
@@ -44,6 +39,12 @@ namespace Aurum.Services.IncomeServices
         public async Task<decimal> GetTotalIncome(int accountId, DateTime endDate)
         {
             var incomes = await _incomeRepo.GetAll(accountId, endDate);
+  
+            if (incomes == null)
+            {
+                return 0m;
+            }
+            
             return incomes
                 .Select(i => i.Amount)
                 .Sum();
@@ -59,7 +60,27 @@ namespace Aurum.Services.IncomeServices
             }
             return incomeDtos;
         }
+        
         public async Task<List<IncomeDto>> GetAll(int accountId, DateTime endDate)
+        {
+            return await _incomeRepo.GetAll(accountId, endDate);
+        }
+        
+        public async Task<List<Income>> GetAll(int accountId, DateTime startDate, DateTime endDate)
+        {
+            if (accountId <= 0)
+            {
+                throw new ArgumentException("Invalid account ID");
+            }
+            if (startDate > endDate)
+            {
+                throw new ArgumentException("Start date cannot be after end date");
+            } 
+            var incomes = await _incomeRepo.GetAll(accountId, startDate, endDate);
+            return incomes ?? new List<Income>();
+        }
+        
+        public async Task<int> Create(Income income)
         {
             var incomes = await _incomeRepo.GetAll(accountId, endDate);
             List<IncomeDto> incomeDtos = new();
@@ -69,6 +90,7 @@ namespace Aurum.Services.IncomeServices
             }
             return incomeDtos;
         }
+        
         public async Task<List<IncomeDto>> GetAll(int accountId, DateTime startDate, DateTime endDate)
         {
             var incomes = await _incomeRepo.GetAll(accountId, startDate, endDate);
@@ -80,6 +102,7 @@ namespace Aurum.Services.IncomeServices
             return incomeDtos;
 
         }
+        
         public async Task<int> Create(ModifyIncomeDto income)
         {
 
@@ -89,6 +112,7 @@ namespace Aurum.Services.IncomeServices
 
             return incomeId;
         }
+        
         public async Task<bool> Delete(int incomeId)
         {
             var isDeleted = await _incomeRepo.Delete(incomeId);

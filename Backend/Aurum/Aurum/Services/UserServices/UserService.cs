@@ -20,7 +20,6 @@ namespace Aurum.Services.UserServices
             if (user == null) throw new ArgumentException($"Could not find user with id: {userId}");
 
             return user;
-
         }
         public async Task<int> Create(User user)
         {

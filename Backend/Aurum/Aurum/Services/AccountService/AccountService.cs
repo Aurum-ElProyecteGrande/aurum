@@ -21,6 +21,7 @@ namespace Aurum.Services.AccountService
 
             return account.Amount;
         }
+        
         public async Task<Account> Get(int accountId)
         {
             if (accountId == 0) throw new ArgumentNullException($"No account found with id {accountId}");
