@@ -50,13 +50,22 @@ namespace Aurum.Services.IncomeServices
         public async Task<List<Income>> GetAll(int accountId, DateTime endDate)
         {
             return await _incomeRepo.GetAll(accountId, endDate);
-
         }
+        
         public async Task<List<Income>> GetAll(int accountId, DateTime startDate, DateTime endDate)
         {
-            return await _incomeRepo.GetAll(accountId, startDate, endDate);
-
+            if (accountId <= 0)
+            {
+                throw new ArgumentException("Invalid account ID");
+            }
+            if (startDate > endDate)
+            {
+                throw new ArgumentException("Start date cannot be after end date");
+            } 
+            var incomes = await _incomeRepo.GetAll(accountId, startDate, endDate);
+            return incomes ?? new List<Income>();
         }
+        
         public async Task<int> Create(Income income)
         {
 

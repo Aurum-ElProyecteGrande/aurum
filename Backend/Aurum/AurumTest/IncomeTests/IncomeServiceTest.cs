@@ -236,4 +236,46 @@ public class IncomeServiceTest
 
         Assert.ThrowsAsync<InvalidOperationException>(async () => await _incomeService.Delete(incomeId));
     }
+
+    [Test]
+    public async Task CorrectId_AndValidDates_ReturnsIncomes()
+    {
+        int accountId = 1;
+        DateTime startDate = new DateTime(2024, 1, 1);
+        DateTime endDate = new DateTime(2024, 12, 31);
+        List<Income> incomes = new List<Income>
+        {
+            new Income { Amount = 100m, Label = "friendly loan"},
+            new Income { Amount = 150m, Label = "inheritance"}
+        };
+
+        _incomeRepoMock.Setup(repo => repo.GetAll(accountId, startDate, endDate)).ReturnsAsync(incomes);
+
+        var result = await _incomeService.GetAll(accountId, startDate, endDate);
+        
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.EquivalentTo(incomes));
+            Assert.That(result[0].Amount, Is.EqualTo(100m));
+            Assert.That(result[1].Label, Is.EqualTo("inheritance"));
+        });
+    }
+
+    [Test]
+    public async Task RepositoryReturnsNull_ReturnsEmptyList()
+    {
+        int accountId = 1;
+        DateTime startDate = new DateTime(2024, 1, 1);
+        DateTime endDate = new DateTime(2024, 12, 31);
+
+        _incomeRepoMock.Setup(repo => repo.GetAll(accountId, startDate, endDate)).ReturnsAsync(( List<Income>)null);
+
+        var result = await _incomeService.GetAll(accountId, startDate, endDate);
+        
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result, Is.Empty);
+    }
+    
+    // test for case: GetAll(int accountId, DateTime startDate, DateTime endDate) gets invalid id throws argument exception
+    
 }

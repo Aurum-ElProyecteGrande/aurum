@@ -16,6 +16,5 @@ namespace Aurum.Services.CurrencyServices
             var currencyList = await _currencyRepo.GetAll();
             return currencyList;
         }
-
     }
 }
