@@ -1,6 +1,5 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS base
-RUN adduser -D -u 1000 appuser  # Create a non-root user
-USER appuser                    # Switch to non-root user
+USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://+:8080

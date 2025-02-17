@@ -62,26 +62,7 @@ namespace Aurum.Services.IncomeServices
         }
         
         public async Task<List<IncomeDto>> GetAll(int accountId, DateTime endDate)
-        {
-            return await _incomeRepo.GetAll(accountId, endDate);
-        }
-        
-        public async Task<List<Income>> GetAll(int accountId, DateTime startDate, DateTime endDate)
-        {
-            if (accountId <= 0)
-            {
-                throw new ArgumentException("Invalid account ID");
-            }
-            if (startDate > endDate)
-            {
-                throw new ArgumentException("Start date cannot be after end date");
-            } 
-            var incomes = await _incomeRepo.GetAll(accountId, startDate, endDate);
-            return incomes ?? new List<Income>();
-        }
-        
-        public async Task<int> Create(Income income)
-        {
+        {       
             var incomes = await _incomeRepo.GetAll(accountId, endDate);
             List<IncomeDto> incomeDtos = new();
             foreach (var income in incomes)
@@ -93,6 +74,15 @@ namespace Aurum.Services.IncomeServices
         
         public async Task<List<IncomeDto>> GetAll(int accountId, DateTime startDate, DateTime endDate)
         {
+            if (accountId <= 0)
+            {
+                throw new ArgumentException("Invalid account ID");
+            }
+            if (startDate > endDate)
+            {
+                throw new ArgumentException("Start date cannot be after end date");
+            }
+
             var incomes = await _incomeRepo.GetAll(accountId, startDate, endDate);
             List<IncomeDto> incomeDtos = new();
             foreach (var income in incomes)
@@ -105,7 +95,6 @@ namespace Aurum.Services.IncomeServices
         
         public async Task<int> Create(ModifyIncomeDto income)
         {
-
             var incomeId = await _incomeRepo.Create(ConvertModifyDtoToIncome(income));
 
             if (incomeId == 0) throw new InvalidOperationException("Invalid income input");
