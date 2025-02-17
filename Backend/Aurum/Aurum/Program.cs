@@ -1,6 +1,8 @@
+using System.Text;
 using System.Text.Json;
 using Aurum.Data.Context;
 using Aurum.Data.Entities;
+using Aurum.Data.Seeders;
 using Aurum.Repositories.IncomeRepository.RegularIncomeRepository;
 using Aurum.Models.CustomJsonConverter;
 using Aurum.Models.RegularExpenseDto;
@@ -29,6 +31,9 @@ using Aurum.Repositories.UserRepository;
 using Aurum.Services.CurrencyServices;
 using Aurum.Repositories.LayoutRepository;
 using Aurum.Services.LayoutServices;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,7 +51,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AurumContext>(options =>
 {
     options.UseSqlServer(
-  Environment.GetEnvironmentVariable("DbConnectionString"),
+   Environment.GetEnvironmentVariable("DbConnectionString"),
 sqlOptions => sqlOptions.EnableRetryOnFailure(
             maxRetryCount: 5,
             maxRetryDelay: TimeSpan.FromSeconds(10),
@@ -54,6 +59,39 @@ sqlOptions => sqlOptions.EnableRetryOnFailure(
         ));
 });
 
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ClockSkew = TimeSpan.Zero,
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = "apiWithAuthBackend",
+            ValidAudience = "apiWithAuthBackend",
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes("!SomethingSecret!!SomethingSecret!")
+            ),
+        };
+    });
+builder.Services
+    .AddIdentityCore<IdentityUser>(options =>
+    {
+        options.SignIn.RequireConfirmedAccount = false;
+        options.User.RequireUniqueEmail = true;
+        options.Password.RequireDigit = false;
+        options.Password.RequiredLength = 6;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireLowercase = false;
+    })
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<AurumContext>();
+
+builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IIncomeRepo, IncomeRepo>();
 builder.Services.AddScoped<IAccountRepo, AccountRepo>();
 builder.Services.AddScoped<ICurrencyRepo, CurrencyRepo>();
@@ -73,9 +111,9 @@ builder.Services.AddScoped<IIncomeCategoryService, IncomeCategoryService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<ICurrencyService, CurrencyService>();
-
 builder.Services.AddScoped<ILayoutRepo, LayoutRepo>();
 builder.Services.AddScoped<ILayoutService, LayoutService>();
+builder.Services.AddScoped<AuthenticationSeeder>();
 
 
 builder.Services.AddCors(options =>
@@ -91,6 +129,11 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+using var scope = app.Services.CreateScope();
+var authenticationSeeder = scope.ServiceProvider.GetRequiredService<AuthenticationSeeder>();
+authenticationSeeder.AddRoles();
+authenticationSeeder.AddAdmin();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -100,6 +143,8 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowFrontEnd");
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
