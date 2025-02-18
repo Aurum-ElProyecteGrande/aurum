@@ -44,9 +44,16 @@ namespace Aurum.Services.AccountService
             if (accountId == 0) throw new InvalidOperationException("Failed to create account. Invalid input.");
             return accountId;
         }
-        public async Task<int> Update(Account account)
+        public async Task<int> Update(ModifyAccountDto account, int accountId)
         {
-            var accountId = await _accountRepo.Update(account);
+            var accToUpdate = await _accountRepo.Get(accountId);
+
+            accToUpdate.UserId = account.UserId;
+            accToUpdate.DisplayName = account.DisplayName;
+            accToUpdate.CurrencyId = account.CurrencyId;
+            accToUpdate.Amount = account.Amount;
+
+            var updatedAccountId = await _accountRepo.Update(accToUpdate);
 
             if (accountId == 0) throw new InvalidOperationException("Failed to update account. Invalid input.");
 

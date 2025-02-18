@@ -34,7 +34,7 @@ public class UserController : ControllerBase
         }
     }
 
-    [HttpDelete("{userId:int}")]
+    [HttpDelete("{userId}")]
     public async Task<IActionResult> Delete([FromRoute] int userId)
     {
         try

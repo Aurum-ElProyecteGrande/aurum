@@ -71,7 +71,7 @@ public class LayoutController : ControllerBase
     }
 
 
-    [HttpGet("{userId:int}")]
+    [HttpGet("{userId}")]
     public async Task<IActionResult> GetAll(string userId)
     {
         try
