@@ -1,19 +1,24 @@
 using Aurum.Models.RegularExpenseDto;
 using Aurum.Services.RegularExpenseService;
+using Aurum.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aurum.Controllers.RegularExpressController;
 
+[Authorize]
 public class RegularExpenseController(IRegularExpenseService service):ControllerBase
 {
 	private readonly IRegularExpenseService _service = service;
-
-	//TODO userId should be replaced from the authentication context
+	
 	[HttpGet("/expenses/regulars/{accountId:int}")]
-	public async Task<IActionResult> GetAll([FromRoute]int accountId, [FromQuery]string userId)
+	public async Task<IActionResult> GetAll([FromRoute]int accountId)
 	{
 		try
 		{
+			if (UserHelper.GetUserId(HttpContext,out var userId, out var unauthorized)) 
+				return unauthorized;
+			
 			var expenses = await _service.GetAll(accountId, userId);
 			return Ok(expenses);
 		}
