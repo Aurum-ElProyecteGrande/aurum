@@ -169,8 +169,8 @@ void AddDatabase(WebApplicationBuilder webApplicationBuilder2)
     webApplicationBuilder2.Services.AddDbContext<AurumContext>(options =>
     {
         options.UseSqlServer(
-             "Server=db;Database=Aurum;User Id=sa;Password=yourStrong(!)Password;Encrypt=false;",
-            // Environment.GetEnvironmentVariable("DbConnectionString"),
+             // "Server=db;Database=Aurum;User Id=sa;Password=yourStrong(!)Password;Encrypt=false;",
+             Environment.GetEnvironmentVariable("DbConnectionString"),
             sqlOptions => sqlOptions.EnableRetryOnFailure(
                 maxRetryCount: 5,
                 maxRetryDelay: TimeSpan.FromSeconds(10),
