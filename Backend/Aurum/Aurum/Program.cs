@@ -148,6 +148,18 @@ void AddAuthentication(WebApplicationBuilder builder2)
         .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
+            options.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    var token = context.Request.Cookies["AuthToken"];
+                    if (!string.IsNullOrEmpty(token))
+                        context.Token = token;
+                    
+                    return Task.CompletedTask;
+                }
+            };
+            
             options.TokenValidationParameters = new TokenValidationParameters()
             {
                 ClockSkew = TimeSpan.Zero,
@@ -169,8 +181,8 @@ void AddDatabase(WebApplicationBuilder webApplicationBuilder2)
     webApplicationBuilder2.Services.AddDbContext<AurumContext>(options =>
     {
         options.UseSqlServer(
-              "Server=localhost,1433;Database=Aurum;User Id=sa;Password=yourStrong(!)Password;Encrypt=false;",
-             //Environment.GetEnvironmentVariable("DbConnectionString"),
+              // "Server=localhost,1433;Database=Aurum;User Id=sa;Password=yourStrong(!)Password;Encrypt=false;",
+             Environment.GetEnvironmentVariable("DbConnectionString"),
             sqlOptions => sqlOptions.EnableRetryOnFailure(
                 maxRetryCount: 5,
                 maxRetryDelay: TimeSpan.FromSeconds(10),
