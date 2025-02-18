@@ -18,7 +18,7 @@ namespace Aurum.Controllers.AccountController
         }
 
         [HttpGet("{userId:int}")]
-        public async Task<IActionResult> GetAll([FromRoute] int userId)
+        public async Task<IActionResult> GetAll([FromRoute] string userId)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace Aurum.Controllers.AccountController
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Account account)
+        public async Task<IActionResult> Create(ModifyAccountDto account)
         {
             try
             {

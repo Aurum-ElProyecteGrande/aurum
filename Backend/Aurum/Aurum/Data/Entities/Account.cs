@@ -6,7 +6,7 @@ namespace Aurum.Data.Entities;
 public class Account
 {
 	public int AccountId { get; set; }
-	public int UserId { get; set; }
+	public string UserId { get; set; }
 	public string DisplayName { get; set; }
 	public decimal Amount { get; set; }
 	public int CurrencyId { get; set; }

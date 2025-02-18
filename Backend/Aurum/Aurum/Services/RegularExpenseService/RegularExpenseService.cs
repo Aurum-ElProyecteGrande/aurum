@@ -14,7 +14,7 @@ public class RegularExpenseService(IRegularExpenseRepository repository,IExpense
 	private readonly IRegularExpenseRepository _repository = repository;
 	private readonly IExpenseCategoryService _categoryService = categoryService;
 	
-	public async Task<List<RegularExpenseDto>> GetAll(int accountId, int userId)
+	public async Task<List<RegularExpenseDto>> GetAll(int accountId, string userId)
 	{
 		var rawExpenses = await _repository.GetAllRegular(accountId);
 		

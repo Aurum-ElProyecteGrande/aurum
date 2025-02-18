@@ -14,7 +14,7 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
     private readonly IExpenseRepository _repository = repository;
     private readonly IExpenseCategoryService _categoryService = categoryService;
 
-    public async Task<List<ExpenseDto>> GetAll(int accountId, int userId)
+    public async Task<List<ExpenseDto>> GetAll(int accountId, string userId)
     {
         var rawData = await _repository.GetAll(accountId);
 
@@ -30,7 +30,7 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
 
     }
 
-    public async Task<List<ExpenseDto>> GetAll(int accountId, int userId, DateTime startDate, DateTime endDate)
+    public async Task<List<ExpenseDto>> GetAll(int accountId, string userId, DateTime startDate, DateTime endDate)
     {
         var rawData = await _repository.GetAll(accountId, startDate, endDate);
 

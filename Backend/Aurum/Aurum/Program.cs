@@ -58,12 +58,12 @@ AddServices(builder);
 AddCors(builder);
 
 var app = builder.Build();
-
+/*
 using var scope = app.Services.CreateScope();
 var authenticationSeeder = scope.ServiceProvider.GetRequiredService<AuthenticationSeeder>();
 authenticationSeeder.AddRoles();
 authenticationSeeder.AddAdmin();
-
+*/
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -169,8 +169,8 @@ void AddDatabase(WebApplicationBuilder webApplicationBuilder2)
     webApplicationBuilder2.Services.AddDbContext<AurumContext>(options =>
     {
         options.UseSqlServer(
-             // "Server=db;Database=Aurum;User Id=sa;Password=yourStrong(!)Password;Encrypt=false;",
-             Environment.GetEnvironmentVariable("DbConnectionString"),
+              "Server=localhost,1433;Database=Aurum;User Id=sa;Password=yourStrong(!)Password;Encrypt=false;",
+             //Environment.GetEnvironmentVariable("DbConnectionString"),
             sqlOptions => sqlOptions.EnableRetryOnFailure(
                 maxRetryCount: 5,
                 maxRetryDelay: TimeSpan.FromSeconds(10),

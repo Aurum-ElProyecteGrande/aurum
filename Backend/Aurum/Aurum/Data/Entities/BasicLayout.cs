@@ -3,7 +3,7 @@
     public class BasicLayout
     {
         public int BasicLayoutId { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public string Chart1 { get; set; }
         public string Chart2 { get; set; }
         public string Chart3 { get; set; }

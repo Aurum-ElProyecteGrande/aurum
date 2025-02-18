@@ -9,7 +9,7 @@ public class ExpenseSubCategory
 	public int ExpenseCategoryId { get; set; }
 	public string Name { get; set; }
 	public bool IsBase { get; set; } = false;
-	public int? UserId { get; set; } = null;
+	public string? UserId { get; set; } = null;
 	
 	public ICollection<Expense> Expenses { get; set; } = [];
 	public ICollection<RegularExpense> RegularExpenses { get; set; } = [];

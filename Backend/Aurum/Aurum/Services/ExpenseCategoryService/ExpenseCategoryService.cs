@@ -8,7 +8,7 @@ public class ExpenseCategoryService(IExpenseCategoryRepository repository): IExp
 {
 	private readonly IExpenseCategoryRepository _repository = repository;
 	
-	public async Task<Dictionary<CategoryDto, List<SubCategoryDto>>> GetAllExpenseCategories(int userId)
+	public async Task<Dictionary<CategoryDto, List<SubCategoryDto>>> GetAllExpenseCategories(string userId)
 	{
 		// Retrieve categories and subcategories
 		var categories = await GetAllCategories();
@@ -45,7 +45,7 @@ public class ExpenseCategoryService(IExpenseCategoryRepository repository): IExp
 		return categories.Select(CreateCategoryDto).ToList();
 	}
 
-	private async Task<List<SubCategoryDto>> GetAllSubCategories(int userId)
+	private async Task<List<SubCategoryDto>> GetAllSubCategories(string userId)
 	{
 		var categories = await _repository.GetAllSubCategory(userId);
 		

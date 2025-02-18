@@ -10,7 +10,7 @@ public class RegularExpenseController(IRegularExpenseService service):Controller
 
 	//TODO userId should be replaced from the authentication context
 	[HttpGet("/expenses/regulars/{accountId:int}")]
-	public async Task<IActionResult> GetAll([FromRoute]int accountId, [FromQuery]int userId)
+	public async Task<IActionResult> GetAll([FromRoute]int accountId, [FromQuery]string userId)
 	{
 		try
 		{
