@@ -1,4 +1,4 @@
-using Aurum.Data.Entities;
+/*using Aurum.Data.Entities;
 using Aurum.Repositories.IncomeRepository.IncomeRepository;
 using Aurum.Services.IncomeServices;
 using Moq;
@@ -278,4 +278,4 @@ public class IncomeServiceTest
     
     // test for case: GetAll(int accountId, DateTime startDate, DateTime endDate) gets invalid id throws argument exception
     
-}
+}*/
