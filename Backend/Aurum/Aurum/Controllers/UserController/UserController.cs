@@ -2,6 +2,8 @@ using Aurum.Data.Contracts;
 using Aurum.Data.Entities;
 using Aurum.Services.UserServices;
 using Aurum.Services.UserServices;
+using Aurum.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aurum.Controllers.UserController;
@@ -70,9 +72,8 @@ public class UserController : ControllerBase
     public async Task<ActionResult<AuthResponse>> Authenticate([FromBody] AuthRequest request)
     {
         if (!ModelState.IsValid)
-        {
             return BadRequest(ModelState);
-        }
+        
 
         var result = await _userService.LoginAsync(request.Email, request.Password);
         
@@ -89,6 +90,36 @@ public class UserController : ControllerBase
         AddErrors(result);
         return BadRequest(ModelState);
     }
+    
+    [HttpPost("password-change"), Authorize]
+    public async Task<IActionResult> PasswordChange([FromBody] PasswordChangeRequest request)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
+        
+        if (UserHelper.GetUserId(HttpContext,out var userId, out var unauthorized)) 
+            return unauthorized;
+        
+        var result = await _userService.ChangePasswordAsync(userId, request);
+        
+        if (result.Succeeded) 
+            return Ok();
+        
+        return BadRequest(result.Errors);
+    }
+    
+    [HttpGet("validate"), Authorize]
+    public IActionResult Validate()
+    {
+        
+        if (User.Identity?.IsAuthenticated ?? false)
+            return Ok(new { message = "Token is valid." });
+        
+
+        return Unauthorized(new { message = "Token is invalid or expired." });
+    }
+
 
 
     private void AddErrors(AuthResult result)

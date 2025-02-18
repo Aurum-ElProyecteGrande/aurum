@@ -95,6 +95,23 @@ namespace Aurum.Services.UserServices
 
             return new AuthResult(true, managedUser.Email, managedUser.UserName, accessToken, managedUser.Id);
         }
+        
+        public async Task<IdentityResult> ChangePasswordAsync(string userId, PasswordChangeRequest passwordChangeRequest)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+
+            if (user == null) 
+                throw new InvalidOperationException("User not found.");
+            
+            
+            var result = await userManager.CheckPasswordAsync(user, passwordChangeRequest.OldPassword);
+            if (!result)
+                return IdentityResult.Failed(new IdentityError { Description = "Incorrect old password." });
+            
+            
+            var changePasswordResult = await userManager.ChangePasswordAsync(user, passwordChangeRequest.OldPassword, passwordChangeRequest.NewPassword);
+            return changePasswordResult;
+        }
 
         private static AuthResult InvalidEmail(string email)
         {
