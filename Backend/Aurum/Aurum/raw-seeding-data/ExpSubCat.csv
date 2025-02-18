@@ -1,0 +1,12 @@
+ExpenseSubCategoryId,ExpenseCategoryId,Name,IsBase,UserId
+1,1,lidl,1,NULL
+2,1,spar,1,NULL
+3,1,tesco,1,NULL
+4,2,gas,1,NULL
+5,2,water,1,NULL
+6,2,electricity,1,NULL
+7,2,tv,1,NULL
+8,3,netflix,1,NULL
+9,3,bike,1,NULL
+10,4,reapir,1,NULL
+11,4,furniture,1,NULL
