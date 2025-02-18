@@ -12,7 +12,7 @@ public class ExpenseController(IExpenseService service):ControllerBase
 
 	//TODO userId should be replaced from the authentication context
 	[HttpGet("/expenses/{accountId:int}")]
-	public async Task<IActionResult> GetAll([FromRoute]int accountId, [FromQuery]int userId)
+	public async Task<IActionResult> GetAll([FromRoute]int accountId, [FromQuery]string userId)
 	{
 		try
 		{
@@ -28,7 +28,7 @@ public class ExpenseController(IExpenseService service):ControllerBase
 	
 	//TODO userId should be replaced from the authentication context
 	[HttpGet("/expenses/{accountId:int}/{startDate:datetime}/{endDate:datetime}")]
-	public async Task<IActionResult> GetAllWithDate([FromRoute]int accountId, [FromRoute]DateTime startDate, [FromRoute]DateTime endDate, [FromQuery]int userId)
+	public async Task<IActionResult> GetAllWithDate([FromRoute]int accountId, [FromRoute]DateTime startDate, [FromRoute]DateTime endDate, [FromQuery]string userId)
 	{
 		try
 		{

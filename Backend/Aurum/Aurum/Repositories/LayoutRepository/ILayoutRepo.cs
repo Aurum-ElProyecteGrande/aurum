@@ -11,8 +11,8 @@ namespace Aurum.Repositories.LayoutRepository
         Task<int> UpdateScientic(ScienticLayout layout);
         Task<int> CreateDetailed(DetailedLayout layout);
         Task<int> UpdateDetailed(DetailedLayout layout);
-        Task<BasicLayout>? GetBasic(int userId);
-        Task<ScienticLayout>? GetScientic(int userId);
-        Task<DetailedLayout>? GetDetailed(int userId);
+        Task<BasicLayout>? GetBasic(string userId);
+        Task<ScienticLayout>? GetScientic(string userId);
+        Task<DetailedLayout>? GetDetailed(string userId);
     }
 }

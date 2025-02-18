@@ -16,7 +16,7 @@ namespace Aurum.Repositories.AccountRepo
         public async Task<Account> Get(int accountId) => _dbContext.Accounts
             .FirstOrDefault(a => a.AccountId == accountId);
 
-        public async Task<List<Account>> GetAll(int userId) => _dbContext.Accounts
+        public async Task<List<Account>> GetAll(string userId) => _dbContext.Accounts
             .Where(a => a.UserId == userId)
             .ToList();
         public async Task<int> Create(Account account)

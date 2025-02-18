@@ -5,6 +5,7 @@ namespace Aurum.Repositories.IncomeRepository.RegularIncomeRepository
 {
     public interface IRegularIncomeRepo
     {
+        Task<RegularIncome> Get(int regularId);
         Task<List<RegularIncome>> GetAllRegular(int accountId);
         Task<int> CreateRegular(RegularIncome income);
         Task<int> UpdateRegular(RegularIncome regularIncome);

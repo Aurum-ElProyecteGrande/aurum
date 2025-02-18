@@ -7,8 +7,8 @@ public class ExpenseCategoryController(IExpenseCategoryService service): Control
 {
 	private readonly IExpenseCategoryService _service = service;
 	
-	[HttpGet("/categories/expense/{userId:int}")]
-	public async Task<IActionResult> GetAll([FromRoute] int userId)
+	[HttpGet("/categories/expense/{userId}")]
+	public async Task<IActionResult> GetAll([FromRoute] string userId)
 	{
 		try
 		{

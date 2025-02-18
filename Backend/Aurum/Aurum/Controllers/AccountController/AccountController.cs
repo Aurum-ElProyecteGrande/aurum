@@ -17,8 +17,8 @@ namespace Aurum.Controllers.AccountController
             _accountService = accountService;
         }
 
-        [HttpGet("{userId:int}")]
-        public async Task<IActionResult> GetAll([FromRoute] int userId)
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetAll([FromRoute] string userId)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace Aurum.Controllers.AccountController
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Account account)
+        public async Task<IActionResult> Create(ModifyAccountDto account)
         {
             try
             {
@@ -47,12 +47,12 @@ namespace Aurum.Controllers.AccountController
             }
         }
 
-        [HttpPut()]
-        public async Task<IActionResult> Update(Account account)
+        [HttpPut("{accountId}")]
+        public async Task<IActionResult> Update(ModifyAccountDto account, int accountId)
         {
             try
             {
-                var updatedId = await _accountService.Update(account);
+                var updatedId = await _accountService.Update(account, accountId);
                 return Ok(updatedId);
             }
             catch (Exception ex)
