@@ -1,7 +1,10 @@
 using Aurum.Data.Entities;
+using Aurum.Data.Seeders.DataGenerators;
 using Aurum.Data.Seeders.DataReaders;
 using Aurum.Models.ExpenseDto;
 using Aurum.Models.RegularExpenseDto;
+using Aurum.Repositories.CurrencyRepository;
+using Aurum.Services.CurrencyServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -23,21 +26,4 @@ public class AurumContext(DbContextOptions<AurumContext> options) : IdentityDbCo
     public DbSet<ScienticLayout> ScienticLayouts { get; set; }
     public DbSet<DetailedLayout> DetailedLayouts { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
-
-        CsvDataReader<Currency> _currencyReader = new CurrencyReader("currencies.csv");
-
-        // Seed data 
-
-        modelBuilder.Entity<IdentityUser>().HasData(
-        //CreateUsers() -> need pw hasher first
-        );
-
-        modelBuilder.Entity<Currency>().HasData(
-            _currencyReader.Read()
-            );
-
-    }
 }

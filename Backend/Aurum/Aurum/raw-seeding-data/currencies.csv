@@ -1,2 +1,4 @@
-CurrencyId,Name,CurrencyCode,Symbol
-1,Forint,HUF,Ft
+Forint,HUF,Ft
+Euro,EUR,€
+US Dollar,USD,$
+Font,GBP,£
