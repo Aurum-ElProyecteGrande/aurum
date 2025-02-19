@@ -8,16 +8,18 @@ namespace Aurum.Data.Seeders.DataGenerators
     {
         private const int enoughIncomes = 10;
         private AurumContext _context;
+        private Dictionary<string, List<string>> _incomeLabelsByCat;
 
-        public IncomeGenerator(AurumContext context)
+        public IncomeGenerator(AurumContext context, Dictionary<string, List<string>> incomeLabelsByCat)
         {
             _context = context;
+            _incomeLabelsByCat = incomeLabelsByCat;
         }
 
-        public async Task<List<Income>> GenerateIncomes(int accId, Dictionary<string, List<string>> incomeLabelsByCat)
+        public async Task<List<Income>> GenerateIncomes(int accId)
         {
             List<Income> incomes = new();
-            var actualCategories = GetActualCategories(incomeLabelsByCat);
+            var actualCategories = GetActualCategories(_incomeLabelsByCat);
 
             DateTime today = DateTime.Now;
 

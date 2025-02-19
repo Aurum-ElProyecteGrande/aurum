@@ -20,4 +20,8 @@ RUN dotnet publish "Aurum.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:Use
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+RUN mkdir -p /app/raw-seeding-data
+COPY raw-seeding-data/*.csv /app/raw-seeding-data/
+
 ENTRYPOINT ["dotnet", "Aurum.dll"]

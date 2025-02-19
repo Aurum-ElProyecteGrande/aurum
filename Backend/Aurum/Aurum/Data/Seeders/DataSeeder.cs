@@ -8,7 +8,7 @@ namespace Aurum.Data.Seeders
 {
     public class DataSeeder
     {
-        private const int minimumExistingIncomeCategories = 5;
+        private const int minimumExistingCategories = 5;
 
         public readonly AurumContext _context;
         public readonly UserManager<IdentityUser> _userManager;
@@ -26,6 +26,10 @@ namespace Aurum.Data.Seeders
             await SeedAccounts();
             await SeedIncomeCategories();
             await SeedIncomes();
+            await SeedExpenseCategories();
+            await SeedExpenseSubCategories();
+            await SeedExpenses();
+
         }
 
         private async Task SeedCurrencies()
@@ -64,7 +68,7 @@ namespace Aurum.Data.Seeders
 
         private async Task SeedIncomeCategories()
         {
-            if (_context.IncomeCategories.Count() < minimumExistingIncomeCategories)
+            if (_context.IncomeCategories.Count() < minimumExistingCategories)
             {
                 CsvDataReader<IncomeCategory> incomeCategoryReader = new IncomeCategoryReader("income-categories.csv");
                 var incomeCategories = incomeCategoryReader.Read();
@@ -75,14 +79,15 @@ namespace Aurum.Data.Seeders
 
         private async Task SeedIncomes()
         {
-            CsvDataReader<Dictionary<string, List<string>>> incomeReader = new IncomeReader("incomes.csv");
-            IncomeGenerator incomeGenerator = new(_context);
+            CsvDataReader<IncomeCategory> incomeCategoryReader = new IncomeCategoryReader("income-categories.csv");
+            CsvDataReader<Dictionary<string, List<string>>> incomeReader = new IncomeReader("incomes.csv", incomeCategoryReader);
             var incomeByCategoriesList = incomeReader.Read();
             var incomeByCaregories = incomeByCategoriesList.FirstOrDefault();
+            IncomeGenerator incomeGenerator = new(_context, incomeByCaregories);
 
             foreach (var acc in _context.Accounts)
             {
-                var incomes = (await incomeGenerator.GenerateIncomes(acc.AccountId, incomeByCaregories));
+                var incomes = (await incomeGenerator.GenerateIncomes(acc.AccountId));
                 if (incomes is not null)
                 {
                     await _context.Incomes.AddRangeAsync(incomes);
@@ -91,5 +96,54 @@ namespace Aurum.Data.Seeders
             }
 
         }
+
+        private async Task SeedExpenseCategories()
+        {
+            if (_context.ExpenseCategories.Count() < minimumExistingCategories)
+            {
+                CsvDataReader<ExpenseCategory> expenseCategoryReader = new ExpenseCategoryReader("expense-categories.csv");
+                var expenseCategories = expenseCategoryReader.Read();
+                await _context.ExpenseCategories.AddRangeAsync(expenseCategories);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        private async Task SeedExpenseSubCategories()
+        {
+            if (!_context.ExpenseSubCategories.Any())
+            {
+                CsvDataReader<ExpenseCategory> expenseCategoryReader = new ExpenseCategoryReader("expense-categories.csv");
+                CsvDataReader<Dictionary<string, List<string>>> expenseSubCategoryReader = new ExpenseSubCategoryReader("expense-sub-categories.csv", expenseCategoryReader);
+                var expenseSubCategoriesByCategory = expenseSubCategoryReader.Read();
+                ExpenseSubCategoryGenerator expenseSubCategoryGenerator = new(_context, expenseSubCategoriesByCategory.FirstOrDefault());
+                var expenseSubCategories = expenseSubCategoryGenerator.GenerateExpenseSubCategories();
+                await _context.ExpenseSubCategories.AddRangeAsync(expenseSubCategories);
+                await _context.SaveChangesAsync();
+            }
+
+        }
+
+        private async Task SeedExpenses()
+        {
+            CsvDataReader<ExpenseCategory> expenseCategoryReader = new ExpenseCategoryReader("expense-categories.csv");
+            CsvDataReader<Dictionary<string, List<string>>> expenseSubCategoryReader = new ExpenseSubCategoryReader("expense-sub-categories.csv", expenseCategoryReader);
+            CsvDataReader<Dictionary<string, Dictionary<string, List<string>>>> expenseReader = new ExpenseReader("expenses.csv", expenseSubCategoryReader);
+
+            var expensesByCatBySubList = expenseReader.Read();
+            var expensesByCatBySub = expensesByCatBySubList.FirstOrDefault();
+
+            ExpenseGenerator expenseGenerator = new(_context, expensesByCatBySub);
+
+            foreach (var acc in _context.Accounts)
+            {
+                var expenses = (await expenseGenerator.GenerateExpenses(acc.AccountId));
+                if (expenses is not null)
+                {
+                    await _context.Expenses.AddRangeAsync(expenses);
+                    await _context.SaveChangesAsync();
+                }
+            }
+        }
+
     }
 }
