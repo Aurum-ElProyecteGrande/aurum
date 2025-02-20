@@ -8,7 +8,7 @@ import ChangeChartForm from "../components/dashboard/change-chart-form";
 import TransactionSidebar from "@/components/transactions/transaction_sidebar/TransactionSidebar";
 import Sidebar from "../components/sidebar";
 import { layouts } from "../../scripts/dashboard_scripts/layouts"
-import { fetchAccounts, fetchExpenses, fetchIncome, fetchLayouts, fetchPostLayout } from "@/scripts/dashboard_scripts/dashboard_scripts";
+import { fetchAccounts, fetchExpenses, fetchIncome, fetchLayouts, fetchPostLayout, fetchUserName } from "@/scripts/dashboard_scripts/dashboard_scripts";
 import { getIndexOfPossibleChart } from "@/scripts/dashboard_scripts/dashboard_scripts";
 
 export default function DashboardPage() {
@@ -25,20 +25,25 @@ export default function DashboardPage() {
   const [accounts, setAccounts] = useState([])
   const [expenses, setExpenses] = useState([])
   const [incomes, setIncomes] = useState([])
-  const userId = "b8eb3c1d-70de-49aa-95af-c94a8f5f4217" //from credentials probably? TODO
+  const [username, setUsername] = useState("John Doe")
 
-  const chartProps = { isEditMode, accounts, expenses, incomes, userId }
+  const chartProps = { isEditMode, accounts, expenses, incomes }
 
   //chart effects
   useEffect(() => {
+    const getUserName = async () => {
+      const username = await fetchUserName()
+      setUsername(username)
+    }
+
     const getAccounts = async () => {
       const updatedAccounts = await fetchAccounts()
       setAccounts(updatedAccounts)
     }
-    if (userId) {
-      getAccounts()
-    }
-  }, [userId])
+
+    getUserName()
+    getAccounts()
+  }, [username])
 
   useEffect(() => {
     const getTransactions = async () => {
@@ -63,7 +68,7 @@ export default function DashboardPage() {
   //\
   // save layout
   const loadLayouts = async () => {
-    return setUserInitialChartNames(await fetchLayouts(userId))
+    return setUserInitialChartNames(await fetchLayouts())
   }
 
   useEffect(() => {
@@ -100,7 +105,6 @@ export default function DashboardPage() {
   const saveChoosenChartsForUser = async () => {
     const chosenChartNames = choosenCharts.map(chart => chart.name)
     const layoutDto = {
-      userId: userId,
       layoutName: chosenLayout,
       charts: chosenChartNames
     }
@@ -118,7 +122,8 @@ export default function DashboardPage() {
         isHamburgerOpen={isHamburgerOpen}
         isEditMode={isEditMode}
         chosenLayout={chosenLayout}
-        saveChoosenChartsForUser={saveChoosenChartsForUser} />
+        saveChoosenChartsForUser={saveChoosenChartsForUser}
+        username={username} />
       <TransactionSidebar />
       {isHamburgerOpen &&
         <HamburgerMenu

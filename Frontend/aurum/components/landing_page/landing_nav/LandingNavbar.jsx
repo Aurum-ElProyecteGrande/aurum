@@ -5,7 +5,7 @@ import LandingLogo from "../landing_logo/LandingLogo";
 import { IoMenuOutline, IoClose } from "react-icons/io5";
 import { useRouter } from 'next/navigation';
 
-const LandingNavbar = ({ useModal }) => {
+const LandingNavbar = ({ useModal, userInfo }) => {
 	const [showNav, setShowNav] = useState(false);
 	const router = useRouter();
 

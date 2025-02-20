@@ -14,6 +14,7 @@ import AuthModal from "@/components/modal/AuthModal";
 export default function Home() {
   const [showModal, setShowModal] = useState(false)
   const [isSignUp, setIsSignUp] = useState(false)
+  const [userInfo, setUserInfo] = useState({})
 
   const handleModal = (signMode) => {
     setShowModal(true);
@@ -26,14 +27,14 @@ export default function Home() {
 
   return (
     <>
-      <LandingNavbar useModal={handleModal}/>
+      <LandingNavbar useModal={handleModal} userInfo={userInfo}/>
       <LandingHero />
       <LandingScroll />
       <LandingPrices />
       <LandingShowcase />
       <LandingNewsletter />
       <LandingFooter />
-      {showModal && <AuthModal showModal={showModal} setShowModal={setShowModal} isSignUp={isSignUp} />}
+      {showModal && <AuthModal showModal={showModal} setShowModal={setShowModal} isSignUp={isSignUp} setUserInfo={setUserInfo} />}
     </>
   );
 }
