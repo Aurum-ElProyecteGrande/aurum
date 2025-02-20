@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { IoMdClose } from "react-icons/io";
 
-const AuthModal = ({ showModal, setShowModal, isSignUp }) => {
+const AuthModal = ({ showModal, setShowModal, isSignUp, setUserInfo }) => {
   const [isSignUpMode, setIsSignUpMode] = useState(isSignUp);
   const [formData, setFormData] = useState({
     name: '',
@@ -56,9 +56,7 @@ const AuthModal = ({ showModal, setShowModal, isSignUp }) => {
       
       if (!response.ok)
         throw new Error('Failed to authenticate.');
-
-      const data = await response.json();
-      console.log(data);
+      
     } catch (err) {
       setError(err.message);
     } finally {
