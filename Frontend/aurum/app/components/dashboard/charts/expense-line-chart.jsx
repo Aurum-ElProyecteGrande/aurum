@@ -30,8 +30,8 @@ export default function ExpenseLineChart({ isEditMode, accounts, segmentIndex, c
     }, [accounts])
 
     useEffect(() => {
-        const getExpenses = async (accId) => {
-            const updatedExpenses = await fetchExpensesByDate(accId, startDate.toISOString().slice(0, 10), today.toISOString().slice(0, 10))
+        const getBalances = async (accId) => {
+            const updatedBalances = await fetchExpensesByDate(accId, startDate.toISOString().slice(0, 10), today.toISOString().slice(0, 10))
             let expensesByDate = Object.groupBy(updatedExpenses, ({ date }) => date)
             let updatedExpenseByDateString = []
             for (const key in expensesByDate) {
@@ -40,7 +40,7 @@ export default function ExpenseLineChart({ isEditMode, accounts, segmentIndex, c
             setExpensesByDateString(updatedExpenseByDateString)
         }
         if (curAccount) {
-            getExpenses(curAccount.accountId)
+            getBalances(curAccount.accountId)
         }
     }, [curAccount, startDate])
 
@@ -91,6 +91,8 @@ export default function ExpenseLineChart({ isEditMode, accounts, segmentIndex, c
         setDaysShown(e.target.value)
     }
 
+    console.log(rawChartData)
+
     return (
         <div key={segmentIndex} className={`${chosenLayout}-${segmentIndex + 1} chart-container ${isEditMode && "edit-mode"}`}>
 
@@ -121,13 +123,10 @@ export default function ExpenseLineChart({ isEditMode, accounts, segmentIndex, c
                             contentStyle={{ backgroundColor: "#333333", borderColor: "#F9D342", color: "#F4F4F4" }}
                         />
                         <Legend />
-                        <Line type="monotone" dataKey="expense" stroke="#F9D342" name={curAccount && curAccount.displayName} />
+                        <Line type="monotone" dataKey="expense" stroke="#F9D342" name={curAccount && `${curAccount.displayName} (${curAccount.currency.currencyCode})`} />
                     </LineChart>
                 </ResponsiveContainer>
             </div>
-
-
         </div>
-
     )
 }

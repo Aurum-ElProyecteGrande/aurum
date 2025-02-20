@@ -13,6 +13,16 @@ export const fetchExpenses = async (accId) => {
     return expenses
 }
 
+export const fetchExpensesWithCurrency = async (accId) => {
+    const response = await fetch(`${apiUrl}/expenses/currency/${accId}`,{
+        method: "Get",
+        headers:{},
+        credentials: "include"
+    })
+    if (!response.ok) throw new Error(`Fetching expenses for account: ${accId} went wrong`)
+    const expenses = await response.json()
+    return expenses
+}
 export const fetchExpensesByDate = async (accId, startDate, endDate) => {
     const response = await fetch(`${apiUrl}/expenses/${accId}/${startDate}/${endDate}`,{
         method: "Get",
@@ -26,6 +36,17 @@ export const fetchExpensesByDate = async (accId, startDate, endDate) => {
 
 export const fetchIncome = async (accId) => {
     const response = await fetch(`${apiUrl}/income/${accId}`,{
+        method: "Get",
+        headers:{},
+        credentials: "include"
+    })
+    if (!response.ok) throw new Error(`Fetching expenses for account: ${accId} went wrong`)
+    const expenses = await response.json()
+    return expenses
+}
+
+export const fetchIncomesWithCurrency = async (accId) => {
+    const response = await fetch(`${apiUrl}/income/currency/${accId}`,{
         method: "Get",
         headers:{},
         credentials: "include"
@@ -68,6 +89,17 @@ export const fetchBalance = async (accId) => {
     return balance
 }
 
+export const fetchBalanceForRange = async (accId, startDate, endDate) => {
+    const response = await fetch(`${apiUrl}/balance/${accId}?startDate=${startDate}&endDate=${endDate}`,{
+        method: "Get",
+        headers:{},
+        credentials: "include"
+    })
+    if (!response.ok) throw new Error(`Fetching balance for account: ${accId} went wrong`)
+    const balance = await response.json()
+    return balance
+}
+
 export const fetchLayouts = async (userId) => {
     const response = await fetch(`${apiUrl}/Layout/${userId}`,{
         method: "Get",
@@ -98,6 +130,6 @@ export const getIndexOfPossibleChart = (chartName) => {
     return false
 }
 
-export const displayHuf =(amount) => {
-    return amount.toLocaleString('hu-HU', { style: 'currency', currency: 'HUF' })
+export const displayCurrency =(amount, curCurrency) => {
+    return amount.toLocaleString('hu-HU', { style: 'currency', currency: curCurrency })
 }
