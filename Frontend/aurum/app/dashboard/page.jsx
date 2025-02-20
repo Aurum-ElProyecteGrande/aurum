@@ -25,7 +25,7 @@ export default function DashboardPage() {
   const [accounts, setAccounts] = useState([])
   const [expenses, setExpenses] = useState([])
   const [incomes, setIncomes] = useState([])
-  const userId = 1 //from credentials probably? TODO
+  const userId = "b8eb3c1d-70de-49aa-95af-c94a8f5f4217" //from credentials probably? TODO
 
   const chartProps = {isEditMode, accounts, expenses, incomes, userId}
 

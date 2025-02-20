@@ -12,6 +12,11 @@ public class CurrencyRepo : ICurrencyRepo
     {
         _dbContext = aurumContext;
     }
+
+    public async Task<Currency> Get(int currencyId) => _dbContext.Currencies
+        .FirstOrDefault(c => c.CurrencyId == currencyId);
+
+
     public async Task<List<Currency>> GetAll() => _dbContext.Currencies
         .ToList();
 }
