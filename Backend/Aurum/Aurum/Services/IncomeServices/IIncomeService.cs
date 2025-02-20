@@ -10,6 +10,7 @@ namespace Aurum.Services.IncomeServices
         Task<List<IncomeDto>> GetAll(int accountId);
         Task<List<IncomeDto>> GetAll(int accountId, DateTime endDate);
         Task<List<IncomeDto>> GetAll(int accountId, DateTime startDate, DateTime endDate);
+        Task<List<IncomeWithCurrency>> GetAllWithCurrency(int accountId);
         Task<int> Create(ModifyIncomeDto income);
         Task<bool> Delete(int incomeId);
     }

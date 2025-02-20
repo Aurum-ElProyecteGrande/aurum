@@ -50,7 +50,25 @@ public class ExpenseController(IExpenseService service):ControllerBase
 		}
 	}
 
-	[HttpPost("/expenses")]
+    [HttpGet("/expenses/currency/{accountId:int}")]
+    public async Task<IActionResult> GetAllWithCurrency([FromRoute] int accountId)
+    {
+        try
+        {
+            if (UserHelper.GetUserId(HttpContext, out var userId, out var unauthorized))
+                return unauthorized;
+
+            var expenses = await _service.GetAllWithCurrency(accountId, userId);
+            return Ok(expenses);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpPost("/expenses")]
 	public async Task<IActionResult> Create([FromBody]ModifyExpenseDto expense)
 	{
 		try

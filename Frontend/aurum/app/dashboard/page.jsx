@@ -8,7 +8,7 @@ import ChangeChartForm from "../components/dashboard/change-chart-form";
 import TransactionSidebar from "@/components/transactions/transaction_sidebar/TransactionSidebar";
 import Sidebar from "../components/sidebar";
 import { layouts } from "../../scripts/dashboard_scripts/layouts"
-import { fetchAccounts, fetchExpenses, fetchIncome, fetchLayouts, fetchPostLayout } from "@/scripts/dashboard_scripts/dashboard_scripts";
+import { fetchAccounts, fetchExpenses, fetchExpensesWithCurrency, fetchIncome, fetchIncomesWithCurrency, fetchLayouts, fetchPostLayout } from "@/scripts/dashboard_scripts/dashboard_scripts";
 import { getIndexOfPossibleChart } from "@/scripts/dashboard_scripts/dashboard_scripts";
 
 export default function DashboardPage() {
@@ -44,12 +44,12 @@ export default function DashboardPage() {
     const getTransactions = async () => {
       const updatedExpenses = []
       await Promise.all(accounts.map(async (acc) => {
-        updatedExpenses.push(...await fetchExpenses(acc.accountId))
+        updatedExpenses.push(...await fetchExpensesWithCurrency(acc.accountId))
       }))
 
       const updatedIncomes = []
       await Promise.all(accounts.map(async (acc) => {
-        updatedIncomes.push(...await fetchIncome(acc.accountId))
+        updatedIncomes.push(...await fetchIncomesWithCurrency(acc.accountId))
       }))
 
       setExpenses(updatedExpenses)

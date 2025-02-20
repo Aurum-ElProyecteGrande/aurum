@@ -6,13 +6,18 @@ using Aurum.Repositories.ExpenseRepository;
 using Aurum.Services.ExpenseCategoryService;
 using System.Linq;
 using Aurum.Data.Entities;
+using Aurum.Models.IncomeDTOs;
+using Aurum.Services.AccountService;
+using Aurum.Services.CurrencyServices;
 
 namespace Aurum.Services.ExpenseService;
 
-public class ExpenseService(IExpenseRepository repository, IExpenseCategoryService categoryService) : IExpenseService
+public class ExpenseService(IExpenseRepository repository, IExpenseCategoryService categoryService, IAccountService accountService, ICurrencyService currencyService) : IExpenseService
 {
     private readonly IExpenseRepository _repository = repository;
     private readonly IExpenseCategoryService _categoryService = categoryService;
+    private readonly IAccountService _accountService = accountService;
+    private readonly ICurrencyService _currencyService = currencyService;
 
     public async Task<List<ExpenseDto>> GetAll(int accountId, string userId)
     {
@@ -43,6 +48,20 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
             throw new InvalidDataException("No categories found");
 
         return CreateExpenseDtoList(rawData, categories);
+    }
+
+    public async Task<List<ExpenseWithCurrency>> GetAllWithCurrency(int accountId, string userId)
+    {
+        var expenseDtos = await GetAll(accountId, userId);
+
+        List<ExpenseWithCurrency> expensesWithCur = new();
+
+        foreach(var expense in expenseDtos)
+        {
+            expensesWithCur.Add(await ConvertExpenseToWithCurrency(expense, accountId));
+        }
+
+        return expensesWithCur;
     }
 
     public async Task<int> Create(ModifyExpenseDto expenseDto)
@@ -117,5 +136,12 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
             .Select(e => e.Amount)
             .Sum();
     }
+    private async Task<ExpenseWithCurrency> ConvertExpenseToWithCurrency(ExpenseDto expDto, int accId)
+    {
+        var account = await _accountService.Get(accId);
+        var currency = await _currencyService.Get(account.Currency.CurrencyId);
+        return new(currency, expDto.Category, expDto.Subcategory, expDto.Label, expDto.Amount, expDto.Date);
+    }
+
 }
 

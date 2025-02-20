@@ -1,3 +1,4 @@
+import { displayCurrency } from '@/scripts/dashboard_scripts/dashboard_scripts';
 import ChangeChartForm from '../change-chart-form';
 import { useEffect, useState } from "react"
 
@@ -5,8 +6,6 @@ export default function LastTransactions({ isEditMode, accounts, expenses, incom
 
     const [transactions, setTransactions] = useState([])
     const maxTransactions = 15
-
-    console.log(expenses)
 
     useEffect(() => {
         const getTransactions = async () => {
@@ -79,7 +78,7 @@ export default function LastTransactions({ isEditMode, accounts, expenses, incom
                                     </p>
                                 </div>
                                 <div className={`amount ${t.isExpense ? "expense" : "income"}`}>
-                                    {t.isExpense ? "-" : "+"} {t.amount.toLocaleString('hu-HU', { style: 'currency', currency: 'HUF' })}
+                                    {t.isExpense ? "-" : "+"} {displayCurrency(t.amount, t.currency.currencyCode)}
                                 </div>
                             </div>
                         ))}
