@@ -9,32 +9,31 @@ namespace Aurum.Services.UserServices
     {
         private IUserRepo _userRepo = userRepo;
         
-        public async Task<User> Get(int userId)
+        public async Task<AuthResponse> GetUserInfo(string userId)
         {
-            if (userId == 0) throw new NullReferenceException("User ID can not be 0");
-
-            var user = await _userRepo.Get(userId);
+            
+            var user = await userManager.FindByIdAsync(userId);
 
             if (user == null) throw new ArgumentException($"Could not find user with id: {userId}");
 
-            return user;
+            return new AuthResponse(user.Email, user.UserName);
         }
-        public async Task<bool> Update(User user)
+        public async Task<bool> Update(AuthResponse user, string userId)
         {
-            var updatedUser = await userManager.FindByIdAsync(user.UserId.ToString());
+            var updatedUser = await userManager.FindByIdAsync(userId);
     
             if (updatedUser == null)
-                throw new ArgumentException($"Could not find user with id: {user.UserId}");
+                throw new ArgumentException($"Could not find user with id: {userId}");
 
             updatedUser.Email = user.Email;
-            updatedUser.UserName = user.Username;
+            updatedUser.UserName = user.UserName;
             
             var result = await userManager.UpdateAsync(updatedUser);
             
             if (result.Succeeded)
                 return true;
             
-            throw new InvalidOperationException($"Failed to update user with ID {user.UserId}");
+            throw new InvalidOperationException($"Failed to update user with ID {userId}");
         }
         
         public async Task<bool> Delete(string userId)
