@@ -122,7 +122,7 @@ export default function IncomeLineChart({ isEditMode, accounts, segmentIndex, ch
                             contentStyle={{ backgroundColor: "#333333", borderColor: "#F9D342", color: "#F4F4F4" }}
                         />
                         <Legend />
-                        <Line type="monotone" dataKey="income" stroke="#F9D342" />
+                        <Line type="monotone" dataKey="income" stroke="#F9D342" name={`${curAccount.displayName} (${curAccount.currency.currencyCode})`}/>
                     </LineChart>
                 </ResponsiveContainer>
             </div>

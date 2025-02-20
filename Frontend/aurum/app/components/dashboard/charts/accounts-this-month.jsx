@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import ChangeChartForm from '../change-chart-form';
-import { displayHuf, fetchExpensesByDate, fetchIncomeByDate } from '@/scripts/dashboard_scripts/dashboard_scripts';
+import { displayCurrency, fetchExpensesByDate, fetchIncomeByDate } from '@/scripts/dashboard_scripts/dashboard_scripts';
 
 
 export default function AccountsThisMonth({ isEditMode, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts, accounts, expenses, incomes }) {
@@ -27,9 +27,9 @@ export default function AccountsThisMonth({ isEditMode, segmentIndex, chosenLayo
             }
 
             const updatedAccsWithTrxs = [
-                { name: accounts[0].displayName, inc: acc1Inc, exp: acc1Exp },
-                accounts[1] && { name: accounts[1].displayName, inc: acc2Inc, exp: acc2Exp },
-                accounts[2] && { name: accounts[2].displayName, inc: acc3Inc, exp: acc3Exp }
+                { name: accounts[0].displayName, inc: acc1Inc, exp: acc1Exp, currencyCode: accounts[0].currency.currencyCode },
+                accounts[1] && { name: accounts[1].displayName, inc: acc2Inc, exp: acc2Exp, currencyCode: accounts[1].currency.currencyCode},
+                accounts[2] && { name: accounts[2].displayName, inc: acc3Inc, exp: acc3Exp, currencyCode: accounts[2].currency.currencyCode}
             ]
 
 
@@ -68,15 +68,15 @@ export default function AccountsThisMonth({ isEditMode, segmentIndex, chosenLayo
                             <div className='acc-name'> {acc.name}</div>
                             <div className='row exp'>
                                 <div >Total expense</div>
-                                <div className='exp'>- {displayHuf(acc.exp)}</div>
+                                <div className='exp'>- {displayCurrency(acc.exp, acc.currencyCode)}</div>
                             </div>
                             <div className='row inc'>
                                 <div>Total income</div>
-                                <div  className='inc'>+ {displayHuf(acc.inc)}</div>
+                                <div  className='inc'>+ {displayCurrency(acc.exp, acc.currencyCode)}</div>
                             </div>
                             <div className={`row total${acc.inc - acc.exp > 0 ? "inc" : "exp"}`}>
                                 <div className={acc.inc - acc.exp > 0 ? "inc" : "exp"}>Total sum</div>
-                                <div className={acc.inc - acc.exp > 0 ? "inc" : "exp"}>{displayHuf(acc.inc - acc.exp)}</div>
+                                <div className={acc.inc - acc.exp > 0 ? "inc" : "exp"}>{displayCurrency(acc.inc - acc.exp, acc.currencyCode)}</div>
                             </div>
                         </div>
                     ))}

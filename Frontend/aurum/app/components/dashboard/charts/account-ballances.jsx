@@ -1,4 +1,4 @@
-import { fetchBalance } from "@/scripts/dashboard_scripts/dashboard_scripts"
+import { displayCurrency, fetchBalance } from "@/scripts/dashboard_scripts/dashboard_scripts"
 import { useEffect, useState } from "react"
 import ChangeChartForm from '../change-chart-form';
 
@@ -50,16 +50,16 @@ export default function AccountBalances({ isEditMode, accounts, segmentIndex, ch
                 </div>
             </div>
             <div className="chart">
-            <div className="chart-body">
-                <div className="account-balance-container">
-                    {balances && balances.map(balance => (
-                        <div key={balance.name} className="row">
-                            <div>{balance.name}</div>
-                            <div className="ballance">{balance.balance.toLocaleString('hu-HU', { style: 'currency', currency: balance.currency.currencyCode })}</div>
-                        </div>
-                    ))}
+                <div className="chart-body">
+                    <div className="account-balance-container">
+                        {balances && balances.map(balance => (
+                            <div key={balance.name} className="row">
+                                <div>{balance.name}</div>
+                                <div className="ballance">{displayCurrency(balance.balance, balance.currency.currencyCode)}</div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </div>
 
 
             </div>

@@ -21,17 +21,20 @@ namespace Aurum.Repositories.IncomeRepository.IncomeRepository
             .Where(i => i.AccountId == accountId)
             .Where(i => i.Date < endDate)
             .ToList();
+        
         public async Task<List<Income>> GetAll(int accountId, DateTime startDate, DateTime endDate) => _dbContext.Incomes
             .Where(i => i.AccountId == accountId)
             .Where(i => i.Date >= startDate)
             .Where(i => i.Date <= endDate)
             .ToList();
+        
         public async Task<int> Create(Income income)
         {
             await _dbContext.AddAsync(income);
             await _dbContext.SaveChangesAsync();
             return income.IncomeId;
         }
+        
         public async Task<bool> Delete(int incomeId)
         {
             var incomeToDelete = _dbContext.Incomes.FirstOrDefault(i => i.IncomeId == incomeId);

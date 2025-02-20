@@ -8,7 +8,7 @@ import ChangeChartForm from "../components/dashboard/change-chart-form";
 import TransactionSidebar from "@/components/transactions/transaction_sidebar/TransactionSidebar";
 import Sidebar from "../components/sidebar";
 import { layouts } from "../../scripts/dashboard_scripts/layouts"
-import { fetchAccounts, fetchExpenses, fetchIncome, fetchLayouts, fetchPostLayout, fetchUserName } from "@/scripts/dashboard_scripts/dashboard_scripts";
+import { fetchAccounts, fetchExpenses, fetchExpensesWithCurrency, fetchIncome, fetchIncomesWithCurrency, fetchLayouts, fetchPostLayout, fetchUserName } from "@/scripts/dashboard_scripts/dashboard_scripts";
 import { getIndexOfPossibleChart } from "@/scripts/dashboard_scripts/dashboard_scripts";
 
 export default function DashboardPage() {
@@ -49,12 +49,12 @@ export default function DashboardPage() {
     const getTransactions = async () => {
       const updatedExpenses = []
       await Promise.all(accounts.map(async (acc) => {
-        updatedExpenses.push(...await fetchExpenses(acc.accountId))
+        updatedExpenses.push(...await fetchExpensesWithCurrency(acc.accountId))
       }))
 
       const updatedIncomes = []
       await Promise.all(accounts.map(async (acc) => {
-        updatedIncomes.push(...await fetchIncome(acc.accountId))
+        updatedIncomes.push(...await fetchIncomesWithCurrency(acc.accountId))
       }))
 
       setExpenses(updatedExpenses)
@@ -142,32 +142,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-
-//              { isEditMode, accounts, expenses, incomes })
-
-
-/*
-
-  return (
-    <div className="dashboard page">
-      <Header setIsHamburgerOpen={setIsHamburgerOpen} isHamburgerOpen={isHamburgerOpen} isEditMode={isEditMode} />
-      <Sidebar />
-      {isHamburgerOpen &&
-        <HamburgerMenu isEditMode={isEditMode} setIsEditMode={setIsEditMode} choosenLayout={choosenLayout} setChoosenLayout={setChoosenLayout} />
-      }
-      <div className="dashboard-container">
-        {possibleChartsBySegment.map((possibleCharts, segmentIndex) => (
-          <div key={segmentIndex}
-            className={`${choosenLayout}-${segmentIndex + 1} chart-container ${isEditMode && "edit-mode"}`}>
-            {React.cloneElement(choosenCharts[segmentIndex].chart,
-              { isEditMode, accounts })}
-            {isEditMode &&
-              <ChangeChartForm choosenCharts={choosenCharts} segmentIndex={segmentIndex} possibleCharts={possibleCharts} setChoosenCharts={setChoosenCharts} />
-            }
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-*/
