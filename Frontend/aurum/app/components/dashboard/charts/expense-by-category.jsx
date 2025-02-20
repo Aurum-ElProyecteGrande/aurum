@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
+import ChangeChartForm from '../change-chart-form';
+
 
 const COLORS = ['#3D62A4', '#F9D342', '#5E946A ', '#C56A64'];
 
-export default function ExpenseByCategory({ isEditMode, expenses }) {
+export default function ExpenseByCategory({ isEditMode, expenses, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts }) {
 
     const [expensesByCategory, setExpensesByCategory] = useState([])
     const [filteredExpensesByCategory, setFilteredExpensesByCategory] = useState([])
@@ -46,7 +48,7 @@ export default function ExpenseByCategory({ isEditMode, expenses }) {
         if (expenses[0]) {
             getExpensesByCategory()
         }
-    }, [expenses])
+    }, [expenses, startDate])
 
 
     useEffect(() => {
@@ -63,41 +65,54 @@ export default function ExpenseByCategory({ isEditMode, expenses }) {
 
 
     return (
-        <div className="chart">
-            <div className="chart-title">
-                <p>Expenses by category in last {daysCalculated} days</p>
-            </div>
-            <div className='expense-by-category-container'>
-                <ResponsiveContainer width="30%" height="100%" className="expense-by-category">
-                    <PieChart width={10} height={40}>
-                        <Pie
-                            data={filteredExpensesByCategory}
-                            cx="50%"
-                            cy="45%"
-                            outerRadius={35}
-                            dataKey="categorySum"
-                        >
-                            {filteredExpensesByCategory.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                            ))}
-                        </Pie>
-                    </PieChart>
-                </ResponsiveContainer>
-                <div className='pie-chart-tooltip'>
-                    {filteredExpensesByCategory[0] && filteredExpensesByCategory.map((ec, i) => (
-                        <div key={ec.category} className='row' style={{ borderBottom: `1px solid ${COLORS[i % COLORS.length]}` }}>
-                            <div className='label' style={{ color: COLORS[i % COLORS.length] }}>{ec.category}</div>
-                            <div className='value'>{ec.categorySum.toLocaleString('hu-HU', { style: 'currency', currency: 'HUF' })}</div>
-                        </div>
-                    ))}
+
+        <div key={segmentIndex} className={`${chosenLayout}-${segmentIndex + 1} chart-container ${isEditMode && "edit-mode"}`}>
+
+            <div className='chart-title-container'>
+                {isEditMode &&
+                    <div className="change-chart-types-container">
+                        <ChangeChartForm
+                            choosenCharts={choosenCharts}
+                            segmentIndex={segmentIndex}
+                            possibleCharts={possibleChartsBySegment[segmentIndex]}
+                            setChoosenCharts={setChoosenCharts} />
+                    </div>
+                }
+                <div className="chart-title">
+                    <p>Expenses by category in last {daysCalculated} days</p>
                 </div>
             </div>
-            {
-                isEditMode &&
-                <div className="change-chart-types-container">
+
+            <div className="chart">
+
+                <div className='expense-by-category-container'>
+                    <ResponsiveContainer width="30%" height="100%" className="expense-by-category">
+                        <PieChart width={10} height={40}>
+                            <Pie
+                                data={filteredExpensesByCategory}
+                                cx="50%"
+                                cy="45%"
+                                outerRadius={35}
+                                dataKey="categorySum"
+                            >
+                                {filteredExpensesByCategory.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                ))}
+                            </Pie>
+                        </PieChart>
+                    </ResponsiveContainer>
+                    <div className='pie-chart-tooltip'>
+                        {filteredExpensesByCategory[0] && filteredExpensesByCategory.map((ec, i) => (
+                            <div key={ec.category} className='row' style={{ borderBottom: `1px solid ${COLORS[i % COLORS.length]}` }}>
+                                <div className='label' style={{ color: COLORS[i % COLORS.length] }}>{ec.category}</div>
+                                <div className='value'>{ec.categorySum.toLocaleString('hu-HU', { style: 'currency', currency: 'HUF' })}</div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            }
-        </div >
+            </div >
+
+        </div>
     );
 
 }

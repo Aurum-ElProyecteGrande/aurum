@@ -1,7 +1,7 @@
-import { fetchExpenses, fetchIncome } from "@/scripts/dashboard_scripts/dashboard_scripts"
+import ChangeChartForm from '../change-chart-form';
 import { useEffect, useState } from "react"
 
-export default function LastTransactions({ accounts, expenses, incomes }) {
+export default function LastTransactions({ isEditMode, accounts, expenses, incomes, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts }) {
 
     const [transactions, setTransactions] = useState([])
     const maxTransactions = 15
@@ -48,27 +48,45 @@ export default function LastTransactions({ accounts, expenses, incomes }) {
     }
 
     return (
-        <div className="chart">
-            <div className="chart-title">
-                <p>Last transactions</p>
-            </div>
-            <div className="chart-body">
-                <div className="transaction-container">
-                    {transactions[0] && transactions.map((t, i) => (
-                        <div key={i} className={`row`}>
-                            <div className={`date ${t.isExpense ? "expense" : "income"}`}>{t.date.toString().slice(0, 10)}</div>
-                            <div className="label">
-                                <p className={`${t.isExpense ? "expense" : "income"}`}>
-                                    {t.label}
-                                </p>
-                            </div>
-                            <div className={`amount ${t.isExpense ? "expense" : "income"}`}>
-                                {t.isExpense ? "-" : "+"} {t.amount.toLocaleString('hu-HU', { style: 'currency', currency: 'HUF' })}
-                            </div>
-                        </div>
-                    ))}
+
+        <div key={segmentIndex} className={`${chosenLayout}-${segmentIndex + 1} chart-container ${isEditMode && "edit-mode"}`}>
+
+            <div className='chart-title-container'>
+                {isEditMode &&
+                    <div className="change-chart-types-container">
+                        <ChangeChartForm
+                            choosenCharts={choosenCharts}
+                            segmentIndex={segmentIndex}
+                            possibleCharts={possibleChartsBySegment[segmentIndex]}
+                            setChoosenCharts={setChoosenCharts} />
+                    </div>
+                }
+                <div className="chart-title">
+                    <p>Last transactions</p>
                 </div>
             </div>
-        </div >
+
+            <div className="chart">
+
+                <div className="chart-body">
+                    <div className="transaction-container">
+                        {transactions[0] && transactions.map((t, i) => (
+                            <div key={i} className={`row`}>
+                                <div className={`date ${t.isExpense ? "expense" : "income"}`}>{t.date.toString().slice(0, 10)}</div>
+                                <div className="label">
+                                    <p className={`${t.isExpense ? "expense" : "income"}`}>
+                                        {t.label}
+                                    </p>
+                                </div>
+                                <div className={`amount ${t.isExpense ? "expense" : "income"}`}>
+                                    {t.isExpense ? "-" : "+"} {t.amount.toLocaleString('hu-HU', { style: 'currency', currency: 'HUF' })}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div >
+
+        </div>
     )
 }
