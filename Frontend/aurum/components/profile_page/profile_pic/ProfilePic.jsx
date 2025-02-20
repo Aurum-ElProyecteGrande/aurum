@@ -5,18 +5,18 @@ const ProfilePic = ({profilePicture, handleProfilePictureChange}) => {
     <div className="user-profile-picture">
         <img
           src={
-            profilePicture || "https://via.placeholder.com/150"
+            profilePicture || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd1Z3I4enuWtfMxeCRHUpoDQWQtlf9XJMI1w&s"
           }
           alt="Profile"
         />
-        <label htmlFor="profilePicture">
+        <label htmlFor="profilePicture" onClick={() => alert("Paywall sorry")}>
           Change Profile Picture
         </label>
-        <input
+        {/* <input
           type="file"
           id="profilePicture"
           onChange={handleProfilePictureChange}
-        />
+        /> */}
       </div>
   )
 }

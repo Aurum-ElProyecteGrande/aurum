@@ -131,7 +131,7 @@ export default function DashboardPage() {
           setIsEditMode={setIsEditMode}
           chosenLayout={chosenLayout}
           setChosenLayout={setChosenLayout} />
-      }
+      }      
       <div className="dashboard-container">
         {choosenCharts && choosenCharts.map((choosenChart, segmentIndex) => (
           <React.Fragment key={segmentIndex}>
