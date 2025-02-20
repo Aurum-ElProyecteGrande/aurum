@@ -24,7 +24,7 @@ export default function IncomeLineChart({ isEditMode, accounts, segmentIndex, ch
     }, [daysShown])
 
     useEffect(() => {
-        if (accounts) {
+        if (accounts[0]) {
             setCurAccount(accounts[0])
         }
     }, [accounts])

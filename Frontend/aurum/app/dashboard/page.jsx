@@ -35,13 +35,15 @@ export default function DashboardPage() {
       const username = await fetchUserName()
       setUsername(username)
     }
+    loadLayouts()
+    getUserName()
+  }, [])
 
+  useEffect(() => {
     const getAccounts = async () => {
       const updatedAccounts = await fetchAccounts()
       setAccounts(updatedAccounts)
     }
-
-    getUserName()
     getAccounts()
   }, [username])
 
@@ -71,9 +73,7 @@ export default function DashboardPage() {
     return setUserInitialChartNames(await fetchLayouts())
   }
 
-  useEffect(() => {
-    loadLayouts()
-  }, [])
+
   //\
 
   //gets saved layout if has in DB else initial layout
@@ -135,7 +135,7 @@ export default function DashboardPage() {
       <div className="dashboard-container">
         {choosenCharts && choosenCharts.map((choosenChart, segmentIndex) => (
           <React.Fragment key={segmentIndex}>
-            {React.cloneElement(choosenChart.chart, { ...chartProps, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts })}
+            {accounts[0] && React.cloneElement(choosenChart.chart, { ...chartProps, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts })}
           </React.Fragment>
         ))}
       </div>

@@ -31,7 +31,7 @@ export default function ExpenseLineChart({ isEditMode, accounts, segmentIndex, c
 
     useEffect(() => {
         const getBalances = async (accId) => {
-            const updatedBalances = await fetchExpensesByDate(accId, startDate.toISOString().slice(0, 10), today.toISOString().slice(0, 10))
+            const updatedExpenses = await fetchExpensesByDate(accId, startDate.toISOString().slice(0, 10), today.toISOString().slice(0, 10))
             let expensesByDate = Object.groupBy(updatedExpenses, ({ date }) => date)
             let updatedExpenseByDateString = []
             for (const key in expensesByDate) {
