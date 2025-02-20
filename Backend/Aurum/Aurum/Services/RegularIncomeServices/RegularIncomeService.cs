@@ -17,6 +17,7 @@ namespace Aurum.Services.RegularIncomeServices
             _regularIncomeRepo = regularIncomeRepo;
             _incomeCategoryService = incomeCategoryService;
         }
+        
         public async Task<List<RegularIncomeDto>> GetAllRegular(int accountId)
         {
             var incomes = await _regularIncomeRepo.GetAllRegular(accountId);
@@ -27,6 +28,7 @@ namespace Aurum.Services.RegularIncomeServices
             }
             return incomeDtos;
         }
+        
         public async Task<int> CreateRegular(ModifyRegularIncomeDto income)
         {
             var regularIncomeId = await _regularIncomeRepo.CreateRegular(ConvertModifyDtoToIncome(income));
@@ -35,6 +37,7 @@ namespace Aurum.Services.RegularIncomeServices
 
             return regularIncomeId;
         }
+        
         public async Task<int> UpdateRegular(ModifyRegularIncomeDto regularIncome, int regularId)
         {
             var regularToUpdate = await _regularIncomeRepo.Get(regularId);
@@ -51,6 +54,7 @@ namespace Aurum.Services.RegularIncomeServices
 
             return regularIncomeId;
         }
+        
         public async Task<bool> DeleteRegular(int regularId)
         {
             var isDeleted = await _regularIncomeRepo.DeleteRegular(regularId);

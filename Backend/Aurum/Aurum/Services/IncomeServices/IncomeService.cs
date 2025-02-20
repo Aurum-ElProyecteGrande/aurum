@@ -84,13 +84,14 @@ namespace Aurum.Services.IncomeServices
             }
 
             var incomes = await _incomeRepo.GetAll(accountId, startDate, endDate);
+            
             List<IncomeDto> incomeDtos = new();
             foreach (var income in incomes)
             {
                 incomeDtos.Add(await ConvertIncomeToDto(income));
             }
+            
             return incomeDtos;
-
         }
         
         public async Task<int> Create(ModifyIncomeDto income)

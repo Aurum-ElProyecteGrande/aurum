@@ -15,6 +15,5 @@ namespace Aurum.Services.IncomeCategoryServices
         {
             return await _incomeCategoryRepo.GetAllCategory();
         }
-
     }
 }

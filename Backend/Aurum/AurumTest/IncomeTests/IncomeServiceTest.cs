@@ -1,5 +1,8 @@
-/*using Aurum.Data.Entities;
+using Aurum.Data.Entities;
+using Aurum.Models.IncomeDTOs;
 using Aurum.Repositories.IncomeRepository.IncomeRepository;
+using Aurum.Services.AccountService;
+using Aurum.Services.IncomeCategoryServices;
 using Aurum.Services.IncomeServices;
 using Moq;
 
@@ -10,13 +13,18 @@ namespace AurumTest.Services.IncomeServices;
 public class IncomeServiceTest
 {
     private Mock<IIncomeRepo> _incomeRepoMock;
-    private IncomeService _incomeService;
+    private Mock<IAccountService> _accountServiceMock;
+    private Mock<IIncomeCategoryService> _incomeCategoryServiceMock;
 
+    private IncomeService _incomeService;
+    
     [SetUp]
     public void SetUp()
     {
         _incomeRepoMock = new Mock<IIncomeRepo>();
-        _incomeService = new IncomeService(_incomeRepoMock.Object);
+        _accountServiceMock = new Mock<IAccountService>();
+        _incomeCategoryServiceMock = new Mock<IIncomeCategoryService>();
+        _incomeService = new IncomeService(_incomeRepoMock.Object, _incomeCategoryServiceMock.Object, _accountServiceMock.Object);
     }
     
     [Test]
@@ -139,76 +147,172 @@ public class IncomeServiceTest
     }
 
     [Test]
-    public async Task GetAll_WithAccountId_ReturnsListOfIncomes()
+    public async Task GetAll_WithAccountId_ReturnsListOfIncomeDtos()
     {
         int accountId = 1;
-        List<Income> expectedIncomes = new List<Income>
+
+        List<Income> mockIncomes = new List<Income>
         {
-            new Income { IncomeId = 1, AccountId = accountId, Amount = 100 },
-            new Income { IncomeId = 2, AccountId = accountId, Amount = 200 }
+            new Income 
+            { 
+                IncomeId = 1, 
+                AccountId = accountId, 
+                IncomeCategoryId = 10, 
+                Label = "Salary", 
+                Amount = 1000, 
+                Date = DateTime.Now
+            },
+            new Income 
+            { 
+                IncomeId = 2, 
+                AccountId = accountId, 
+                IncomeCategoryId = 20, 
+                Label = "Bonus", 
+                Amount = 500, 
+                Date = DateTime.Now
+            }
         };
 
-        _incomeRepoMock.Setup(repo => repo.GetAll(accountId)).ReturnsAsync(expectedIncomes);
+        List<IncomeCategory> mockCategories = new()
+        {
+            new IncomeCategory { IncomeCategoryId = 10, Name = "Salary Category" },
+            new IncomeCategory { IncomeCategoryId = 20, Name = "Bonus Category" }
+        };
+        
+        _incomeRepoMock.Setup(repo => repo.GetAll(accountId)).ReturnsAsync(mockIncomes);
+
+        _incomeCategoryServiceMock.Setup(service => service.GetAllCategory()).ReturnsAsync(mockCategories);
 
         var result = await _incomeService.GetAll(accountId);
         
+        Assert.That(result, Is.Not.Null);
+
+        Assert.That(result, Has.Count.EqualTo(2));
+
         Assert.Multiple(() =>
         {
-            Assert.That(result.Count, Is.EqualTo(expectedIncomes.Count));
-            Assert.That(result[0].IncomeId, Is.EqualTo(expectedIncomes[0].IncomeId));
-            Assert.That(result[1].Amount, Is.EqualTo(expectedIncomes[1].Amount));
+            Assert.That(result[0].Category.Name, Is.EqualTo("Salary Category"));
+            Assert.That(result[0].Label, Is.EqualTo("Salary"));
+            Assert.That(result[0].Amount, Is.EqualTo(1000));
+
+            Assert.That(result[1].Category.Name, Is.EqualTo("Bonus Category"));
+            Assert.That(result[1].Label, Is.EqualTo("Bonus"));
+            Assert.That(result[1].Amount, Is.EqualTo(500));
         });
     }
 
     [Test]
-    public async Task GetAll_WithAccountIdAndEndDate_ReturnsListOfIncomes()
+    public async Task GetAll_WithNoIncomes_ReturnsEmptyList()
+    {
+        int accountId = 2;
+        _incomeRepoMock.Setup(repo => repo.GetAll(accountId)).ReturnsAsync(new List<Income>());
+        _incomeCategoryServiceMock.Setup(service => service.GetAllCategory()).ReturnsAsync(new List<IncomeCategory>());
+
+        var result = await _incomeService.GetAll(accountId);
+        
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result, Is.Empty);
+    }
+
+    [Test]
+    public async Task GetAll_WithAccountIdAndEndDate_ReturnsListOfIncomeDtos()
     {
         int accountId = 1;
-        DateTime endDate = new DateTime(2024, 12, 31);
-        List<Income> expectedIncomes = new List<Income>
+        DateTime endDate = DateTime.UtcNow;
+        
+        List<Income> mockIncomes = new List<Income>
         {
-            new Income { IncomeId = 1, AccountId = accountId, Amount = 100, Date = new DateTime(2024, 12, 31) },
-            new Income() { IncomeId = 2, AccountId = accountId, Amount = 200, Date = new DateTime(2024, 12, 30) }
+            new Income { IncomeId = 1, AccountId = accountId, IncomeCategoryId = 10, Label = "Freelance", Amount = 200, Date = endDate }
         };
 
-        _incomeRepoMock.Setup(repo => repo.GetAll(accountId, endDate)).ReturnsAsync(expectedIncomes);
-
+        List<IncomeCategory> mockCategories = new List<IncomeCategory>
+        {
+            new IncomeCategory { IncomeCategoryId = 10, Name = "Freelance Work" }
+        };
+    
+        _incomeRepoMock.Setup(repo => repo.GetAll(accountId, endDate)).ReturnsAsync(mockIncomes);
+        _incomeCategoryServiceMock.Setup(service => service.GetAllCategory()).ReturnsAsync(mockCategories);
+        
         var result = await _incomeService.GetAll(accountId, endDate);
         
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result, Has.Count.EqualTo(1));
         Assert.Multiple(() =>
         {
-            Assert.That(result.Count, Is.EqualTo(expectedIncomes.Count));
-            Assert.That(result[0].IncomeId, Is.EqualTo(expectedIncomes[0].IncomeId));
-            Assert.That(result[1].Amount, Is.EqualTo(expectedIncomes[1].Amount));
+            Assert.That(result[0].Category.Name, Is.EqualTo("Freelance Work"));
+            Assert.That(result[0].Label, Is.EqualTo("Freelance"));
+            Assert.That(result[0].Amount, Is.EqualTo(200));
         });
     }
 
     [Test]
-    public async Task ValidId_CreatesIncomeAndReturnsId()
+    public async Task GetAll_WithStartAndEndDate_ReturnsListOfIncomeDtos()
     {
-        int incomeId = 1;
-        Income income = new Income { IncomeId = incomeId };
+        int accountId = 1;
+        DateTime startDate = new DateTime(2024, 1, 1);
+        DateTime endDate = new DateTime(2024, 12, 31);
 
-        _incomeRepoMock.Setup(repo => repo.Create(income)).ReturnsAsync(incomeId);
+        List<Income> mockIncomes = new List<Income>
+        {
+            new Income
+            {
+                IncomeId = 1, AccountId = accountId, IncomeCategoryId = 15, Label = "Consulting", Amount = 300,
+                Date = new DateTime(2025, 6, 15)
+            }
+        };
 
-        var result = await _incomeService.Create(income);
+        List<IncomeCategory> mockCategories = new List<IncomeCategory>
+        {
+            new IncomeCategory { IncomeCategoryId = 15, Name = "Consulting Services" }
+        };
+
+        _incomeRepoMock.Setup(repo => repo.GetAll(accountId, startDate, endDate)).ReturnsAsync(mockIncomes);
+        _incomeCategoryServiceMock.Setup(service => service.GetAllCategory()).ReturnsAsync(mockCategories);
+
+        var result = await _incomeService.GetAll(accountId, startDate, endDate);
         
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result, Has.Count.EqualTo(1));
         Assert.Multiple(() =>
         {
-            Assert.That(result, Is.EqualTo(incomeId));
-            _incomeRepoMock.Verify(repo => repo.Create(income), Times.Once);
+            Assert.That(result[0].Category.Name, Is.EqualTo("Consulting Services"));
+            Assert.That(result[0].Label, Is.EqualTo("Consulting"));
+            Assert.That(result[0].Amount, Is.EqualTo(300));
         });
     }
 
+    [Test]
+    public async Task Create_ValidModifyIncomeDto_ReturnsIncomeId()
+    {
+        ModifyIncomeDto newIncome = new(1, 5, "New Income", 600, DateTime.UtcNow);
+        
+        _incomeRepoMock.Setup(repo => repo.Create(It.IsAny<Income>())).ReturnsAsync(10);
+
+        var result = await _incomeService.Create(newIncome);
+        
+        Assert.That(result, Is.EqualTo(10));
+    }
+    
     [Test]
     public async Task InvalidId_ThrowsInvalidOperationException_OnCreate()
     {
-        int incomeId = 0;
-        Income income = new Income { IncomeId = incomeId };
-
-        _incomeRepoMock.Setup(repo => repo.Create(income)).ReturnsAsync(incomeId);
+        ModifyIncomeDto modifyIncomeDto = new ModifyIncomeDto(1, 5, "New Income", 600, DateTime.UtcNow);
         
-        Assert.ThrowsAsync<InvalidOperationException>(async () => await _incomeService.Create(income));
+        _incomeRepoMock.Setup(repo => repo.Create(It.IsAny<Income>())).ReturnsAsync(0);
+
+        var ex = Assert.ThrowsAsync<InvalidOperationException>(async () => await _incomeService.Create(modifyIncomeDto));
+        
+        Assert.That(ex.Message, Is.EqualTo("Invalid income input"));
+    }
+
+    [Test]
+    public async Task Delete_InvalidIncomeId_ThrowsException()
+    {
+        int incomeId = 99;
+        _incomeRepoMock.Setup(repo => repo.Delete(incomeId)).ReturnsAsync(false);
+
+        var ex = Assert.ThrowsAsync<InvalidOperationException>(() => _incomeService.Delete(incomeId));
+        Assert.That(ex.Message, Is.EqualTo($"Could not delete income with id {incomeId}"));
     }
 
     [Test]
@@ -238,44 +342,17 @@ public class IncomeServiceTest
     }
 
     [Test]
-    public async Task CorrectId_AndValidDates_ReturnsIncomes()
-    {
-        int accountId = 1;
-        DateTime startDate = new DateTime(2024, 1, 1);
-        DateTime endDate = new DateTime(2024, 12, 31);
-        List<Income> incomes = new List<Income>
-        {
-            new Income { Amount = 100m, Label = "friendly loan"},
-            new Income { Amount = 150m, Label = "inheritance"}
-        };
-
-        _incomeRepoMock.Setup(repo => repo.GetAll(accountId, startDate, endDate)).ReturnsAsync(incomes);
-
-        var result = await _incomeService.GetAll(accountId, startDate, endDate);
-        
-        Assert.Multiple(() =>
-        {
-            Assert.That(result, Is.EquivalentTo(incomes));
-            Assert.That(result[0].Amount, Is.EqualTo(100m));
-            Assert.That(result[1].Label, Is.EqualTo("inheritance"));
-        });
-    }
-
-    [Test]
     public async Task RepositoryReturnsNull_ReturnsEmptyList()
     {
         int accountId = 1;
         DateTime startDate = new DateTime(2024, 1, 1);
         DateTime endDate = new DateTime(2024, 12, 31);
 
-        _incomeRepoMock.Setup(repo => repo.GetAll(accountId, startDate, endDate)).ReturnsAsync(( List<Income>)null);
+        _incomeRepoMock.Setup(repo => repo.GetAll(accountId, startDate, endDate)).ReturnsAsync(new List<Income>());
 
         var result = await _incomeService.GetAll(accountId, startDate, endDate);
         
         Assert.That(result, Is.Not.Null);
         Assert.That(result, Is.Empty);
     }
-    
-    // test for case: GetAll(int accountId, DateTime startDate, DateTime endDate) gets invalid id throws argument exception
-    
-}*/
+}
