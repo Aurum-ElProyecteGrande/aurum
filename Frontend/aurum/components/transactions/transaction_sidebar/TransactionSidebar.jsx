@@ -2,11 +2,16 @@ import React from 'react'
 import Link from 'next/link'
 import { MdLogout, MdFormatListBulleted } from "react-icons/md";
 import { LuLayoutDashboard } from "react-icons/lu";
+import { CgProfile } from "react-icons/cg";
 import Image from 'next/image'
 import Logo from '@/imgs/aurum_logo.png'
-
+import { fetchLogout } from '@/scripts/landing_page_scripts/landing_page';
 
 function TransactionSidebar() {
+    const handleLogOut = async () => {
+        await fetchLogout()
+    }
+
     return (
         <aside className='transactions-sidebar'>
             <div className="transactions-sidebar-container">
@@ -38,19 +43,18 @@ function TransactionSidebar() {
                     <li>
                         <Link href="/profile">
                             <div className='transactions-sidebar-menu-item'>
-                                <MdFormatListBulleted />
+                                <CgProfile />
                                 <p>Profile</p>
                             </div>
                         </Link>
                     </li>
                     <li>
-                        <Link href="/">
+                        <Link href="/" onClick={handleLogOut}>
                             <div className='transactions-sidebar-menu-item'>
                                 <MdLogout />
                                 <p>Logout</p>
                             </div>
                         </Link>
-
                     </li>
                 </ul>
             </div>
