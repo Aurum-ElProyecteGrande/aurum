@@ -3,11 +3,9 @@ import { CiMenuKebab } from "react-icons/ci";
 import { FaRegSave } from "react-icons/fa";
 
 
-export default function Header({ setIsHamburgerOpen, isHamburgerOpen, isEditMode, chosenLayout, saveChoosenChartsForUser }) {
+export default function Header({ setIsHamburgerOpen, isHamburgerOpen, isEditMode, chosenLayout, saveChoosenChartsForUser, username }) {
 
-  const [username, setUsername] = useState("Gele")
-
-  useEffect(() => {
+   useEffect(() => {
     const handleClick = (e) => {
       if (e.target.id !== "hamburger-menu-button") {
         setIsHamburgerOpen(false)

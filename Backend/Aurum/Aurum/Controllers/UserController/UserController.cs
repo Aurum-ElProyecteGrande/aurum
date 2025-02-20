@@ -19,13 +19,35 @@ public class UserController : ControllerBase
         _userService = userService;
     }
     
-
-    [HttpPut()]
-    public async Task<IActionResult> Update(User user)
+    [HttpGet(), Authorize]
+    public async Task<IActionResult> GetUserInfo()
     {
         try
         {
-            var didUpdate = await _userService.Update(user);
+            if (UserHelper.GetUserId(HttpContext,out var userId, out var unauthorized)) 
+                return unauthorized;
+            
+            var userInfo = await _userService.GetUserInfo(userId);
+
+            return Ok(userInfo);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return BadRequest(ex.Message);
+        }
+    }
+    
+
+    [HttpPut()]
+    public async Task<IActionResult> Update([FromBody]AuthResponse user)
+    {
+        try
+        {
+            if (UserHelper.GetUserId(HttpContext,out var userId, out var unauthorized)) 
+                return unauthorized;
+            
+            var didUpdate = await _userService.Update(user, userId);
 
             return Ok(didUpdate);
         }
@@ -36,12 +58,15 @@ public class UserController : ControllerBase
         }
     }
 
-    [HttpDelete("{userId}")]
-    public async Task<IActionResult> Delete([FromRoute] int userId)
+    [HttpDelete("")]
+    public async Task<IActionResult> Delete()
     {
         try
         {
-            var isDeleted = await _userService.Delete(userId.ToString());
+            if (UserHelper.GetUserId(HttpContext,out var userId, out var unauthorized)) 
+                return unauthorized;
+            
+            var isDeleted = await _userService.Delete(userId);
 
             return Ok(isDeleted);
         }
@@ -69,7 +94,7 @@ public class UserController : ControllerBase
     }
 	
     [HttpPost("login")]
-    public async Task<ActionResult<AuthResponse>> Authenticate([FromBody] AuthRequest request)
+    public async Task<IActionResult> Authenticate([FromBody] AuthRequest request)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -85,13 +110,13 @@ public class UserController : ControllerBase
         Response.Cookies.Append("AuthToken", result.Token, cookieOptions);
         
         if (result.Success) 
-            return Ok(new AuthResponse(result.Email, result.UserName, result.UserId));
+            return Ok();
 		
         AddErrors(result);
         return BadRequest(ModelState);
     }
     
-    [HttpPost("password-change"), Authorize]
+    [HttpPut("password-change"), Authorize]
     public async Task<IActionResult> PasswordChange([FromBody] PasswordChangeRequest request)
     {
         if (!ModelState.IsValid)

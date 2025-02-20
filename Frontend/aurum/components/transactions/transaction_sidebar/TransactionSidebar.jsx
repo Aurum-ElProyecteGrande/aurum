@@ -36,6 +36,14 @@ function TransactionSidebar() {
                         </Link>
                     </li>
                     <li>
+                        <Link href="/profile">
+                            <div className='transactions-sidebar-menu-item'>
+                                <MdFormatListBulleted />
+                                <p>Profile</p>
+                            </div>
+                        </Link>
+                    </li>
+                    <li>
                         <Link href="/">
                             <div className='transactions-sidebar-menu-item'>
                                 <MdLogout />
