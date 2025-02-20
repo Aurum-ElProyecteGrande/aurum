@@ -1,4 +1,4 @@
 ﻿namespace Aurum.Models.LayoutDTOs
 {
-    public record LayoutDto(int UserId, string LayoutName, List<string> Charts);
+    public record LayoutDto(string UserId, string LayoutName, List<string> Charts);
 }

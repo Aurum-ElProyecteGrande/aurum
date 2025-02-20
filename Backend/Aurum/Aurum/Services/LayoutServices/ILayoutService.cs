@@ -7,6 +7,6 @@ namespace Aurum.Services.LayoutServices
         Task<int> CreateOrUpdateBasic(LayoutDto layout);
         Task<int> CreateOrUpdateScientic(LayoutDto layout);
         Task<int> CreateOrUpdateDetailed(LayoutDto layout);
-        Task<AllLayoutsDto> GetAll(int userId);
+        Task<AllLayoutsDto> GetAll(string userId);
     }
 }

@@ -6,6 +6,7 @@ export default function LastTransactions({ isEditMode, accounts, expenses, incom
     const [transactions, setTransactions] = useState([])
     const maxTransactions = 15
 
+    console.log(expenses)
 
     useEffect(() => {
         const getTransactions = async () => {

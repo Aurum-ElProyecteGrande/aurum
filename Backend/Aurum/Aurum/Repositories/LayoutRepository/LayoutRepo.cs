@@ -51,12 +51,12 @@ namespace Aurum.Repositories.LayoutRepository
             await _dbContext.SaveChangesAsync();
             return layout.DetailedLayoutId;
         }
-        public async Task<BasicLayout>? GetBasic(int userId) => _dbContext.BasicLayouts
+        public async Task<BasicLayout>? GetBasic(string userId) => _dbContext.BasicLayouts
             .FirstOrDefault(l => l.UserId == userId);
-        public async Task<ScienticLayout>? GetScientic(int userId) => _dbContext.ScienticLayouts
+        public async Task<ScienticLayout>? GetScientic(string userId) => _dbContext.ScienticLayouts
             .FirstOrDefault(l => l.UserId == userId);
 
-        public async Task<DetailedLayout>? GetDetailed(int userId) => _dbContext.DetailedLayouts
+        public async Task<DetailedLayout>? GetDetailed(string userId) => _dbContext.DetailedLayouts
             .FirstOrDefault(l => l.UserId == userId);
 
     }

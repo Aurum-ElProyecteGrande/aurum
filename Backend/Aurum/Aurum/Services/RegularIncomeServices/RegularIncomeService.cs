@@ -3,6 +3,7 @@ using Aurum.Models.IncomeDTOs;
 using Aurum.Models.RegularityEnum;
 using Aurum.Repositories.IncomeRepository.RegularIncomeRepository;
 using Aurum.Services.IncomeCategoryServices;
+using Microsoft.Identity.Client;
 
 namespace Aurum.Services.RegularIncomeServices
 {
@@ -34,9 +35,17 @@ namespace Aurum.Services.RegularIncomeServices
 
             return regularIncomeId;
         }
-        public async Task<int> UpdateRegular(ModifyRegularIncomeDto regularIncome)
+        public async Task<int> UpdateRegular(ModifyRegularIncomeDto regularIncome, int regularId)
         {
-            var regularIncomeId = await _regularIncomeRepo.UpdateRegular(ConvertModifyDtoToIncome(regularIncome));
+            var regularToUpdate = await _regularIncomeRepo.Get(regularId);
+
+            regularToUpdate.IncomeCategoryId = regularIncome.CategoryId;
+            regularToUpdate.Label = regularIncome.Label;
+            regularToUpdate.Amount = regularIncome.Amount;
+            regularToUpdate.StartDate = regularIncome.StartDate;
+            regularToUpdate.Regularity = regularIncome.Regularity;
+
+            var regularIncomeId = await _regularIncomeRepo.UpdateRegular(regularToUpdate);
 
             if (regularIncomeId == 0) throw new InvalidOperationException("Invalid regular income input");
 

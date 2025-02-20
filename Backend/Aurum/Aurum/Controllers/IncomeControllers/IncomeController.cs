@@ -4,10 +4,12 @@ using System;
 using Aurum.Services.IncomeServices;
 using Aurum.Services.RegularIncomeServices;
 using Aurum.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Aurum.Controllers.IncomeControllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class IncomeController : ControllerBase
     {
@@ -107,12 +109,12 @@ namespace Aurum.Controllers.IncomeControllers
             }
         }
 
-        [HttpPut("regulars")]
-        public async Task<IActionResult> UpdateRegular(ModifyRegularIncomeDto regularIncome)
+        [HttpPut("regulars/{regularId}")]
+        public async Task<IActionResult> UpdateRegular(ModifyRegularIncomeDto regularIncome, int regularId)
         {
             try
             {
-                var regularIncomeId = await _regularIncomeService.UpdateRegular(regularIncome);
+                var regularIncomeId = await _regularIncomeService.UpdateRegular(regularIncome, regularId);
                 return Ok(regularIncomeId);
             }
             catch (Exception ex)

@@ -120,7 +120,7 @@ namespace Aurum.Services.LayoutServices
             var createdId = await _layoutRepo.CreateDetailed(detailedLayout);
             return createdId;
         }
-        public async Task<AllLayoutsDto> GetAll(int userId)
+        public async Task<AllLayoutsDto> GetAll(string userId)
         {
             var basicLayout = await _layoutRepo.GetBasic(userId);
             var scienticLayout = await _layoutRepo.GetScientic(userId);

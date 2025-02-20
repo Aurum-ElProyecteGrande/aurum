@@ -13,6 +13,8 @@ namespace Aurum.Repositories.IncomeRepository.RegularIncomeRepository
             _dbContext = dbContext;
         }
 
+        public async Task<RegularIncome> Get(int regularId) => _dbContext.RegularIncomes
+            .FirstOrDefault(ri => ri.RegularIncomeId == regularId);
         public async Task<List<RegularIncome>> GetAllRegular(int accountId) => _dbContext.RegularIncomes
             .Where(ri => ri.AccountId == accountId)
             .ToList();

@@ -10,7 +10,7 @@ export default function AccountBalances({ isEditMode, accounts, segmentIndex, ch
         const getBalances = async () => {
             let updatedBalances = await Promise.all(accounts.map(async (acc) => (
                 {
-                    name: acc.displayName, balance: await fetchBalance(acc.accountId)
+                    name: acc.displayName, balance: await fetchBalance(acc.accountId), currency: acc.currency
                 }))
             )
 
@@ -28,6 +28,7 @@ export default function AccountBalances({ isEditMode, accounts, segmentIndex, ch
             getBalances()
         }
     }, [accounts])
+
 
 
     return (
@@ -48,18 +49,15 @@ export default function AccountBalances({ isEditMode, accounts, segmentIndex, ch
                     <p>Account ballances</p>
                 </div>
             </div>
-
             <div className="chart">
-
-                <div className="chart-body">
-                    <div className="account-balance-container">
-                        {balances && balances.map(balance => (
-                            <div key={balance.name} className="row">
-                                <div>{balance.name}</div>
-                                <div className="ballance">{balance.balance.toLocaleString('hu-HU', { style: 'currency', currency: 'HUF' })}</div>
-                            </div>
-                        ))}
-                    </div>
+            <div className="chart-body">
+                <div className="account-balance-container">
+                    {balances && balances.map(balance => (
+                        <div key={balance.name} className="row">
+                            <div>{balance.name}</div>
+                            <div className="ballance">{balance.balance.toLocaleString('hu-HU', { style: 'currency', currency: balance.currency.currencyCode })}</div>
+                        </div>
+                    ))}
                 </div>
             </div>
 

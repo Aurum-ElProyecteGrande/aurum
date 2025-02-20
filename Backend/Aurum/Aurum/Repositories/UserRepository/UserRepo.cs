@@ -11,27 +11,31 @@ public class UserRepo : IUserRepo
     {
         _dbContext = dbContext;
     }
-    public async Task<User> Get(int userId) => _dbContext.Users
-        .FirstOrDefault(u => u.UserId == userId);
+    public async Task<User> Get(int userId) =>  throw new NotImplementedException();
+        /*_dbContext.Users
+        .FirstOrDefault(u => u.UserId == userId);*/
 
 
     public async Task<int> Create(User user)
     {
-        await _dbContext.Users.AddAsync(user);
+        /*await _dbContext.Users.AddAsync(user);
         await _dbContext.SaveChangesAsync();
-        return user.UserId;
+        return user.UserId;*/
+        throw new NotImplementedException();
     }
 
     public async Task<int> Update(User user)
     {
-        _dbContext.Users.Update(user);
+        /*_dbContext.Users.Update(user);
         await _dbContext.SaveChangesAsync();
-        return user.UserId;
+        return user.UserId;*/
+        
+        throw new NotImplementedException();
     }
 
     public async Task<bool> Delete(int userId)
     {
-        var userToDelete = _dbContext.Users.FirstOrDefault(u => u.UserId == userId);
+        /*var userToDelete = _dbContext.Users.FirstOrDefault(u => u.UserId == userId);
 
         if (userToDelete is not null)
         {
@@ -40,7 +44,9 @@ public class UserRepo : IUserRepo
             return true;
         }
 
-        return false;
+        return false;*/
+
+        throw new NotImplementedException();
 
     }
 }

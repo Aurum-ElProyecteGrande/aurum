@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Aurum.Services.BalanceService;
 using Aurum.Models.IncomeDTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Aurum.Controllers.BalanceController
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class BalanceController : ControllerBase
     {

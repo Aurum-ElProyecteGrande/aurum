@@ -1,11 +1,10 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS base
-RUN adduser -D -u 1000 appuser  # Create a non-root user
-USER appuser                    # Switch to non-root user
+﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://+:8080
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Aurum/Aurum.csproj", "Aurum/"]
@@ -21,4 +20,8 @@ RUN dotnet publish "Aurum.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:Use
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+RUN mkdir -p /app/raw-seeding-data
+COPY raw-seeding-data/*.csv /app/raw-seeding-data/
+
 ENTRYPOINT ["dotnet", "Aurum.dll"]
