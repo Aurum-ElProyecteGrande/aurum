@@ -32,7 +32,7 @@ export default function DashboardPage() {
   //chart effects
   useEffect(() => {
     const getAccounts = async () => {
-      const updatedAccounts = await fetchAccounts(userId)
+      const updatedAccounts = await fetchAccounts()
       setAccounts(updatedAccounts)
     }
     if (userId) {

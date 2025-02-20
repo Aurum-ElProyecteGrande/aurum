@@ -8,7 +8,7 @@ public static class UserHelper
 	public static bool GetUserId(HttpContext context, out string? userId, out IActionResult? unauthorized)
 	{
 		userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
+		
 		if (userId != null)
 		{
 			unauthorized = null;

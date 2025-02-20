@@ -2,6 +2,7 @@ using Aurum.Data.Entities;
 using Aurum.Models.AccountDto;
 using Aurum.Repositories.AccountRepository;
 using Aurum.Services.AccountService;
+using Aurum.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,11 +20,16 @@ namespace Aurum.Controllers.AccountController
             _accountService = accountService;
         }
 
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> GetAll([FromRoute] string userId)
+        [HttpGet()]
+        public async Task<IActionResult> GetAll()
         {
             try
             {
+                if (UserHelper.GetUserId(HttpContext,out var userId, out var unauthorized)) 
+                    return unauthorized;
+                
+                Console.WriteLine(userId);
+                
                 var accounts = await _accountService.GetAll(userId);
                 return Ok(accounts);
             }

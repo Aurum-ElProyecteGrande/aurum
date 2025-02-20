@@ -62,7 +62,7 @@ export default function AccountBalances({ isEditMode, accounts, segmentIndex, ch
             </div>
 
 
-
+            </div>
         </div>
     )
 }

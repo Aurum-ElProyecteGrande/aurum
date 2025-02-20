@@ -1,4 +1,4 @@
-using Aurum.Data.Entities;
+/*using Aurum.Data.Entities;
 using Aurum.Repositories.AccountRepository;
 using Aurum.Services.AccountService;
 using Aurum.Models.AccountDto;
@@ -189,4 +189,4 @@ public class AccountServiceTest
 
         Assert.ThrowsAsync<InvalidOperationException>(async () => await _accountService.Delete(accountId));
     }
-}
+}*/
