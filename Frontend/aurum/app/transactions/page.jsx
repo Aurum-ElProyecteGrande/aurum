@@ -10,7 +10,7 @@ export default function TransactionsPage() {
   const [accounts, setAccounts] = useState([]);
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(15);
+  const [itemsPerPage] = useState(12);
   const [search, setSearch] = useState("");
   const [filteredData, setFilteredData] = useState([])
   const [sort, setSort] = useState({ key: null, direction: "ascending" });
