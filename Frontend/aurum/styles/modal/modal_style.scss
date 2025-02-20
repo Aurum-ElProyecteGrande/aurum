@@ -1,0 +1,111 @@
+.auth-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+
+  &.visible {
+    opacity: 1;
+    visibility: visible;
+  } 
+
+  .auth-container {
+    position: relative;
+    width: 50rem;
+    height: 35rem;
+    background: $background;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    display: flex;
+
+    .form-section {
+      position: absolute;
+      width: 50%;
+      height: 100%;
+      top: 0;
+      padding: 50px;
+      left: 0;
+      transition: all 0.5s ease;
+      opacity: 1;
+
+      form {
+        display: flex;
+        height: 100%;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        h1 {
+          font-size: 2rem;
+          margin-bottom: 20px;
+        }
+
+        span {
+          font-size: 0.9rem;
+          margin-bottom: 15px;
+        }
+
+        input {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 15px;
+          border-radius: 5px;
+          font-size: 1rem;
+          outline: none;
+        }
+
+        .error-message {
+          color: red;
+          font-size: 0.9rem;
+          margin-bottom: 15px;
+        }
+      }
+    }
+
+    .overlay-section {
+      position: absolute;
+      width: 50%;
+      height: 100%;
+      top: 0;
+      right: 0;
+      background: $primary;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 50px;
+      transition: all 0.5s ease;
+
+      .exit {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        font-size: 2rem;
+        cursor: pointer;
+        z-index: 1000;
+      }
+
+      .overlay-panel {
+        h1 {
+          font-size: 2rem;
+          margin-bottom: 20px;
+        }
+
+        p {
+          font-size: 1rem;
+          margin-bottom: 30px;
+        }
+      }
+    }
+  }
+}

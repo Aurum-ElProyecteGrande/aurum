@@ -1,11 +1,13 @@
 ﻿using Aurum.Models.CategoryDtos;
 using Aurum.Repositories.IncomeRepository.IncomeCategoryRepository;
 using Aurum.Services.IncomeCategoryServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aurum.Controllers.IncomeCategoriyControllers
 {
     [ApiController]
+    [Authorize]
     [Route("/categories/income")]
     public class IncomeCategoryController : ControllerBase
     {

@@ -2,11 +2,13 @@
 using Aurum.Data.Entities;
 using Aurum.Models.LayoutDTOs;
 using Aurum.Services.LayoutServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aurum.Controllers.LayoutControllers;
 
 [ApiController]
+[Authorize]
 [Route("[controller]")]
 public class LayoutController : ControllerBase
 {
