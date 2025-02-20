@@ -120,8 +120,6 @@ public class UserController : ControllerBase
         return Unauthorized(new { message = "Token is invalid or expired." });
     }
 
-
-
     private void AddErrors(AuthResult result)
     {
         foreach (var error in result.ErrorMessages)

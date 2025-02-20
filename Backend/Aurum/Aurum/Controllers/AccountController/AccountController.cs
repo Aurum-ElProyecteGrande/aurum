@@ -2,11 +2,13 @@ using Aurum.Data.Entities;
 using Aurum.Models.AccountDto;
 using Aurum.Repositories.AccountRepository;
 using Aurum.Services.AccountService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aurum.Controllers.AccountController
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class AccountController : ControllerBase
     {

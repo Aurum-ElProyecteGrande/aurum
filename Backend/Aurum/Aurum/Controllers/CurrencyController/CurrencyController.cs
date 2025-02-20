@@ -1,10 +1,12 @@
 using Aurum.Repositories.CurrencyRepository;
 using Aurum.Services.CurrencyServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aurum.Controllers.CurrencyController;
 
 [ApiController]
+[Authorize]
 [Route("[controller]")]
 public class CurrencyController : ControllerBase
 {
