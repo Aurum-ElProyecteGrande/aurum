@@ -11,6 +11,11 @@ namespace Aurum.Services.CurrencyServices
         {
             _currencyRepo = currencyRepo;
         }
+
+        public async Task<Currency> Get(int currenyId)
+        {
+            return await _currencyRepo.Get(currenyId);
+        }
         public async Task<List<Currency>> GetAll()
         {
             var currencyList = await _currencyRepo.GetAll();

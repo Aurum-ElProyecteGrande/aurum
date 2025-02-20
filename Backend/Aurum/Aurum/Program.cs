@@ -62,8 +62,16 @@ var app = builder.Build();
 using var scope = app.Services.CreateScope();
 var authenticationSeeder = scope.ServiceProvider.GetRequiredService<AuthenticationSeeder>();
 authenticationSeeder.AddRoles();
-authenticationSeeder.AddAdmin();
 */
+
+var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+var seeder = services.GetRequiredService<DataSeeder>();
+await seeder.SeedAsync();
+
+
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -109,6 +117,8 @@ void AddServices(WebApplicationBuilder webApplicationBuilder)
     webApplicationBuilder.Services.AddScoped<ILayoutRepo, LayoutRepo>();
     webApplicationBuilder.Services.AddScoped<ILayoutService, LayoutService>();
     webApplicationBuilder.Services.AddScoped<AuthenticationSeeder>();
+    webApplicationBuilder.Services.AddScoped<DataSeeder>();
+
 }
 
 void AddCors(WebApplicationBuilder builder1)
@@ -181,7 +191,6 @@ void AddDatabase(WebApplicationBuilder webApplicationBuilder2)
     webApplicationBuilder2.Services.AddDbContext<AurumContext>(options =>
     {
         options.UseSqlServer(
-              // "Server=localhost,1433;Database=Aurum;User Id=sa;Password=yourStrong(!)Password;Encrypt=false;",
              Environment.GetEnvironmentVariable("DbConnectionString"),
             sqlOptions => sqlOptions.EnableRetryOnFailure(
                 maxRetryCount: 5,

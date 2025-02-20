@@ -10,7 +10,7 @@ export default function AccountBalances({ accounts }) {
         const getBalances = async () => {
             let updatedBalances = await Promise.all(accounts.map(async (acc) => (
                 {
-                    name: acc.displayName, balance: await fetchBalance(acc.accountId)
+                    name: acc.displayName, balance: await fetchBalance(acc.accountId), currency: acc.currency
                 }))
             )
 
@@ -30,6 +30,7 @@ export default function AccountBalances({ accounts }) {
     }, [accounts])
 
 
+
     return (
         <div className="chart">
             <div className="chart-title">
@@ -40,7 +41,7 @@ export default function AccountBalances({ accounts }) {
                     {balances && balances.map(balance => (
                         <div key={balance.name} className="row">
                             <div>{balance.name}</div>
-                            <div className="ballance">{balance.balance.toLocaleString('hu-HU', { style: 'currency', currency: 'HUF' })}</div>
+                            <div className="ballance">{balance.balance.toLocaleString('hu-HU', { style: 'currency', currency: balance.currency.currencyCode })}</div>
                         </div>
                     ))}
                 </div>
