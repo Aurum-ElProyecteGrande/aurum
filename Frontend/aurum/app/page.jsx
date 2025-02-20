@@ -1,5 +1,5 @@
 "use client"
-import { useEffect } from "react";
+import { useState ,useEffect } from "react";
 import LandingNavbar from "@/components/landing_page/landing_nav/LandingNavbar";
 import LandingHero from "@/components/landing_page/landing_hero/LandingHero";
 import LandingScroll from "@/components/landing_page/landing_scroll/LandingScroll";
@@ -9,8 +9,16 @@ import LandingFooter from "@/components/landing_page/landing_footer/LandingFoote
 import LandingShowcase from "@/components/landing_page/landing_showcase/LandingShowcase";
 import Aos from 'aos';
 import 'aos/dist/aos.css';
+import AuthModal from "@/components/modal/AuthModal";
 
 export default function Home() {
+  const [showModal, setShowModal] = useState(false)
+  const [isSignUp, setIsSignUp] = useState(false)
+
+  const handleModal = (signMode) => {
+    setShowModal(true);
+    setIsSignUp(signMode);
+  }
 
   useEffect(() => {
     Aos.init({ duration: 750 });
@@ -18,13 +26,14 @@ export default function Home() {
 
   return (
     <>
-      <LandingNavbar />
+      <LandingNavbar useModal={handleModal}/>
       <LandingHero />
       <LandingScroll />
       <LandingPrices />
       <LandingShowcase />
       <LandingNewsletter />
       <LandingFooter />
+      {showModal && <AuthModal showModal={showModal} setShowModal={setShowModal} isSignUp={isSignUp} />}
     </>
   );
 }

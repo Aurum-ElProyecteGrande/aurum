@@ -3,20 +3,27 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import LandingLogo from "../landing_logo/LandingLogo";
 import { IoMenuOutline, IoClose } from "react-icons/io5";
-import { fetchTest } from "@/scripts/landing_page_scripts/landing_page";
+import { useRouter } from 'next/navigation';
 
-const LandingNavbar = () => {
+const LandingNavbar = ({ useModal }) => {
 	const [showNav, setShowNav] = useState(false);
+	const router = useRouter();
 
+	const handleLinkClick = async (url) => {
+		const response = await fetch('/api/User/validate', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			credentials: 'include',
+		});
 
-	useEffect(() => {
-		const fetchData = async () => {
-			const data = await fetchTest();
-			console.log(data);
-		};
-
-		fetchData();
-	}, []);
+		if (response.ok) {
+			router.push(url);
+		} else {
+			router.push('/');
+		}
+	};
 
 
 	return (
@@ -33,16 +40,25 @@ const LandingNavbar = () => {
 					<li onClick={() => setShowNav(false)}>
 						<Link href="#footer">Socials</Link>
 					</li>
-					<li onClick={() => setShowNav(false)}>
+					<li onClick={() => {
+						setShowNav(false)
+						handleLinkClick('/dashboard')
+					}}>
 						<Link href="/dashboard">Dashboard</Link>
 					</li>
-					<li onClick={() => setShowNav(false)}>
+					<li onClick={() => {
+						setShowNav(false)
+						handleLinkClick('/transactions')
+					}}>
 						<Link href="/transactions">Transactions</Link>
 					</li>
 				</ul>
 				<div className="landing-navbar-buttons">
-					<button className="transparent-button">Login</button>
-					<button className="accent-button">Register</button>
+					<button
+						className="transparent-button"
+						onClick={() => useModal(false)}>Login</button>
+					<button className="accent-button"
+						onClick={() => useModal(true)}>Register</button>
 				</div>
 				<div className="landing-navbar-menu" onClick={() => setShowNav(!showNav)}>
 					{showNav ? <IoClose /> : <IoMenuOutline />}
