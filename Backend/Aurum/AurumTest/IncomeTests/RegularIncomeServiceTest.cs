@@ -213,5 +213,4 @@ public class RegularIncomeServiceTest
         var method = typeof(RegularIncomeService).GetMethod("ConvertRegularIncomeToDto", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         return await (Task<RegularIncomeDto>)method.Invoke(_regularIncomeService, new object[] { income });
     }
-    
 }
