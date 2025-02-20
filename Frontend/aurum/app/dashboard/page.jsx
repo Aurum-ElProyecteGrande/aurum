@@ -130,7 +130,7 @@ export default function DashboardPage() {
       <div className="dashboard-container">
         {choosenCharts && choosenCharts.map((choosenChart, segmentIndex) => (
           <React.Fragment key={segmentIndex}>
-            {React.cloneElement(choosenChart.chart, { ...chartProps, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts })}
+            {accounts[0] && React.cloneElement(choosenChart.chart, { ...chartProps, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts })}
           </React.Fragment>
         ))}
       </div>

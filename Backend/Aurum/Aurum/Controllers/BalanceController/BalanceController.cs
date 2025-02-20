@@ -57,7 +57,7 @@ namespace Aurum.Controllers.BalanceController
                 var validStartDate = _balanceService.ValidateDate(startDate);
                 var validEndDate = _balanceService.ValidateDate(endDate);
 
-                var balances = _balanceService.GetBalanceForRange(accountId, validStartDate, validEndDate);
+                var balances = await _balanceService.GetBalanceForRange(accountId, validStartDate, validEndDate);
 
                 return Ok(balances);
             }

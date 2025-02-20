@@ -90,7 +90,7 @@ export const fetchBalance = async (accId) => {
 }
 
 export const fetchBalanceForRange = async (accId, startDate, endDate) => {
-    const response = await fetch(`${apiUrl}/balance/${accId}?startDate=${startDate}&endDate=${endDate}`,{
+    const response = await fetch(`${apiUrl}/balance/${accId}/range/?startDate=${startDate}&endDate=${endDate}`,{
         method: "Get",
         headers:{},
         credentials: "include"

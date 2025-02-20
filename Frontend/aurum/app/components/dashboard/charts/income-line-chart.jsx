@@ -90,6 +90,8 @@ export default function IncomeLineChart({ isEditMode, accounts, segmentIndex, ch
         setDaysShown(e.target.value)
     }
 
+    console.log("inc",rawChartData)
+
     return (
 
         <div key={segmentIndex} className={`${chosenLayout}-${segmentIndex + 1} chart-container ${isEditMode && "edit-mode"}`}>
