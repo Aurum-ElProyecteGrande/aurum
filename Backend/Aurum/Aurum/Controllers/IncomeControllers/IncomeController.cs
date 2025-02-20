@@ -4,10 +4,12 @@ using System;
 using Aurum.Services.IncomeServices;
 using Aurum.Services.RegularIncomeServices;
 using Aurum.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Aurum.Controllers.IncomeControllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class IncomeController : ControllerBase
     {
