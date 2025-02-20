@@ -1,4 +1,5 @@
-﻿using Aurum.Services.AccountService;
+﻿using Aurum.Models.BalanceDTOs;
+using Aurum.Services.AccountService;
 using Aurum.Services.ExpenseService;
 using Aurum.Services.IncomeServices;
 
@@ -44,6 +45,22 @@ namespace Aurum.Services.BalanceService
 
             return initialAmount - totalExpense + totalIncome;
         }
+
+        public async Task<List<BalanceDto>> GetBalanceForRange(int accountId, DateTime startDate, DateTime endDate)
+        {
+            List<BalanceDto> balanceList = new();
+
+            for (int i = 0; i < (endDate - startDate).Days; i++)
+            {
+                var curDate = startDate.AddDays(i);
+                var balance = await GetBalance(accountId, curDate);
+                BalanceDto balanceDto = new(curDate, balance);
+                balanceList.Add(balanceDto);
+            }
+
+            return balanceList;
+        }
+
     }
 }
 
