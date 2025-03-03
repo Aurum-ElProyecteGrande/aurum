@@ -123,36 +123,6 @@ namespace Aurum.Migrations
                     b.HasKey("CurrencyId");
 
                     b.ToTable("Currencies");
-
-                    b.HasData(
-                        new
-                        {
-                            CurrencyId = -1,
-                            CurrencyCode = "HUF",
-                            Name = "Forint",
-                            Symbol = "Ft"
-                        },
-                        new
-                        {
-                            CurrencyId = -2,
-                            CurrencyCode = "EUR",
-                            Name = "Euro",
-                            Symbol = "€"
-                        },
-                        new
-                        {
-                            CurrencyId = -3,
-                            CurrencyCode = "USD",
-                            Name = "US Dollar",
-                            Symbol = "$"
-                        },
-                        new
-                        {
-                            CurrencyId = -4,
-                            CurrencyCode = "GBP",
-                            Name = "Font",
-                            Symbol = "P"
-                        });
                 });
 
             modelBuilder.Entity("Aurum.Data.Entities.DetailedLayout", b =>

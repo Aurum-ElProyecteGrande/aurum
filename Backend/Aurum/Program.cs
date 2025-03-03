@@ -61,6 +61,11 @@ AddCors(builder);
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AurumContext>();
+    dbContext.Database.Migrate();
+}
 
 using (var scope = app.Services.CreateScope())
 {
@@ -70,7 +75,6 @@ using (var scope = app.Services.CreateScope())
 
     await SeedRolesAndAdminAsync(userManager, roleManager, app);
 }
-
 
 using (var scope = app.Services.CreateScope())
 {
