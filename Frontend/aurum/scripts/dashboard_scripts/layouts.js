@@ -4,8 +4,8 @@ import AccountBallances from "../../app/components/dashboard/charts/account-ball
 import LastTransactions from "../../app/components/dashboard/charts/last-transactions";
 import ExpenseByCategory from "../../app/components/dashboard/charts/expense-by-category";
 import IncomesByCategory from "@/app/components/dashboard/charts/income-by-category";
-import Chart6 from "../../app/components/dashboard/charts/chart6";
 import AccountsThisMonth from "../../app/components/dashboard/charts/accounts-this-month";
+import BalanceLineChart from "../../app/components/dashboard/charts/balance-line-chart";
 
 const charts2x1 = [
     { name: "expense-by-category", chart: <ExpenseByCategory /> },
@@ -18,7 +18,7 @@ const charts3x3 = [
 const charts3x2 = [
     { name: "expense-line-chart", chart: <ExpenseLineChart /> },
     { name: "income-line-chart", chart: <IncomeLineChart /> },
-    { name: "chart6", chart: <Chart6 /> }
+    { name: "balance-line-chart", chart: <BalanceLineChart /> }
 ]
 const charts3x1 = [
     { name: "accounts-this-month", chart: <AccountsThisMonth /> }

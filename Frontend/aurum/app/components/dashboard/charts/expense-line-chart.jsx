@@ -91,8 +91,6 @@ export default function ExpenseLineChart({ isEditMode, accounts, segmentIndex, c
         setDaysShown(e.target.value)
     }
 
-    console.log(rawChartData)
-
     return (
         <div key={segmentIndex} className={`${chosenLayout}-${segmentIndex + 1} chart-container ${isEditMode && "edit-mode"}`}>
 
