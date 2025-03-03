@@ -1,5 +1,4 @@
 using Aurum.Data.Entities;
-using Aurum.Models.CurrencyDto;
 
 namespace Aurum.Repositories.CurrencyRepository
 
