@@ -38,6 +38,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
+
 
 // Add services to the container.
 builder.Services.AddControllers()
@@ -58,19 +60,24 @@ AddServices(builder);
 AddCors(builder);
 
 var app = builder.Build();
-/*
-using var scope = app.Services.CreateScope();
-var authenticationSeeder = scope.ServiceProvider.GetRequiredService<AuthenticationSeeder>();
-authenticationSeeder.AddRoles();
-*/
-
-var scope = app.Services.CreateScope();
-var services = scope.ServiceProvider;
-var seeder = services.GetRequiredService<DataSeeder>();
-await seeder.SeedAsync();
 
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
+    await SeedRolesAndAdminAsync(userManager, roleManager, app);
+}
+
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var seeder = services.GetRequiredService<DataSeeder>();
+    await seeder.SeedAsync();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -165,11 +172,11 @@ void AddAuthentication(WebApplicationBuilder builder2)
                     var token = context.Request.Cookies["AuthToken"];
                     if (!string.IsNullOrEmpty(token))
                         context.Token = token;
-                    
+
                     return Task.CompletedTask;
                 }
             };
-            
+
             options.TokenValidationParameters = new TokenValidationParameters()
             {
                 ClockSkew = TimeSpan.Zero,
@@ -177,10 +184,10 @@ void AddAuthentication(WebApplicationBuilder builder2)
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = "apiWithAuthBackend",
-                ValidAudience = "apiWithAuthBackend",
+                ValidIssuer = configuration["Token:Issuer"],
+                ValidAudience = configuration["Token:Audience"],
                 IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes("!SomethingSecret!!SomethingSecret!")
+                    Encoding.UTF8.GetBytes(configuration["Token:Key"])
                 ),
             };
         });
@@ -191,7 +198,7 @@ void AddDatabase(WebApplicationBuilder webApplicationBuilder2)
     webApplicationBuilder2.Services.AddDbContext<AurumContext>(options =>
     {
         options.UseSqlServer(
-             Environment.GetEnvironmentVariable("DbConnectionString"),
+            configuration["Database:ConnectionString"],
             sqlOptions => sqlOptions.EnableRetryOnFailure(
                 maxRetryCount: 5,
                 maxRetryDelay: TimeSpan.FromSeconds(10),
@@ -204,8 +211,25 @@ void AddCookiePolicy(WebApplicationBuilder builder3)
 {
     builder3.Services.Configure<CookiePolicyOptions>(options =>
     {
-        options.HttpOnly = HttpOnlyPolicy.Always;   
+        options.HttpOnly = HttpOnlyPolicy.Always;
         options.Secure = CookieSecurePolicy.Always;
         options.MinimumSameSitePolicy = SameSiteMode.None;
     });
+}
+
+async Task SeedRolesAndAdminAsync(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, WebApplication app)
+{
+    if (!await roleManager.RoleExistsAsync("Admin"))
+    {
+        using var scope = app.Services.CreateScope();
+        var authenticationSeeder = scope.ServiceProvider.GetRequiredService<AuthenticationSeeder>();
+        authenticationSeeder.AddRoles();
+    }
+    var adminUser = await userManager.FindByEmailAsync("admin@admin.com");
+    if (adminUser == null)
+    {
+        using var scope = app.Services.CreateScope();
+        var authenticationSeeder = scope.ServiceProvider.GetRequiredService<AuthenticationSeeder>();
+        authenticationSeeder.CreateAdminIfNotExists();
+    }
 }

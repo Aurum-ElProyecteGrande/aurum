@@ -15,14 +15,26 @@ public class AuthenticationSeeder(RoleManager<IdentityRole> roleManager, UserMan
 		var tUser = CreateUserRole(roleManager);
 		tUser.Wait();
 	}
-		
-	private async Task CreateAdminRole(RoleManager<IdentityRole> manager) =>
+
+    public async Task CreateAdminIfNotExists()
+    {
+        var adminInDb = await userManager.FindByEmailAsync("admin@admin.com");
+        if (adminInDb == null)
+        {
+            var admin = new IdentityUser { UserName = "admin", Email = "admin@admin.com" };
+            var adminCreated = await userManager.CreateAsync(admin, "admin123");
+
+            if (adminCreated.Succeeded)
+            {
+                await userManager.AddToRoleAsync(admin, "Admin");
+            }
+        }
+    }
+
+    private async Task CreateAdminRole(RoleManager<IdentityRole> manager) =>
 		await manager.CreateAsync(new IdentityRole("Admin"));
 
-	async Task CreateUserRole(RoleManager<IdentityRole> manager) =>
+	private async Task CreateUserRole(RoleManager<IdentityRole> manager) =>
 		await manager.CreateAsync(new IdentityRole("User"));
-	
-
-	
 
 }
