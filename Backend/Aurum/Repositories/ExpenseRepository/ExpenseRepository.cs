@@ -24,6 +24,8 @@ public class ExpenseRepository(AurumContext aurumContext): IExpenseRepository
 			            && e.Date <= endDate)
 			.Include(e => e.ExpenseCategory)
 			.Include(e => e.ExpenseSubCategory)
+			.Include(e => e.Account)
+				.ThenInclude(a => a.Currency)
 			.ToListAsync(); 
 
 
@@ -34,6 +36,8 @@ public class ExpenseRepository(AurumContext aurumContext): IExpenseRepository
 			            e.Date <= endDate)
 			.Include(e => e.ExpenseCategory)
 			.Include(e => e.ExpenseSubCategory)
+			.Include(e => e.Account)
+				.ThenInclude(a => a.Currency)
 			.ToListAsync();  
 
 	public async Task<int> Create(Expense expense)

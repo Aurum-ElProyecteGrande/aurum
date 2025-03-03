@@ -50,25 +50,7 @@ public class ExpenseController(IExpenseService service, ILogger<ExpenseControlle
 			return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
 		}
 	}
-
-    [HttpGet("/expenses/currency/{accountId:int}")]
-    public async Task<IActionResult> GetAllWithCurrency([FromRoute] int accountId)
-    {
-        try
-        {
-            if (UserHelper.GetUserId(HttpContext, out var userId, out var unauthorized))
-                return unauthorized;
-
-            var expenses = await _service.GetAllWithCurrency(accountId);
-            return Ok(expenses);
-        }
-        catch (Exception e)
-        {
-	        _logger.LogError(e, "An error occurred while fetching expenses for accountId {AccountId}.", accountId);
-	        return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
-        }
-    }
-
+	
     [HttpPost("/expenses")]
 	public async Task<IActionResult> Create([FromBody]ModifyExpenseDto expense)
 	{
