@@ -12,56 +12,37 @@ using Aurum.Services.CurrencyServices;
 
 namespace Aurum.Services.ExpenseService;
 
-public class ExpenseService(IExpenseRepository repository, IExpenseCategoryService categoryService, IAccountService accountService, ICurrencyService currencyService) : IExpenseService
+public class ExpenseService(IExpenseRepository repository, IExpenseCategoryService categoryService) : IExpenseService
 {
     private readonly IExpenseRepository _repository = repository;
     private readonly IExpenseCategoryService _categoryService = categoryService;
-    private readonly IAccountService _accountService = accountService;
-    private readonly ICurrencyService _currencyService = currencyService;
 
-    public async Task<List<ExpenseDto>> GetAll(int accountId, string userId)
+    public async Task<List<ExpenseDto>> GetAll(int accountId)
     {
         var rawData = await _repository.GetAll(accountId);
 
-        if (rawData.Count == 0)
+        if (rawData.Count == 0) 
             return [];
-
-        var categories = await _categoryService.GetAllExpenseCategories(userId);
-
-        if (categories.Count == 0)
-            throw new InvalidDataException("No categories found");
-
-        return CreateExpenseDtoList(rawData, categories);
+        
+        return rawData.Select(CreateExpenseDto).ToList();
 
     }
 
-    public async Task<List<ExpenseDto>> GetAll(int accountId, string userId, DateTime startDate, DateTime endDate)
+    public async Task<List<ExpenseDto>> GetAll(int accountId, DateTime startDate, DateTime endDate)
     {
         var rawData = await _repository.GetAll(accountId, startDate, endDate);
 
         if (rawData.Count == 0)
             return [];
-
-        var categories = await _categoryService.GetAllExpenseCategories(userId);
-
-        if (categories.Count == 0)
-            throw new InvalidDataException("No categories found");
-
-        return CreateExpenseDtoList(rawData, categories);
+        
+        return rawData.Select(CreateExpenseDto).ToList();
     }
 
-    public async Task<List<ExpenseWithCurrency>> GetAllWithCurrency(int accountId, string userId)
+    public async Task<List<ExpenseWithCurrency>> GetAllWithCurrency(int accountId)
     {
-        var expenseDtos = await GetAll(accountId, userId);
-
-        List<ExpenseWithCurrency> expensesWithCur = new();
-
-        foreach(var expense in expenseDtos)
-        {
-            expensesWithCur.Add(await ConvertExpenseToWithCurrency(expense, accountId));
-        }
-
-        return expensesWithCur;
+        var rawData = await _repository.GetAll(accountId);
+        
+        return rawData.Select(CreateExpenseWithCurrency).ToList();
     }
 
     public async Task<int> Create(ModifyExpenseDto expenseDto)
@@ -76,41 +57,31 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
 
     public async Task<bool> Delete(int expenseId) =>
         await _repository.Delete(expenseId);
-
-    private List<ExpenseDto> CreateExpenseDtoList(
-        List<Expense> rawExpenses,
-        Dictionary<CategoryDto, List<SubCategoryDto>> categories)
+    
+    private ExpenseDto CreateExpenseDto(Expense expense)
     {
-        var categoryDict = categories.ToDictionary(c => c.Key.CategoryId);
-        var expenses = new List<ExpenseDto>();
-
-        foreach (var rawExpense in rawExpenses)
+        var categoryDto = new CategoryDto(expense.ExpenseCategory.Name, expense.ExpenseCategory.ExpenseCategoryId);
+        
+        SubCategoryDto subCategoryDto = null;
+        if (expense.ExpenseSubCategoryId != null)
         {
-            //For faster lookup
-            if (!categoryDict.TryGetValue(rawExpense.ExpenseCategoryId, out var categoryKvp))
-                throw new KeyNotFoundException($"Category with ID {rawExpense.ExpenseCategoryId} not found");
-
-            var category = categoryKvp.Key;
-            var subCategories = categoryKvp.Value;
-
-            var subCategory = subCategories.FirstOrDefault(s => s.SubCategoryId == rawExpense.ExpenseSubCategoryId);
-
-            var expense = CreateExpenseDto(rawExpense, category, subCategory);
-
-            expenses.Add(expense);
+            subCategoryDto = new SubCategoryDto(
+                expense.ExpenseSubCategory.Name, 
+                expense.ExpenseSubCategory.ExpenseSubCategoryId, 
+                expense.ExpenseCategoryId
+            );
         }
-
-        return expenses;
-    }
-
-    private ExpenseDto CreateExpenseDto(Expense expense, CategoryDto category, SubCategoryDto? subCategory) =>
-        new ExpenseDto(
-            category,
-            subCategory ?? null,
+        
+        return new ExpenseDto(
+            categoryDto,
+            subCategoryDto,
             expense.Label,
             expense.Amount,
             expense.Date
         );
+    }
+
+
 
     private Expense CreateRawExpenseDto(ModifyExpenseDto expenseDto, int? subCategoryId) =>
         new Expense()
@@ -136,11 +107,29 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
             .Select(e => e.Amount)
             .Sum();
     }
-    private async Task<ExpenseWithCurrency> ConvertExpenseToWithCurrency(ExpenseDto expDto, int accId)
+    
+    private ExpenseWithCurrency CreateExpenseWithCurrency(Expense expense)
     {
-        var account = await _accountService.Get(accId);
-        var currency = await _currencyService.Get(account.Currency.CurrencyId);
-        return new(currency, expDto.Category, expDto.Subcategory, expDto.Label, expDto.Amount, expDto.Date);
+        var categoryDto = new CategoryDto(expense.ExpenseCategory.Name, expense.ExpenseCategoryId);
+        
+        SubCategoryDto subCategoryDto = null;
+        if (expense.ExpenseSubCategoryId != null)
+        {
+            subCategoryDto = new SubCategoryDto(
+                expense.ExpenseSubCategory.Name, 
+                expense.ExpenseSubCategory.ExpenseSubCategoryId, 
+                expense.ExpenseCategoryId
+            );
+        }
+        
+        return new ExpenseWithCurrency(
+            expense.Account.Currency,
+            categoryDto,
+            subCategoryDto,
+            expense.Label,
+            expense.Amount,
+            expense.Date
+        );
     }
 
 }
