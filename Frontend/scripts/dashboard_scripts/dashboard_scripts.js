@@ -12,17 +12,6 @@ export const fetchExpenses = async (accId) => {
 	const expenses = await response.json();
 	return expenses;
 };
-
-export const fetchExpensesWithCurrency = async (accId) => {
-    const response = await fetch(`${apiUrl}/expenses/currency/${accId}`,{
-        method: "Get",
-        headers:{},
-        credentials: "include"
-    })
-    if (!response.ok) throw new Error(`Fetching expenses for account: ${accId} went wrong`)
-    const expenses = await response.json()
-    return expenses
-}
 export const fetchExpensesByDate = async (accId, startDate, endDate) => {
 	const response = await fetch(`${apiUrl}/expenses/${accId}/${startDate}/${endDate}`, {
 		method: "Get",
@@ -44,17 +33,6 @@ export const fetchIncome = async (accId) => {
 	const expenses = await response.json();
 	return expenses;
 };
-
-export const fetchIncomesWithCurrency = async (accId) => {
-    const response = await fetch(`${apiUrl}/income/currency/${accId}`,{
-        method: "Get",
-        headers:{},
-        credentials: "include"
-    })
-    if (!response.ok) throw new Error(`Fetching expenses for account: ${accId} went wrong`)
-    const expenses = await response.json()
-    return expenses
-}
 
 export const fetchIncomeByDate = async (accId, startDate, endDate) => {
 	const response = await fetch(

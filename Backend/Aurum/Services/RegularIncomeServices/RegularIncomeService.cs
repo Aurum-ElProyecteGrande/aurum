@@ -1,4 +1,6 @@
 ﻿using Aurum.Data.Entities;
+using Aurum.Models.CategoryDtos;
+using Aurum.Models.CurrencyDto;
 using Aurum.Models.IncomeDTOs;
 using Aurum.Models.RegularityEnum;
 using Aurum.Repositories.IncomeRepository.RegularIncomeRepository;
@@ -24,7 +26,7 @@ namespace Aurum.Services.RegularIncomeServices
             List<RegularIncomeDto> incomeDtos = new();
             foreach (var income in incomes)
             {
-                incomeDtos.Add(await ConvertRegularIncomeToDto(income));
+                incomeDtos.Add(ConvertRegularIncomeToDto(income));
             }
             return incomeDtos;
         }
@@ -64,11 +66,11 @@ namespace Aurum.Services.RegularIncomeServices
             return isDeleted;
         }
 
-        private async Task<RegularIncomeDto> ConvertRegularIncomeToDto(RegularIncome income)
+        private RegularIncomeDto ConvertRegularIncomeToDto(RegularIncome income)
         {
-            var categories = await _incomeCategoryService.GetAllCategory();
-            var category = categories.First(c => c.IncomeCategoryId == income.IncomeCategoryId);
-            return new(income.RegularIncomeId, income.AccountId, new(category.Name, category.IncomeCategoryId), income.Label, income.Amount, income.StartDate, income.Regularity);
+            var category = new CategoryDto(income.IncomeCategory.Name, income.IncomeCategory.IncomeCategoryId);
+            var currency = new CurrencyDto(income.Account.Currency.Name, income.Account.Currency.CurrencyCode, income.Account.Currency.Symbol);
+            return new(income.RegularIncomeId, currency, category, income.Label, income.Amount, income.StartDate, income.Regularity);
         }
 
         private RegularIncome ConvertModifyDtoToIncome(ModifyRegularIncomeDto income) =>

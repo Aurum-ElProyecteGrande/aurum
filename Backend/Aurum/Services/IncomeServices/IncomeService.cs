@@ -1,4 +1,7 @@
 ﻿using Aurum.Data.Entities;
+using Aurum.Models.AccountDto;
+using Aurum.Models.CategoryDtos;
+using Aurum.Models.CurrencyDto;
 using Aurum.Models.IncomeDTOs;
 using Aurum.Repositories.IncomeRepository.IncomeRepository;
 using Aurum.Services.AccountService;
@@ -6,6 +9,7 @@ using Aurum.Services.CurrencyServices;
 using Aurum.Services.IncomeCategoryServices;
 using Microsoft.Identity.Client;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Aurum.Services.IncomeServices
 {
@@ -56,22 +60,22 @@ namespace Aurum.Services.IncomeServices
         public async Task<List<IncomeDto>> GetAll(int accountId)
         {
             var incomes = await _incomeRepo.GetAll(accountId);
-            List<IncomeDto> incomeDtos = new();
-            foreach (var income in incomes)
-            {
-                incomeDtos.Add(await ConvertIncomeToDto(income));
-            }
+
+            List<IncomeDto> incomeDtos = incomes
+                .Select(i => ConvertIncomeToDto(i))
+                .ToList();
+
             return incomeDtos;
         }
 
         public async Task<List<IncomeDto>> GetAll(int accountId, DateTime endDate)
         {
             var incomes = await _incomeRepo.GetAll(accountId, endDate);
-            List<IncomeDto> incomeDtos = new();
-            foreach (var income in incomes)
-            {
-                incomeDtos.Add(await ConvertIncomeToDto(income));
-            }
+
+            List<IncomeDto> incomeDtos = incomes
+                .Select(i => ConvertIncomeToDto(i))
+                .ToList();
+
             return incomeDtos;
         }
 
@@ -87,24 +91,11 @@ namespace Aurum.Services.IncomeServices
             }
 
             var incomes = await _incomeRepo.GetAll(accountId, startDate, endDate);
-            
-            List<IncomeDto> incomeDtos = new();
-            foreach (var income in incomes)
-            {
-                incomeDtos.Add(await ConvertIncomeToDto(income));
-            }
-            
-            return incomeDtos;
-        }
 
-        public async Task<List<IncomeWithCurrency>> GetAllWithCurrency(int accountId)
-        {
-            var incomes = await _incomeRepo.GetAll(accountId);
-            List<IncomeWithCurrency> incomeDtos = new();
-            foreach (var income in incomes)
-            {
-                incomeDtos.Add(await ConvertIncomeToWithCurrency(income));
-            }
+            List<IncomeDto> incomeDtos = incomes
+                .Select(i => ConvertIncomeToDto(i))
+                .ToList();
+
             return incomeDtos;
         }
 
@@ -128,21 +119,13 @@ namespace Aurum.Services.IncomeServices
             return isDeleted;
         }
 
-        private async Task<IncomeDto> ConvertIncomeToDto(Income income)
+        private IncomeDto ConvertIncomeToDto(Income income)
         {
-            var categories = await _incomeCategoryService.GetAllCategory();
-            var category = categories.First(c => c.IncomeCategoryId == income.IncomeCategoryId);
-            return new(new(category.Name, category.IncomeCategoryId), income.Label, income.Amount, income.Date);
-        }
-        private async Task<IncomeWithCurrency> ConvertIncomeToWithCurrency(Income income)
-        {
-            var categories = await _incomeCategoryService.GetAllCategory();
-            var category = categories.First(c => c.IncomeCategoryId == income.IncomeCategoryId);
-            var account = await _accountService.Get(income.AccountId);
-            var currency = await _currencyService.Get(account.Currency.CurrencyId);
-            return new(currency, new(category.Name, category.IncomeCategoryId), income.Label, income.Amount, income.Date);
-        }
+            var categoryDto = new CategoryDto(income.IncomeCategory.Name, income.IncomeCategoryId);
+            var currencyDto = new CurrencyDto(income.Account.Currency.Name, income.Account.Currency.CurrencyCode, income.Account.Currency.Symbol);
 
+            return new(categoryDto, currencyDto, income.Label, income.Amount, income.Date);
+        }
         private Income ConvertModifyDtoToIncome(ModifyIncomeDto income) =>
             new Income()
             {
