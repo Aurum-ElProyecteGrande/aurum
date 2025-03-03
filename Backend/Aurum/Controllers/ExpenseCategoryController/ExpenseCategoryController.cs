@@ -6,9 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace Aurum.Controllers.ExpenseCategoryController;
 
 [Authorize]
-public class ExpenseCategoryController(IExpenseCategoryService service): ControllerBase
+public class ExpenseCategoryController(IExpenseCategoryService service, ILogger<ExpenseCategoryController> logger): ControllerBase
 {
 	private readonly IExpenseCategoryService _service = service;
+	private readonly ILogger<ExpenseCategoryController> _logger  = logger;
 	
 	[HttpGet("/categories/expense")]
 	public async Task<IActionResult> GetAll()
@@ -19,15 +20,13 @@ public class ExpenseCategoryController(IExpenseCategoryService service): Control
 				return unauthorized;
 			
 			var categories = await _service.GetAllExpenseCategories(userId);
-			// if (categories.Count == 0)
-			// 	throw new InvalidOperationException("No expense categories found");
 			
 			return Ok(categories);
 		}
 		catch (Exception e)
 		{
-			Console.WriteLine(e);
-			return StatusCode(500, e.Message);
+			_logger.LogError(e, "An error occurred while fetching expense categories.");
+			return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
 		}
 		
 	}

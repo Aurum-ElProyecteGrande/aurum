@@ -10,9 +10,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace Aurum.Controllers.ExpenseController;
 
 [Authorize]
-public class ExpenseController(IExpenseService service):ControllerBase
+public class ExpenseController(IExpenseService service, ILogger<ExpenseController> logger):ControllerBase
 {
 	private readonly IExpenseService _service = service;
+	private readonly ILogger<ExpenseController> _logger = logger;
 	
 	[HttpGet("/expenses/{accountId:int}")]
 	public async Task<IActionResult> GetAll([FromRoute]int accountId)
@@ -22,13 +23,13 @@ public class ExpenseController(IExpenseService service):ControllerBase
 			if (UserHelper.GetUserId(HttpContext,out var userId, out var unauthorized)) 
 				return unauthorized;
 
-			var expenses = await _service.GetAll(accountId, userId);
+			var expenses = await _service.GetAll(accountId);
 			return Ok(expenses);
 		}
 		catch (Exception e)
 		{
-			Console.WriteLine(e);
-			return StatusCode(500, e.Message);
+			_logger.LogError(e, "An error occurred while fetching expenses for accountId {AccountId}.", accountId);
+			return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
 		}
 	}
 	
@@ -40,13 +41,13 @@ public class ExpenseController(IExpenseService service):ControllerBase
 			if (UserHelper.GetUserId(HttpContext,out var userId, out var unauthorized)) 
 				return unauthorized;
 			
-			var expenses = await _service.GetAll(accountId, userId, startDate, endDate);
+			var expenses = await _service.GetAll(accountId, startDate, endDate);
 			return Ok(expenses);
 		}
 		catch (Exception e)
 		{
-			Console.WriteLine(e);
-			return StatusCode(500, e.Message);
+			_logger.LogError(e, "An error occurred while fetching expenses for accountId {AccountId} from {StartDate} to {EndDate}.", accountId, startDate, endDate);;
+			return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
 		}
 	}
 
@@ -58,13 +59,13 @@ public class ExpenseController(IExpenseService service):ControllerBase
             if (UserHelper.GetUserId(HttpContext, out var userId, out var unauthorized))
                 return unauthorized;
 
-            var expenses = await _service.GetAllWithCurrency(accountId, userId);
+            var expenses = await _service.GetAllWithCurrency(accountId);
             return Ok(expenses);
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
+	        _logger.LogError(e, "An error occurred while fetching expenses for accountId {AccountId}.", accountId);
+	        return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
         }
     }
 
@@ -78,8 +79,9 @@ public class ExpenseController(IExpenseService service):ControllerBase
 		}
 		catch (Exception e)
 		{
-			Console.WriteLine(e);
-			return StatusCode(500, e.Message);
+			_logger.LogError(e, "An error occurred while creating expense");
+
+			return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
 		}
 	}
 
@@ -93,8 +95,8 @@ public class ExpenseController(IExpenseService service):ControllerBase
 		}
 		catch (Exception e)
 		{
-			Console.WriteLine(e);
-			return StatusCode(500, e.Message);
+			_logger.LogError(e, "An error occurred while deleting expense with: {ExpenseId} id.", expenseId);
+			return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
 		}
 	}
 }

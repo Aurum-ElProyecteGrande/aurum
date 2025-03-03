@@ -52,6 +52,8 @@ namespace Aurum.Migrations
 
                     b.HasKey("AccountId");
 
+                    b.HasIndex("CurrencyId");
+
                     b.ToTable("Accounts");
                 });
 
@@ -631,23 +633,40 @@ namespace Aurum.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Aurum.Data.Entities.Account", b =>
+                {
+                    b.HasOne("Aurum.Data.Entities.Currency", "Currency")
+                        .WithMany()
+                        .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Currency");
+                });
+
             modelBuilder.Entity("Aurum.Data.Entities.Expense", b =>
                 {
-                    b.HasOne("Aurum.Data.Entities.Account", null)
+                    b.HasOne("Aurum.Data.Entities.Account", "Account")
                         .WithMany("Expenses")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Aurum.Data.Entities.ExpenseCategory", null)
+                    b.HasOne("Aurum.Data.Entities.ExpenseCategory", "ExpenseCategory")
                         .WithMany("Expenses")
                         .HasForeignKey("ExpenseCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Aurum.Data.Entities.ExpenseSubCategory", null)
+                    b.HasOne("Aurum.Data.Entities.ExpenseSubCategory", "ExpenseSubCategory")
                         .WithMany("Expenses")
                         .HasForeignKey("ExpenseSubCategoryId");
+
+                    b.Navigation("Account");
+
+                    b.Navigation("ExpenseCategory");
+
+                    b.Navigation("ExpenseSubCategory");
                 });
 
             modelBuilder.Entity("Aurum.Data.Entities.ExpenseSubCategory", b =>
