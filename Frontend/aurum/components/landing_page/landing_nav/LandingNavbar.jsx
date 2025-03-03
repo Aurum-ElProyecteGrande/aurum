@@ -3,29 +3,10 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import LandingLogo from "../landing_logo/LandingLogo";
 import { IoMenuOutline, IoClose } from "react-icons/io5";
-import { useRouter } from 'next/navigation';
 
-const LandingNavbar = ({ useModal, userInfo }) => {
+
+const LandingNavbar = ({ useModal, userInfo, handleLinkClick }) => {
 	const [showNav, setShowNav] = useState(false);
-	const router = useRouter();
-
-	const handleLinkClick = async (url) => {
-		const response = await fetch('/api/User/validate', {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			credentials: 'include',
-		});
-
-		if (response.ok) {
-			router.push(url);
-		} else {
-			router.push('/');
-		}
-	};
-
-
 	return (
 		<header className="landing-header">
 			<nav className="landing-navbar wrapper">

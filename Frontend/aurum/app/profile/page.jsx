@@ -15,6 +15,7 @@ const ProfilePage = () => {
     const [email, setEmail] = useState("john.doe@example.com");
     const [password, setPassword] = useState({})
     const [profilePicture, setProfilePicture] = useState(null);
+    const [error, setError] = useState('');
 
     const handleProfilePictureChange = (e) => {
         const file = e.target.files[0];
@@ -25,6 +26,14 @@ const ProfilePage = () => {
 
     const handlePasswordInput = (e) => {
         const { name, value } = e.target;
+
+        if (name == "confirmPassword") {
+            if (value != password.newPassword)
+              setError("Passwords do not match.");
+            else
+              setError("");
+          }
+
         setPassword((prevValues) => ({
             ...prevValues,
             [name]: value, e
@@ -51,7 +60,7 @@ const ProfilePage = () => {
             OldPassword: password.oldPassword,
             NewPassword: password.newPassword
         }
-        
+
         const isSuccess = await fetchPasswordChange(body)
 
         if (!isSuccess)
@@ -81,7 +90,8 @@ const ProfilePage = () => {
                 <ProfileEmail email={email} setEmail={setEmail} isEditingEmail={isEditingEmail} setIsEditingEmail={setIsEditingEmail} handleSave={handleSave} />
                 <ProfilePassword isEditingPassword={isEditingPassword} setIsEditingPassword={setIsEditingPassword}
                     handlePasswordInput={handlePasswordInput}
-                    handlePasswordChange={handlePasswordChange} />
+                    handlePasswordChange={handlePasswordChange}
+                    error={error} />   
             </div>
         </section>
     );

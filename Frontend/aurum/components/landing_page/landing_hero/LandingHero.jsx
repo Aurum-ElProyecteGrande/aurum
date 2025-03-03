@@ -1,7 +1,7 @@
 import React from 'react'
 import LandingHeroImg from '../landing_hero_img/LandingHeroImg'
 
-const LandingHero = () => {
+const LandingHero = ({handleLinkClick}) => {
   return (
     <section className="landing-hero">
       <div className="landing-hero-container wrapper" data-aos="fade-left">
@@ -15,7 +15,9 @@ const LandingHero = () => {
           <p>
           Effortlessly track your expenses with Aurum—your smart companion for smarter financial decisions. Stay organized, save more, and take control of your financial future.
           </p>
-          <button className="fancy-button">
+          <button className="fancy-button" onClick={() => {
+            handleLinkClick("/transactions")
+          }}>
           Get Started Today
           </button>
         </div>

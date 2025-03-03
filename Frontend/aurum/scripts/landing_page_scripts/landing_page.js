@@ -72,3 +72,28 @@ export async function fetchTest() {
 		console.log("All good")
 	return await response.json();
 }
+
+export const fetchLogout = async () => {
+    const response = await fetch("api/user/logout", {
+        method: "POST",
+        headers: {
+        },
+        credentials: "include",
+    });
+    if (!response.ok) 
+        throw new Error(response.statusText);
+
+    return true;
+};
+
+export const fetchValidate = async () => {
+	const response = await fetch('/api/User/validate', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		credentials: 'include',
+	});
+
+    return response.ok;
+};

@@ -10,11 +10,25 @@ import LandingShowcase from "@/components/landing_page/landing_showcase/LandingS
 import Aos from 'aos';
 import 'aos/dist/aos.css';
 import AuthModal from "@/components/modal/AuthModal";
+import { useRouter } from 'next/navigation';
+import { fetchValidate } from "@/scripts/landing_page_scripts/landing_page";
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false)
   const [isSignUp, setIsSignUp] = useState(false)
   const [userInfo, setUserInfo] = useState({})
+  const router = useRouter();
+
+	const handleLinkClick = async (url) => {
+		const isSuccess = await fetchValidate()
+
+		if (isSuccess) {
+			router.push(url);
+		} else {
+			router.push('/');
+      handleModal(false)
+		}
+	};
 
   const handleModal = (signMode) => {
     setShowModal(true);
@@ -27,8 +41,8 @@ export default function Home() {
 
   return (
     <>
-      <LandingNavbar useModal={handleModal} userInfo={userInfo}/>
-      <LandingHero />
+      <LandingNavbar useModal={handleModal} userInfo={userInfo} handleLinkClick={handleLinkClick}/>
+      <LandingHero handleLinkClick={handleLinkClick}/>
       <LandingScroll />
       <LandingPrices />
       <LandingShowcase />

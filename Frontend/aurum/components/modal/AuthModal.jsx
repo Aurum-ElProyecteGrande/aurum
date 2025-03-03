@@ -53,10 +53,10 @@ const AuthModal = ({ showModal, setShowModal, isSignUp, setUserInfo }) => {
         },
         body: JSON.stringify(payload),
       });
-      
+
       if (!response.ok)
         throw new Error('Failed to authenticate.');
-      
+
     } catch (err) {
       setError(err.message);
     } finally {
@@ -108,15 +108,15 @@ const AuthModal = ({ showModal, setShowModal, isSignUp, setUserInfo }) => {
                 required
               />
             )}
-            {error && <p className="error-message">{error}</p>}
-            <button className="primary-button" type="submit" disabled={loading}>
-              {loading ? 'Loading...' : isSignUpMode ? 'Sign Up' : 'Sign In'}
-            </button>
+            {error ? <p className="error-message">{error}</p> :
+              <button className="primary-button" type="submit" disabled={loading}>
+                {loading ? 'Loading...' : isSignUpMode ? 'Sign Up' : 'Sign In'}
+              </button>}
           </form>
         </div>
         <div className="overlay-section">
           <span className="exit" onClick={() => setShowModal(false)}>
-          <IoMdClose />
+            <IoMdClose />
           </span>
           <div className="overlay-panel">
             <h1>{isSignUpMode ? 'Welcome Back!' : 'Hello, Friend!'}</h1>

@@ -144,6 +144,13 @@ public class UserController : ControllerBase
 
         return Unauthorized(new { message = "Token is invalid or expired." });
     }
+    
+    [HttpPost("logout")]
+    public IActionResult Logout()
+    {
+        Response.Cookies.Delete("AuthToken");
+        return Ok("Logged out successfully");
+    }
 
     private void AddErrors(AuthResult result)
     {
