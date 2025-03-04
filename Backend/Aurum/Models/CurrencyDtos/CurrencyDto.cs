@@ -1,4 +1,4 @@
-namespace Aurum.Models.CurrencyDto;
+namespace Aurum.Models.CurrencyDtos;
 
 public record CurrencyDto(
     string Name,

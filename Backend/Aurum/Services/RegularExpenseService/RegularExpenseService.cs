@@ -1,7 +1,6 @@
 using Aurum.Data.Entities;
 using Aurum.Models.CategoryDtos;
 using Aurum.Models.ExpenseDto;
-using Aurum.Models.ExpenseDtos;
 using Aurum.Models.RegularExpenseDto;
 using Aurum.Repositories.RegularExpenseRepository;
 using Aurum.Services.ExpenseCategoryService;

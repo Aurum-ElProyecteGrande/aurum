@@ -1,11 +1,12 @@
 using Aurum.Models.CategoryDtos;
 using Aurum.Models.ExpenseDto;
-using Aurum.Models.ExpenseDtos;
 using Aurum.Models.RegularExpenseDto;
 using Aurum.Repositories.ExpenseRepository;
 using Aurum.Services.ExpenseCategoryService;
 using System.Linq;
 using Aurum.Data.Entities;
+using Aurum.Models.CurrencyDtos;
+using Aurum.Models.ExpenseDTO;
 using Aurum.Models.IncomeDTOs;
 using Aurum.Services.AccountService;
 using Aurum.Services.CurrencyServices;
@@ -37,14 +38,7 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
         
         return rawData.Select(CreateExpenseDto).ToList();
     }
-
-    public async Task<List<ExpenseWithCurrency>> GetAllWithCurrency(int accountId)
-    {
-        var rawData = await _repository.GetAll(accountId);
-        
-        return rawData.Select(CreateExpenseWithCurrency).ToList();
-    }
-
+    
     public async Task<int> Create(ModifyExpenseDto expenseDto)
     {
         var subCategoryId = string.IsNullOrEmpty(expenseDto.SubCategoryName) ? (int?)null :
@@ -60,7 +54,7 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
     
     private ExpenseDto CreateExpenseDto(Expense expense)
     {
-        var categoryDto = new CategoryDto(expense.ExpenseCategory.Name, expense.ExpenseCategory.ExpenseCategoryId);
+        var categoryDto = new CategoryDto(expense.ExpenseCategory.Name, expense.ExpenseCategoryId);
         
         SubCategoryDto subCategoryDto = null;
         if (expense.ExpenseSubCategoryId != null)
@@ -71,8 +65,12 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
                 expense.ExpenseCategoryId
             );
         }
+
+        var currency = new CurrencyDto(expense.Account.Currency.Name, expense.Account.Currency.CurrencyCode,
+            expense.Account.Currency.Symbol);
         
         return new ExpenseDto(
+            currency,
             categoryDto,
             subCategoryDto,
             expense.Label,
@@ -106,30 +104,6 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
         return expenses
             .Select(e => e.Amount)
             .Sum();
-    }
-    
-    private ExpenseWithCurrency CreateExpenseWithCurrency(Expense expense)
-    {
-        var categoryDto = new CategoryDto(expense.ExpenseCategory.Name, expense.ExpenseCategoryId);
-        
-        SubCategoryDto subCategoryDto = null;
-        if (expense.ExpenseSubCategoryId != null)
-        {
-            subCategoryDto = new SubCategoryDto(
-                expense.ExpenseSubCategory.Name, 
-                expense.ExpenseSubCategory.ExpenseSubCategoryId, 
-                expense.ExpenseCategoryId
-            );
-        }
-        
-        return new ExpenseWithCurrency(
-            expense.Account.Currency,
-            categoryDto,
-            subCategoryDto,
-            expense.Label,
-            expense.Amount,
-            expense.Date
-        );
     }
 
 }

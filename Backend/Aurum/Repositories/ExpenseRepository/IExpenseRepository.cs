@@ -1,6 +1,5 @@
 using Aurum.Data.Entities;
 using Aurum.Models.ExpenseDto;
-using Aurum.Models.ExpenseDtos;
 
 namespace Aurum.Repositories.ExpenseRepository;
 
