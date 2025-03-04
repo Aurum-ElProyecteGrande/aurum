@@ -1,18 +1,42 @@
 import { useEffect, useState } from 'react';
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
 import ChangeChartForm from '../change-chart-form';
-import { shortenTitle } from '@/scripts/dashboard_scripts/dashboard_scripts';
+import { fetchCurrencyExchanges, shortenTitle, convertExchangeRate } from '@/scripts/dashboard_scripts/dashboard_scripts';
 
 const COLORS = ['#3D62A4', '#F9D342', '#5E946A ', '#C56A64'];
 
-export default function IncomesByCategory({ isEditMode, incomes, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts }) {
+export default function IncomesByCategory({ isEditMode, incomes, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts, accounts }) {
 
     const [incomesByCategory, setIncomesByCategory] = useState([])
     const [filteredIncomesByCategory, setFilteredIncomesByCategory] = useState([])
     const [startDate, setStartDate] = useState(new Date())
     const [today, setToday] = useState(new Date())
     const [daysCalculated, setDaysCalculated] = useState(30)
+    const [currencies, setCurrencies] = useState([])
+    const [exchangeRates, setExchangeRates] = useState([])
     const maxShownCategory = 4
+
+    useEffect(() => {
+        if (accounts[0]) {
+            let allCurrencies = new Set()
+
+            accounts.forEach(acc => {
+                allCurrencies.add(acc.currency.currencyCode)
+            })
+
+            setCurrencies([...allCurrencies])
+        }
+    }, [accounts])
+
+    useEffect(() => {
+        const getExchangeRates = async () => {
+            const updatedExchangeRates = await fetchCurrencyExchanges("HUF", currencies)
+            setExchangeRates(updatedExchangeRates)
+        }
+        if (currencies[0]) {
+            getExchangeRates()
+        }
+    }, [currencies])
 
 
     useEffect(() => {
@@ -21,11 +45,16 @@ export default function IncomesByCategory({ isEditMode, incomes, segmentIndex, c
         setStartDate(nDaysAgo)
     }, [daysCalculated])
 
-
     useEffect(() => {
         const getIncomesByCategory = async () => {
 
             let updatedIncomes = [...incomes].filter(e => new Date(e.date) >= startDate && new Date(e.date) <= today)
+
+            if (updatedIncomes[0]) {
+                updatedIncomes = updatedIncomes.map(i => (
+                    { ...i, amount: convertExchangeRate(i.amount, exchangeRates.data, i.currency.currencyCode) }
+                ))
+            }
 
             updatedIncomes = updatedIncomes.map(i => {
                 return { amount: i.amount, category: i.category.name }
@@ -45,11 +74,11 @@ export default function IncomesByCategory({ isEditMode, incomes, segmentIndex, c
 
             setIncomesByCategory(updatedIncomesByCategory)
         }
-        if (incomes[0]) {
+        if (incomes[0] && exchangeRates.data) {
             getIncomesByCategory()
         }
 
-    }, [incomes, startDate])
+    }, [incomes, startDate, exchangeRates])
 
 
     useEffect(() => {
