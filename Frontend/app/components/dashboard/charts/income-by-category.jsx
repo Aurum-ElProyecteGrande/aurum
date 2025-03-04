@@ -6,7 +6,9 @@ import ChangeDaysShown from './chart-utils/change-days-shown';
 
 const COLORS = ['#3D62A4', '#F9D342', '#5E946A ', '#C56A64'];
 
-export default function IncomesByCategory({ isEditMode, incomes, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts, accounts }) {
+export default function IncomesByCategory({ isEditMode, incomes, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts, accounts, chartLoaded }) {
+
+    const chartName = "income-by-category"
 
     const [incomesByCategory, setIncomesByCategory] = useState([])
     const [filteredIncomesByCategory, setFilteredIncomesByCategory] = useState([])
@@ -31,6 +33,7 @@ export default function IncomesByCategory({ isEditMode, incomes, segmentIndex, c
         const getExchangeRates = async () => {
             const updatedExchangeRates = await fetchCurrencyExchanges("HUF", currencies)
             setExchangeRates(updatedExchangeRates)
+            chartLoaded(chartName)
         }
         if (currencies[0]) {
             getExchangeRates()

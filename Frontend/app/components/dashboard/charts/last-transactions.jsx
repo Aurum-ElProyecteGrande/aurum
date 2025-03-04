@@ -4,8 +4,10 @@ import { useEffect, useState } from "react"
 import ChangeChartTransactions from './chart-utils/change-chart-transactions';
 import ChangeChartType from './chart-utils/change-chart-acc';
 
-export default function LastTransactions({ isEditMode, accounts, expenses, incomes, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts }) {
-
+export default function LastTransactions({ isEditMode, expenses, incomes, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts, chartLoaded }) {
+    
+    const chartName = "last-transactions" 
+    
     const [transactions, setTransactions] = useState([])
     const [maxTransactions, setMaxTransactions] = useState(15)
     const numberOfTransactions = [15, 20, 25, 30, 35, 40, 45, 50, 100]
@@ -30,6 +32,7 @@ export default function LastTransactions({ isEditMode, accounts, expenses, incom
 
             const updatedTransactions = [...updatedExpenses, ...updatedIncomes]
 
+            chartLoaded(chartName)
             setTransactions(sortAndFilterTransactions(updatedTransactions))
         }
         if (expenses[0] && incomes[0]) {

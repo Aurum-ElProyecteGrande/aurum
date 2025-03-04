@@ -7,7 +7,9 @@ import ChangeChartAcc from "./chart-utils/change-chart-acc";
 import ChangeDaysShown from "./chart-utils/change-days-shown";
 import ChangeChartForm from '../change-chart-form';
 
-export default function ExpenseLineChart({ isEditMode, accounts, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts }) {
+export default function ExpenseLineChart({ isEditMode, accounts, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts, chartLoaded }) {
+
+    const chartName = "expense-line-chart"
 
     const [expensesByDateString, setExpensesByDateString] = useState([])
     const [startDate, setStartDate] = useState(new Date())
@@ -38,6 +40,7 @@ export default function ExpenseLineChart({ isEditMode, accounts, segmentIndex, c
                 updatedExpenseByDateString[key.toString().slice(0, 10)] = expensesByDate[key]
             }
             setExpensesByDateString(updatedExpenseByDateString)
+            chartLoaded(chartName)
         }
         if (curAccount) {
             getBalances(curAccount.accountId)

@@ -7,7 +7,9 @@ import ChangeChartAcc from "./chart-utils/change-chart-acc";
 import ChangeDaysShown from "./chart-utils/change-days-shown";
 import ChangeChartForm from '../change-chart-form';
 
-export default function IncomeLineChart({ isEditMode, accounts, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts }) {
+export default function IncomeLineChart({ isEditMode, accounts, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts, chartLoaded }) {
+
+    const chartName = "income-line-chart"
 
     const [incomesByDateString, setIncomesByDateString] = useState([])
     const [startDate, setStartDate] = useState(new Date())
@@ -38,6 +40,7 @@ export default function IncomeLineChart({ isEditMode, accounts, segmentIndex, ch
                 updatedIncomeByDateString[key.toString().slice(0, 10)] = incomesByDate[key]
             }
             setIncomesByDateString(updatedIncomeByDateString)
+            chartLoaded(chartName)
         }
         if (curAccount) {
             getIncomes(curAccount.accountId)

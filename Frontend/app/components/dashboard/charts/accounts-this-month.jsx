@@ -3,7 +3,9 @@ import ChangeChartForm from '../change-chart-form';
 import { displayCurrency, fetchExpensesByDate, fetchIncomeByDate } from '@/scripts/dashboard_scripts/dashboard_scripts';
 
 
-export default function AccountsThisMonth({ isEditMode, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts, accounts, expenses, incomes }) {
+export default function AccountsThisMonth({ isEditMode, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts, accounts, chartLoaded }) {
+
+    const chartName = "accounts-this-month"
 
     const [accountsWithTotals, setAccountsWithTotals] = useState([])
     const firstDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().slice(0, 10);
@@ -37,9 +39,8 @@ export default function AccountsThisMonth({ isEditMode, segmentIndex, chosenLayo
                 acc.inc = acc.inc.reduce((a, c) => a += c.amount, 0)
                 acc.exp = acc.exp.reduce((a, c) => a += c.amount, 0)
             });
-
             setAccountsWithTotals(updatedAccsWithTrxs)
-
+            chartLoaded(chartName)
         }
         if (accounts[0])
             getTrxs()

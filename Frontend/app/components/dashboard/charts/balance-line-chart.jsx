@@ -7,7 +7,9 @@ import ChangeChartAcc from "./chart-utils/change-chart-acc";
 import ChangeDaysShown from "./chart-utils/change-days-shown";
 import ChangeChartForm from '../change-chart-form';
 
-export default function BalanceLineChart({ isEditMode, accounts, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts }) {
+export default function BalanceLineChart({ isEditMode, accounts, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts, chartLoaded }) {
+
+    const chartName = "balance-line-chart"
 
     const [balancesByDateString, setBalancesByDateString] = useState([])
     const [startDate, setStartDate] = useState(new Date())
@@ -33,6 +35,7 @@ export default function BalanceLineChart({ isEditMode, accounts, segmentIndex, c
             let updatedBalances = await fetchBalanceForRange(accId, startDate.toISOString().slice(0, 10), today.toISOString().slice(0, 10))
             updatedBalances = updatedBalances.map(b => ({ ...b, date: b.date.slice(0, 10) }));
             setBalancesByDateString(updatedBalances)
+            chartLoaded(chartName)
         }
         if (curAccount) {
             getBalances(curAccount.accountId)
