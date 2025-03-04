@@ -48,24 +48,6 @@ namespace Aurum.Controllers.IncomeControllers
             }
         }
 
-        [HttpGet("currency/{accountId:int}")]
-        public async Task<IActionResult> GetAllWithCurrency(int accountId)
-        {
-            try
-            {
-                List<IncomeWithCurrency> incomes = new();
-
-                incomes = await _incomeService.GetAllWithCurrency(accountId);
-
-                return Ok(incomes);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return BadRequest(ex.Message);
-            }
-        }
-
         [HttpPost]
         public async Task<IActionResult> Create(ModifyIncomeDto income)
         {

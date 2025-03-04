@@ -1,5 +1,6 @@
 ﻿using Aurum.Data.Entities;
 using Aurum.Models.AccountDto;
+using Aurum.Models.CurrencyDto;
 using Aurum.Repositories.AccountRepository;
 using Aurum.Services.CurrencyServices;
 using Microsoft.Identity.Client;
@@ -29,8 +30,9 @@ namespace Aurum.Services.AccountService
         public async Task<AccountDto> Get(int accountId)
         {
             if (accountId == 0) throw new ArgumentNullException($"No account found with id {accountId}");
+
             var account = await _accountRepo.Get(accountId);
-            var acccountDto = await ConvertAccountToDto(account);
+            var acccountDto = ConvertAccountToDto(account);
             return acccountDto;
         }
 
@@ -44,7 +46,7 @@ namespace Aurum.Services.AccountService
 
             foreach (var account in accounts)
             {
-                accDtos.Add(await ConvertAccountToDto(account));
+                accDtos.Add(ConvertAccountToDto(account));
             }
 
             return accDtos;
@@ -89,9 +91,9 @@ namespace Aurum.Services.AccountService
             CurrencyId = accDto.CurrencyId,
         };
 
-        private async Task<AccountDto> ConvertAccountToDto(Account acc)
+        private AccountDto ConvertAccountToDto(Account acc)
         {
-            var currency = await _currencyService.Get(acc.CurrencyId);
+            var currency = new CurrencyDto (acc.Currency.Name, acc.Currency.CurrencyCode, acc.Currency.Symbol);
             AccountDto accDto = new(acc.AccountId, acc.UserId, acc.DisplayName, acc.Amount, currency);
             return accDto;
         }

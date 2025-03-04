@@ -2,6 +2,7 @@ using Aurum.Data.Context;
 using Aurum.Data.Entities;
 using Aurum.Models.AccountDto;
 using Aurum.Repositories.AccountRepository;
+using Microsoft.EntityFrameworkCore;
 
 namespace Aurum.Repositories.AccountRepo
 {
@@ -14,10 +15,12 @@ namespace Aurum.Repositories.AccountRepo
             _dbContext = aurumContext;
         }
         public async Task<Account> Get(int accountId) => _dbContext.Accounts
+            .Include(a => a.Currency)
             .FirstOrDefault(a => a.AccountId == accountId);
 
         public async Task<List<Account>> GetAll(string userId) => _dbContext.Accounts
             .Where(a => a.UserId == userId)
+            .Include(a => a.Currency)
             .ToList();
         public async Task<int> Create(Account account)
         {

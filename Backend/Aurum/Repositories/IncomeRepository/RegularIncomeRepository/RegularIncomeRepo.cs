@@ -1,6 +1,7 @@
 ﻿using Aurum.Models.IncomeDTOs;
 using Aurum.Data.Entities;
 using Aurum.Data.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace Aurum.Repositories.IncomeRepository.RegularIncomeRepository
 {
@@ -14,9 +15,15 @@ namespace Aurum.Repositories.IncomeRepository.RegularIncomeRepository
         }
 
         public async Task<RegularIncome> Get(int regularId) => _dbContext.RegularIncomes
+            .Include(i => i.IncomeCategory)
+            .Include(i => i.Account)
+                .ThenInclude(a => a.Currency)
             .FirstOrDefault(ri => ri.RegularIncomeId == regularId);
         public async Task<List<RegularIncome>> GetAllRegular(int accountId) => _dbContext.RegularIncomes
             .Where(ri => ri.AccountId == accountId)
+            .Include(i => i.IncomeCategory)
+            .Include(i => i.Account)
+                .ThenInclude(a => a.Currency)
             .ToList();
         public async Task<int> CreateRegular(RegularIncome income)
         {

@@ -1,4 +1,5 @@
 using Aurum.Data.Entities;
+using Aurum.Models.CurrencyDto;
 
 namespace Aurum.Models.AccountDto;
 
@@ -7,5 +8,5 @@ public record AccountDto(
     string UserId,
     string DisplayName,
     decimal Amount,
-    Currency Currency
+    CurrencyDto.CurrencyDto Currency
     );
