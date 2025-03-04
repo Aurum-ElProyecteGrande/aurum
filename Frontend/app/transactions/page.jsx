@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import TransactionSidebar from "@/components/transactions/transaction_sidebar/TransactionSidebar";
 import TransactionTable from "@/components/transactions/transaction_table/TRansactionTable";
 import TransactionHeader from "@/components/transactions/transaction_header/TransactionHeader";
-import { fetchAccounts, fetchExpensesWithCurrency, fetchIncomesWithCurrency } from "@/scripts/dashboard_scripts/dashboard_scripts";
+import { fetchAccounts, fetchExpenses, fetchIncome, fetchExpensesByDate, fetchIncomeByDate } from "@/scripts/dashboard_scripts/dashboard_scripts";
 
 
 export default function TransactionsPage() {
@@ -15,31 +15,53 @@ export default function TransactionsPage() {
   const [filteredData, setFilteredData] = useState([])
   const [sort, setSort] = useState({ key: null, direction: "ascending" });
   const [loading, setLoading] = useState(true);
-
+  const [startDate, setStartDate] = useState("") 
+  const [today, setToday] = useState("")
+  
   const getAccounts = async () => {
     const updatedAccounts = await fetchAccounts()
-    setAccounts(updatedAccounts)
+
+    const accountsWithChecked = updatedAccounts.map((account) => ({
+      ...account, 
+      checked: true, 
+    }));
+
+    setAccounts(accountsWithChecked)
   }
 
+  const fetchAccountData = async (acc) => {
+    if (!acc.checked) 
+      return [];
+  
+    const mergedData = [];
+  
+    const [expenses, incomes] = await Promise.all([
+      startDate === today
+        ? fetchExpenses(acc.accountId)
+        : fetchExpensesByDate(acc.accountId, startDate, today),
+  
+      startDate === today
+        ? fetchIncome(acc.accountId)
+        : fetchIncomeByDate(acc.accountId, startDate, today),
+    ]);
+  
+    expenses.forEach((e) => mergedData.push({ ...e, isExpense: true, accountName: acc.displayName }));
+    incomes.forEach((i) => mergedData.push({ ...i, isExpense: false, accountName: acc.displayName }));
+  
+    return mergedData; 
+  };
+  
   const getData = async () => {
     try {
-      setLoading(true)
-      const mergedData = [];
-
-      // Process all accounts
-      for (const acc of accounts) {
-        const [expenses, incomes] = await Promise.all([
-          fetchExpensesWithCurrency(acc.accountId),
-          fetchIncomesWithCurrency(acc.accountId),
-        ]);
-
-        // Push directly into the merged data array
-        expenses.forEach((e) => mergedData.push({ ...e, isExpense: true }));
-        incomes.forEach((i) => mergedData.push({ ...i, isExpense: false }));
-      }
-
+      setLoading(true);
+  
+      const allMergedData = await Promise.all(accounts.map(fetchAccountData));
+  
+      const mergedData = allMergedData.flat();
+  
       setData(mergedData);
       setFilteredData(mergedData);
+  
       const startTime = Date.now();
       const elapsedTime = Date.now() - startTime;
       if (elapsedTime < 2000) {
@@ -47,19 +69,22 @@ export default function TransactionsPage() {
       }
     } catch (error) {
       console.error("Error fetching data:", error);
-    }
-    finally {
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
   // Fetch data
   useEffect(() => {
     getAccounts()
+
+    const today = new Date().toISOString().split('T')[0];
+    setToday(today);
+    setStartDate(today);
   }, []);
 
   useEffect(() => {
     getData();
-  }, [accounts]);
+  }, [accounts, startDate]);
 
   // Filter data when search changes
   useEffect(() => {
@@ -108,8 +133,6 @@ export default function TransactionsPage() {
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
-  console.log(data.length, filteredData.length, currentData.length)
-
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -117,6 +140,22 @@ export default function TransactionsPage() {
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
   };
+
+  const onStartDateChange = (e) => {
+    setStartDate(e.target.value)
+  };
+
+  const handleCheckboxChange = (accountId) => {
+    const updatedAccounts = accounts.map(account => 
+      account.accountId === accountId 
+        ? { ...account, checked: !account.checked } 
+        : account 
+    );
+  
+    setAccounts(updatedAccounts);
+  };
+
+  
 
   const handleSort = (key) => {
     let direction = 'ascending';
@@ -132,7 +171,7 @@ export default function TransactionsPage() {
   return (
     <section className="transactions">
       <TransactionSidebar />
-      <TransactionHeader onChange={handleSearchChange} />
+      <TransactionHeader onSearchChange={handleSearchChange} startDate={startDate} onStartDateChange={onStartDateChange} accountOptions={accounts} handleCheckboxChange={handleCheckboxChange} />
       {loading ?
         <div className="loading wrapper">
         </div>
