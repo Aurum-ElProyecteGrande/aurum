@@ -14,14 +14,14 @@ namespace Aurum.Repositories.AccountRepo
         {
             _dbContext = aurumContext;
         }
-        public async Task<Account> Get(int accountId) => _dbContext.Accounts
+        public async Task<Account> Get(int accountId) => await _dbContext.Accounts
             .Include(a => a.Currency)
-            .FirstOrDefault(a => a.AccountId == accountId);
+            .FirstOrDefaultAsync(a => a.AccountId == accountId);
 
-        public async Task<List<Account>> GetAll(string userId) => _dbContext.Accounts
+        public async Task<List<Account>> GetAll(string userId) => await _dbContext.Accounts
             .Where(a => a.UserId == userId)
             .Include(a => a.Currency)
-            .ToList();
+            .ToListAsync();
         public async Task<int> Create(Account account)
         {
             await _dbContext.Accounts.AddAsync(account);
@@ -47,5 +47,8 @@ namespace Aurum.Repositories.AccountRepo
             return false;
 
         }
+
+        public async Task<bool> Exists(string userId, int accountId) => await _dbContext.Accounts
+            .AnyAsync(a => a.UserId == userId && a.AccountId == accountId);
     }
 }

@@ -45,7 +45,11 @@ namespace Aurum.Controllers.AccountController
         {
             try
             {
-                var accountId = await _accountService.Create(account);
+                if (UserHelper.GetUserId(HttpContext,out var userId, out var unauthorized)) 
+                    return unauthorized;
+
+                
+                var accountId = await _accountService.Create(account, userId);
                 return Ok(accountId);
             }
             catch (Exception ex)
@@ -55,7 +59,7 @@ namespace Aurum.Controllers.AccountController
             }
         }
 
-        [HttpPut("{accountId}")]
+        [HttpPut("{accountId:int}")]
         public async Task<IActionResult> Update(ModifyAccountDto account, int accountId)
         {
             try
