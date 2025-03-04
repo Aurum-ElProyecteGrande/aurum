@@ -46,8 +46,6 @@ export default function LastTransactions({ isEditMode, accounts, expenses, incom
         return updatedTransactions
     }
 
-    console.log(transactions)
-
     return (
 
         <div key={segmentIndex} className={`${chosenLayout}-${segmentIndex + 1} chart-container ${isEditMode && "edit-mode"}`}>

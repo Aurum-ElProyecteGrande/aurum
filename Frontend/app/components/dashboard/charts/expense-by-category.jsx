@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
 import ChangeChartForm from '../change-chart-form';
+import { shortenTitle } from '@/scripts/dashboard_scripts/dashboard_scripts';
 
 
 const COLORS = ['#3D62A4', '#F9D342', '#5E946A ', '#C56A64'];
@@ -58,6 +59,16 @@ export default function ExpenseByCategory({ isEditMode, expenses, segmentIndex, 
             for (let i = 0; i < maxShownCategory; i++) {
                 updatedFiltered.push(sortedExpensesByCategory[i])
             }
+
+            if (updatedFiltered[0]) {
+                updatedFiltered = updatedFiltered.map(e => {
+                    return {
+                        category: shortenTitle(e.category, 13),
+                        categorySum: e.categorySum
+                    }
+                })
+            }
+
             setFilteredExpensesByCategory(updatedFiltered)
         }
     }, [expensesByCategory])

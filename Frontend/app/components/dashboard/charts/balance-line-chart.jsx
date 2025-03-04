@@ -32,7 +32,6 @@ export default function BalanceLineChart({ isEditMode, accounts, segmentIndex, c
         const getBalances = async (accId) => {
             let updatedBalances = await fetchBalanceForRange(accId, startDate.toISOString().slice(0, 10), today.toISOString().slice(0, 10))
             updatedBalances = updatedBalances.map(b => ({ ...b, date: b.date.slice(0, 10) }));
-            console.log(updatedBalances)
             setBalancesByDateString(updatedBalances)
         }
         if (curAccount) {
@@ -43,7 +42,6 @@ export default function BalanceLineChart({ isEditMode, accounts, segmentIndex, c
     
         useEffect(() => {
             let updatedRawChartData = []
-            console.log(balancesByDateString)
 
             for (const key in balancesByDateString) {
                 updatedRawChartData.push(balancesByDateString[key])
@@ -60,9 +58,7 @@ export default function BalanceLineChart({ isEditMode, accounts, segmentIndex, c
         const handleChangeDays = (e) => {
             setDaysShown(e.target.value)
         }
-        
-        console.log(rawChartData)
-    
+            
         return (
             <div key={segmentIndex} className={`${chosenLayout}-${segmentIndex + 1} chart-container ${isEditMode && "edit-mode"}`}>
 

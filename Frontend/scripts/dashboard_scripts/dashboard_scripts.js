@@ -126,3 +126,33 @@ export const fetchUserName = async () => {
 export const displayCurrency =(amount, curCurrency) => {
     return amount.toLocaleString('hu-HU', { style: 'currency', currency: curCurrency })
 };
+
+
+export const shortenTitle = (title, maxLength) => {
+	title = title.trim()
+    if (!title) return
+    if (title.length <= maxLength) {
+        return title
+    }
+
+    const words = title.split(" ")
+    let wordIndex = 0
+    let totalChar = 0
+
+    for (let i = 0; i < words.length; i++) {
+        totalChar += words[i].length + 1
+        if (totalChar >= maxLength) {
+            wordIndex = i
+            break
+        }
+    }
+
+    const wordsOfShortTitle = []
+    for (let i = 0; i < wordIndex; i++) {
+        wordsOfShortTitle.push(words[i])
+    }
+
+    let shortenedTitle = wordsOfShortTitle.join(" ")
+    shortenedTitle = shortenedTitle + "..."
+    return shortenedTitle
+}
