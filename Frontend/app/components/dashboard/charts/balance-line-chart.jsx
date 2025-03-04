@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { fetchBalanceForRange } from "@/scripts/dashboard_scripts/dashboard_scripts";
-import ChangeChartType from "./chart-utils/change-chart-type";
+import ChangeChartAcc from "./chart-utils/change-chart-acc";
 import ChangeDaysShown from "./chart-utils/change-days-shown";
 import ChangeChartForm from '../change-chart-form';
 
@@ -65,7 +65,7 @@ export default function BalanceLineChart({ isEditMode, accounts, segmentIndex, c
                 <div className='chart-title-container'>
                     {isEditMode &&
                         <div className="change-chart-types-container">
-                            <ChangeChartType handleChangeType={handleChangeType} accounts={accounts} curAccount={curAccount} />
+                            <ChangeChartAcc handleChangeType={handleChangeType} accounts={accounts} curAccounts={curAccount} />
                             <ChangeDaysShown handleChangeDays={handleChangeDays} daysShown={daysShown} />
                             <ChangeChartForm
                                 choosenCharts={choosenCharts}
@@ -75,7 +75,7 @@ export default function BalanceLineChart({ isEditMode, accounts, segmentIndex, c
                         </div>
                     }
                     <div className="chart-title">
-                        <p>Balances in last {daysShown} days #{curAccount && curAccount.displayName}</p>
+                        <p>Balances in last <span className='highlight'>{daysShown}</span> days #<span className='highlight'>{curAccount && curAccount.displayName}</span></p>
                     </div>
                 </div>
     

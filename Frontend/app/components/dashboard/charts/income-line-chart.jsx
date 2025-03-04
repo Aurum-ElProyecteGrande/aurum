@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { fetchIncomeByDate, fetchAccounts } from "@/scripts/dashboard_scripts/dashboard_scripts";
-import ChangeChartType from "./chart-utils/change-chart-type";
+import ChangeChartAcc from "./chart-utils/change-chart-acc";
 import ChangeDaysShown from "./chart-utils/change-days-shown";
 import ChangeChartForm from '../change-chart-form';
 
@@ -97,7 +97,7 @@ export default function IncomeLineChart({ isEditMode, accounts, segmentIndex, ch
             <div className='chart-title-container'>
                 {isEditMode &&
                     <div className="change-chart-types-container">
-                        <ChangeChartType handleChangeType={handleChangeType} accounts={accounts} curAccount={curAccount} />
+                        <ChangeChartAcc handleChangeType={handleChangeType} accounts={accounts} curAccount={curAccount} />
                         <ChangeDaysShown handleChangeDays={handleChangeDays} daysShown={daysShown} />
                         <ChangeChartForm
                             choosenCharts={choosenCharts}
@@ -107,7 +107,7 @@ export default function IncomeLineChart({ isEditMode, accounts, segmentIndex, ch
                     </div>
                 }
                 <div className="chart-title">
-                    <p>Incomes in last {daysShown} days #{curAccount && curAccount.displayName}</p>
+                    <p>Incomes in last <span className='highlight'>{daysShown}</span> days #<span className='highlight'>{curAccount && curAccount.displayName}</span></p>
                 </div>
             </div>
 

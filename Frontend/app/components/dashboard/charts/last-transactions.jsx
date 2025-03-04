@@ -1,11 +1,14 @@
 import { displayCurrency } from '@/scripts/dashboard_scripts/dashboard_scripts';
 import ChangeChartForm from '../change-chart-form';
 import { useEffect, useState } from "react"
+import ChangeChartTransactions from './chart-utils/change-chart-transactions';
+import ChangeChartType from './chart-utils/change-chart-acc';
 
 export default function LastTransactions({ isEditMode, accounts, expenses, incomes, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts }) {
 
     const [transactions, setTransactions] = useState([])
-    const maxTransactions = 15
+    const [maxTransactions, setMaxTransactions] = useState(15)
+    const numberOfTransactions = [15, 20, 25, 30, 35, 40, 45, 50, 100]
 
     useEffect(() => {
         const getTransactions = async () => {
@@ -32,27 +35,32 @@ export default function LastTransactions({ isEditMode, accounts, expenses, incom
         if (expenses[0] && incomes[0]) {
             getTransactions()
         }
-    }, [expenses, incomes])
+    }, [expenses, incomes, maxTransactions])
 
     const sortAndFilterTransactions = (txs) => {
         let allTransactions = [...txs]
-        allTransactions = allTransactions.sort((a, b) => new Date(a.date) - new Date(b.date))
+        allTransactions = allTransactions.sort((a, b) => new Date(b.date) - new Date(a.date))
 
         let updatedTransactions = []
         for (let i = 0; i < maxTransactions; i++) {
             updatedTransactions.push(allTransactions[i])
         }
-        updatedTransactions = updatedTransactions.reverse()
+
         return updatedTransactions
     }
 
-    return (
+    const handleChangeNrOfTransactions = (e) => {
+        setMaxTransactions(e.target.value)
+    }
 
+    return (
         <div key={segmentIndex} className={`${chosenLayout}-${segmentIndex + 1} chart-container ${isEditMode && "edit-mode"}`}>
 
             <div className='chart-title-container'>
                 {isEditMode &&
                     <div className="change-chart-types-container">
+                        <ChangeChartTransactions handleChangeTransactions={handleChangeNrOfTransactions} nrOfTransactions={numberOfTransactions} curNrOfTransactions={maxTransactions} />
+                        <ChangeChartType />
                         <ChangeChartForm
                             choosenCharts={choosenCharts}
                             segmentIndex={segmentIndex}
@@ -61,13 +69,13 @@ export default function LastTransactions({ isEditMode, accounts, expenses, incom
                     </div>
                 }
                 <div className="chart-title">
-                    <p>Last transactions</p>
+                    <p>Last <span className='highlight'>{maxTransactions}</span> transactions</p>
                 </div>
             </div>
 
             <div className="chart">
 
-                <div className="chart-body">
+                <div className="chart-body last-transactions-body">
                     <div className="transaction-container">
                         {transactions[0] && transactions.map((t, i) => (
                             <div key={i} className={`row`}>

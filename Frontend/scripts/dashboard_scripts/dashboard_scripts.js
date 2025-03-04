@@ -102,6 +102,8 @@ export const fetchPostLayout = async (layoutDto) => {
 		credentials: "include",
 		body: JSON.stringify(layoutDto),
 	});
+	if (!response.ok) return false
+	return true
 };
 
 export const getIndexOfPossibleChart = (chartName) => {

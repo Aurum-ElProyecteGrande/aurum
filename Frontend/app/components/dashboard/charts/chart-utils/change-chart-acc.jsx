@@ -1,6 +1,6 @@
 import React from 'react'
 
-function ChangeChartType({ handleChangeType, accounts, curAccount }) {
+function ChangeChartAcc({ handleChangeType, accounts, curAccount }) {
     return (
         <form className="change-chart-type-form">
             {curAccount && <select value={curAccount.displayName} name="change-chart" onChange={(e) => handleChangeType(e)}>
@@ -12,4 +12,4 @@ function ChangeChartType({ handleChangeType, accounts, curAccount }) {
     )
 }
 
-export default ChangeChartType
+export default ChangeChartAcc

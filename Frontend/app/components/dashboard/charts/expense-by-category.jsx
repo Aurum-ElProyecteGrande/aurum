@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
 import ChangeChartForm from '../change-chart-form';
 import { shortenTitle, fetchCurrencyExchanges, convertExchangeRate } from '@/scripts/dashboard_scripts/dashboard_scripts';
-
+import ChangeDaysShown from './chart-utils/change-days-shown';
 
 const COLORS = ['#3D62A4', '#F9D342', '#5E946A ', '#C56A64'];
 
@@ -12,7 +12,7 @@ export default function ExpenseByCategory({ isEditMode, expenses, segmentIndex, 
     const [filteredExpensesByCategory, setFilteredExpensesByCategory] = useState([])
     const [startDate, setStartDate] = useState(new Date())
     const [today, setToday] = useState(new Date())
-    const [daysCalculated, setDaysCalculated] = useState(30)
+    const [daysShown, setDaysShown] = useState(30)
     const [currencies, setCurrencies] = useState([])
     const [exchangeRates, setExchangeRates] = useState([])
     const maxShownCategory = 4
@@ -42,9 +42,9 @@ export default function ExpenseByCategory({ isEditMode, expenses, segmentIndex, 
 
     useEffect(() => {
         let nDaysAgo = new Date()
-        nDaysAgo.setDate(today.getDate() - daysCalculated);
+        nDaysAgo.setDate(today.getDate() - daysShown);
         setStartDate(nDaysAgo)
-    }, [daysCalculated])
+    }, [daysShown])
 
 
     useEffect(() => {
@@ -104,14 +104,18 @@ export default function ExpenseByCategory({ isEditMode, expenses, segmentIndex, 
     }, [expensesByCategory])
 
 
+    const handleChangeDays = (e) => {
+        setDaysShown(e.target.value)
+    }
+
 
     return (
-
         <div key={segmentIndex} className={`${chosenLayout}-${segmentIndex + 1} chart-container ${isEditMode && "edit-mode"}`}>
 
             <div className='chart-title-container'>
                 {isEditMode &&
                     <div className="change-chart-types-container">
+                        <ChangeDaysShown handleChangeDays={handleChangeDays} daysShown={daysShown} />
                         <ChangeChartForm
                             choosenCharts={choosenCharts}
                             segmentIndex={segmentIndex}
@@ -120,7 +124,7 @@ export default function ExpenseByCategory({ isEditMode, expenses, segmentIndex, 
                     </div>
                 }
                 <div className="chart-title">
-                    <p>Expenses by category in last {daysCalculated} days</p>
+                    <p>Expenses by category in last <span className='highlight'>{daysShown}</span> days</p>
                 </div>
             </div>
 
