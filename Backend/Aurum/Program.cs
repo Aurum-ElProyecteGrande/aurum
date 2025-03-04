@@ -4,6 +4,7 @@ using System.Text.Json;
 using Aurum.Data.Context;
 using Aurum.Data.Entities;
 using Aurum.Data.Seeders;
+using Aurum.Middleware;
 using Aurum.Repositories.IncomeRepository.RegularIncomeRepository;
 using Aurum.Models.CustomJsonConverter;
 using Aurum.Models.RegularExpenseDto;
@@ -98,6 +99,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseMiddleware<AccountValidationMiddleware>();
 
 app.MapControllers();
 
