@@ -103,4 +103,56 @@
       }
     }
   }
+
+  @include respond(tablet-portrait) {
+    .auth-container {
+      width: 100%; 
+      height: 100%; 
+      display: block;
+
+      .form-section, .overlay-section {
+        width: 100%;
+        height: auto;
+        padding: 1rem;
+        position: relative;
+      }
+
+      .overlay-section {
+        background: $primary; 
+        padding: 1.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .form-section {
+        padding: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .exit {
+        font-size: 1.5rem;
+        top: 1rem;
+        right: 1rem;
+      }
+
+      form {
+        h1 {
+          font-size: 1.5rem;
+        }
+
+        span {
+          font-size: 1rem;
+        }
+
+        input {
+          width: 100%;
+          font-size: 0.9rem;
+          padding: 12px;
+        }
+      }
+    }
+  }
 }
