@@ -12,6 +12,7 @@ import { fetchAccounts, fetchExpenses, fetchIncome, fetchLayouts, fetchPostLayou
 import { getIndexOfPossibleChart } from "@/scripts/dashboard_scripts/dashboard_scripts";
 import InfoToast from "../components/toasts/info-toast";
 import OpenAddModal from "../components/add_modal/open-add-modal";
+import AddModal from "../components/add_modal/add-modal";
 
 export default function DashboardPage() {
 
@@ -27,6 +28,10 @@ export default function DashboardPage() {
   const [toastType, setToastType] = useState("") //succes / fail / null
   const [loadedCharts, setLoadedCharts] = useState([])
 
+  //add-modal
+  const [isAddModal, setIsAddModal] = useState(false)
+
+
   //chart states
   const [accounts, setAccounts] = useState([])
   const [expenses, setExpenses] = useState([])
@@ -36,7 +41,6 @@ export default function DashboardPage() {
   const chartLoaded = (chartName) => {
     let updatedLoadedCharts = [...loadedCharts]
     updatedLoadedCharts = updatedLoadedCharts.map(c => c.name === chartName ? { ...c, isLoaded: true } : c)
-    console.log(updatedLoadedCharts)
     setLoadedCharts(updatedLoadedCharts)
   }
 
@@ -184,7 +188,10 @@ export default function DashboardPage() {
           ))}
         </div>
       }
-      <OpenAddModal />
+      <OpenAddModal setIsAddModal={setIsAddModal} />
+      {isAddModal &&
+        <AddModal accounts={accounts} useInfoToast={useInfoToast} setIsAddModal={setIsAddModal}/>
+      }
       <InfoToast toastText={toastText} isToast={isToast} setIsToast={setIsToast} toastType={toastType} />
     </div>
   );

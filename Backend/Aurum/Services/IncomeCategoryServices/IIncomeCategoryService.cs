@@ -1,9 +1,9 @@
-﻿using Aurum.Data.Entities;
+﻿using Aurum.Models.CategoryDtos;
 
 namespace Aurum.Services.IncomeCategoryServices
 {
     public interface IIncomeCategoryService
     {
-        Task<List<IncomeCategory>> GetAllCategory();
+        Task<List<CategoryDto>> GetAllCategory();
     }
 }

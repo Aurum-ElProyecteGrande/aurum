@@ -178,3 +178,57 @@ export const convertExchangeRate = (amount, exchangeRates, originalCurrencyCode)
 	let exchangeRate = exchangeRates[originalCurrencyCode]
 	return amount / exchangeRate
 }
+
+export const fetchIncomeCategories = async () => {
+	const response = await fetch(`${apiUrl}/categories/income`, {
+		method: "Get",
+		headers: {},
+		credentials: "include",
+	});
+	if (!response.ok) throw new Error(`Fetching income categories went wrong`);
+	const categories = await response.json();
+	return categories
+}
+
+export const fetchExpenseCategories = async () => {
+	const response = await fetch(`${apiUrl}/categories/expense`, {
+		method: "Get",
+		headers: {},
+		credentials: "include",
+	});
+	if (!response.ok) throw new Error(`Fetching expense categories went wrong`);
+	const categories = await response.json();
+	return categories
+}
+
+export const fetchPostIncome = async (income) => {
+	const response = await fetch(`${apiUrl}/income`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		credentials: "include",
+		body: JSON.stringify(income),
+	})
+	if (!response.ok) {
+		console.error(`Creating income went wrong`);
+		return false
+	}
+	return true
+}
+
+export const fetchPostExpense = async (expense) => {
+	const response = await fetch(`${apiUrl}/expenses`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		credentials: "include",
+		body: JSON.stringify(expense),
+	})
+	if (!response.ok) {
+		console.error(`Creating expense went wrong`);
+		return false
+	}
+	return true
+}
