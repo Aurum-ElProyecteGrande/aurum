@@ -36,6 +36,7 @@ using Aurum.Services.LayoutServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -100,7 +101,8 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.UseMiddleware<AccountValidationMiddleware>();
+//TODO being called too many times, needs fixing
+// app.UseMiddleware<AccountValidationMiddleware>();
 
 app.MapControllers();
 
