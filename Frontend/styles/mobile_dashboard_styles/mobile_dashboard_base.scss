@@ -1,0 +1,136 @@
+.mobile-dashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    height: 100vh;
+    gap: 1.5rem;
+
+    &-chart {
+        width: 100%;
+        height: 17rem;
+        background-color: $background-shade;
+        border-radius: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0px 12px 24px $background-shade;
+        margin-bottom: 1.5rem;
+
+        h1 {
+            padding-top: 1rem;
+            margin-bottom: 0;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+    }
+
+    &-cards {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 1rem;
+    }
+
+    &-card {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: $background-shade;
+        padding: 1rem 1.5rem;
+        border-radius: 15px;
+        box-shadow: 0px 12px 24px $background-shade;
+        width: 100%;
+        transition: transform 0.2s ease;
+
+        &:hover {
+            transform: scale(1.05);
+        }
+
+        h1 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        span {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+    }
+
+    .loading-text {
+        font-size: 1rem;
+        color: $text-shade;
+        font-weight: 500;
+    }
+}
+
+.bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: $primary;
+    z-index: 1000;
+    height: 5rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &-container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+
+
+    }
+
+    &-menu {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        gap: 2rem;
+
+        .active {
+            a {
+                color: $accent;
+            }
+
+            transform: scale(1.2);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        li {
+            font-size: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: auto;
+
+            a {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: auto;
+                padding: 0.5rem 1rem;
+                z-index: 1;
+
+                &:hover {
+                    background-color: $background;
+                    border-radius: 0 0 15px 15px;
+                    height: 5rem;
+                }
+            }   
+            
+        }
+    }
+}
+
