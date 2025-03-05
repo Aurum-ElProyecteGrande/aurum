@@ -1,6 +1,6 @@
 ﻿using Aurum.Data.Entities;
 using Aurum.Models.CategoryDtos;
-using Aurum.Models.CurrencyDto;
+using Aurum.Models.CurrencyDtos;
 using Aurum.Models.IncomeDTOs;
 using Aurum.Models.RegularityEnum;
 using Aurum.Repositories.IncomeRepository.RegularIncomeRepository;
