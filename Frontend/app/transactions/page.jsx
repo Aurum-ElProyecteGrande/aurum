@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import TransactionSidebar from "@/components/transactions/transaction_sidebar/TransactionSidebar";
 import TransactionTable from "@/components/transactions/transaction_table/TRansactionTable";
 import TransactionHeader from "@/components/transactions/transaction_header/TransactionHeader";
+import TransactionCards from "@/components/transactions/transaction_cards/TransactionsCard";
 import { fetchAccounts, fetchExpenses, fetchIncome } from "@/scripts/dashboard_scripts/dashboard_scripts";
 
 
@@ -192,7 +193,7 @@ export default function TransactionsPage() {
             </button>
           </div>
           <TransactionTable data={currentData} onClick={handleSort} />
-        </div>}
+        </div>} 
     </section>
   );
 }

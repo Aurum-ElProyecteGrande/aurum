@@ -88,4 +88,45 @@
     }
   }
 
+  @include respond(tablet-portrait) {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+
+    &-container {
+      padding-top: 2rem;
+    }
+
+    &-picture {
+      margin-bottom: 1.5rem;
+      img {
+        width: 100px;
+        height: 100px;
+      }
+    }
+
+    &-username,
+    &-email,
+    &-password {
+      width: 100%;
+      align-items: stretch; 
+    }
+
+    label {
+      font-size: 0.85rem;
+    }
+
+    input {
+      font-size: 0.85rem;
+      padding: 0.7rem 1rem;
+    }
+
+    .inactive {
+      input {
+        cursor: not-allowed;
+        color: $text-shade;
+      }
+    }
+  }
+
 }
