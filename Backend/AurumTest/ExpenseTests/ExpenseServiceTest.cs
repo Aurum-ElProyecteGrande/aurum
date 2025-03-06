@@ -3,14 +3,20 @@ using Aurum.Models.CategoryDtos;
 using Aurum.Models.ExpenseDto;
 using Aurum.Repositories.ExpenseRepository;
 using Aurum.Services.ExpenseCategoryService;
-using Aurum.Services.ExpenseService;
 using Moq;
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+using Aurum.Services.ExpenseService;
 
 namespace AurumTest.ExpenseTests;
 
 public class ExpenseServiceTest
 {
-	 private Mock<IExpenseRepository> _repositoryMock;
+    private Mock<IExpenseRepository> _repositoryMock;
     private Mock<IExpenseCategoryService> _categoryServiceMock;
     private ExpenseService _expenseService;
 
@@ -31,38 +37,25 @@ public class ExpenseServiceTest
             .ReturnsAsync(new List<Expense>());
 
         // Act
-        var result = await _expenseService.GetAll(1, 1);
+        var result = await _expenseService.GetAll(1);
 
         // Assert
         Assert.That(result, Is.Empty);
     }
 
     [Test]
-    public async Task GetAll_NoCategoriesFound_ShouldThrowException()
+    public async Task GetAll_WithDateRange_NoExpensesFound_ShouldReturnEmptyList()
     {
         // Arrange
-        var rawExpenses = new List<Expense>
-        {
-            new()
-            {
-                ExpenseId = 1,
-                ExpenseCategoryId = 1, 
-                ExpenseSubCategoryId = 2,
-                Label = "Test Expense",
-                Amount = 100,
-                Date = DateTime.Now
-            }
-        };
-
         _repositoryMock
-            .Setup(r => r.GetAll(It.IsAny<int>()))
-            .ReturnsAsync(rawExpenses);
-        _categoryServiceMock
-            .Setup(s => s.GetAllExpenseCategories(It.IsAny<int>()))
-            .ReturnsAsync(new Dictionary<CategoryDto, List<SubCategoryDto>>());
+            .Setup(r => r.GetAll(It.IsAny<int>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+            .ReturnsAsync(new List<Expense>());
 
-        // Act & Assert
-        Assert.ThrowsAsync<InvalidDataException>(() => _expenseService.GetAll(1, 1));
+        // Act
+        var result = await _expenseService.GetAll(1, DateTime.Now.AddDays(-7), DateTime.Now);
+
+        // Assert
+        Assert.That(result, Is.Empty);
     }
 
     [Test]
@@ -73,32 +66,24 @@ public class ExpenseServiceTest
         {
             new()
             {
-                ExpenseId = 1,
-                ExpenseCategoryId = 1, 
+                AccountId = 1,
+                ExpenseCategoryId = 1,
                 ExpenseSubCategoryId = 2,
                 Label = "Test Expense",
                 Amount = 100,
-                Date = DateTime.Now
-            }
-        };
-
-        var categories = new Dictionary<CategoryDto, List<SubCategoryDto>>
-        {
-            [new CategoryDto("Category1", 1)] = new List<SubCategoryDto>
-            {
-                new SubCategoryDto("SubCategory1", 2, 1)
+                Date = DateTime.Now,
+                ExpenseCategory = new ExpenseCategory { Name = "Category1" },
+                ExpenseSubCategory = new ExpenseSubCategory { Name = "SubCategory1" },
+                Account = new Account { Currency = new Currency { Name = "USD", CurrencyCode = "USD", Symbol = "$" } }
             }
         };
 
         _repositoryMock
             .Setup(r => r.GetAll(It.IsAny<int>()))
             .ReturnsAsync(rawExpenses);
-        _categoryServiceMock
-            .Setup(s => s.GetAllExpenseCategories(It.IsAny<int>()))
-            .ReturnsAsync(categories);
 
         // Act
-        var result = await _expenseService.GetAll(1, 1);
+        var result = await _expenseService.GetAll(1);
 
         // Assert
         Assert.Multiple(() =>
@@ -108,6 +93,7 @@ public class ExpenseServiceTest
             Assert.That(result[0].Amount, Is.EqualTo(100));
             Assert.That(result[0].Category.Name, Is.EqualTo("Category1"));
             Assert.That(result[0].Subcategory.Name, Is.EqualTo("SubCategory1"));
+            Assert.That(result[0].Currency.CurrencyCode, Is.EqualTo("USD"));
         });
     }
 
@@ -179,5 +165,45 @@ public class ExpenseServiceTest
 
         // Assert
         Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public async Task GetTotalExpense_ShouldReturnSumOfAllExpenses()
+    {
+        // Arrange
+        var rawExpenses = new List<Expense>
+        {
+            new() { Amount = 100 },
+            new() { Amount = 200 }
+        };
+
+        _repositoryMock.Setup(r => r.GetAll(It.IsAny<int>()))
+            .ReturnsAsync(rawExpenses);
+
+        // Act
+        var result = await _expenseService.GetTotalExpense(1);
+
+        // Assert
+        Assert.That(result, Is.EqualTo(300));
+    }
+
+    [Test]
+    public async Task GetTotalExpense_WithDate_ShouldReturnSumOfFilteredExpenses()
+    {
+        // Arrange
+        var rawExpenses = new List<Expense>
+        {
+            new() { Amount = 150 },
+            new() { Amount = 350 }
+        };
+
+        _repositoryMock.Setup(r => r.GetAll(It.IsAny<int>(), It.IsAny<DateTime>()))
+            .ReturnsAsync(rawExpenses);
+
+        // Act
+        var result = await _expenseService.GetTotalExpense(1, DateTime.Now);
+
+        // Assert
+        Assert.That(result, Is.EqualTo(500));
     }
 }

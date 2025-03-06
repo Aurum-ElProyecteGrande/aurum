@@ -49,7 +49,7 @@ export default function Transactions() {
       }
 
       setFullData(mergedData);
-      setFilteredData(mergedData)
+      setSemiFilteredData(mergedData)
       const startTime = Date.now();
       const elapsedTime = Date.now() - startTime;
       if (elapsedTime < 2000) {

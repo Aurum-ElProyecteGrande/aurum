@@ -1,5 +1,6 @@
 using Aurum.Data.Entities;
 using Aurum.Models.CategoryDtos;
+using Aurum.Models.CurrencyDtos;
 using Aurum.Models.IncomeDTOs;
 using Aurum.Models.RegularityEnum;
 using Aurum.Repositories.IncomeRepository.RegularIncomeRepository;
@@ -26,7 +27,7 @@ public class RegularIncomeServiceTest
         _regularIncomeService =
             new RegularIncomeService(_regularIncomeRepoMock.Object, _incomeCategoryServiceMock.Object);
     }
-    
+
     [Test]
     public async Task GetAllRegular_WithValidId_ReturnsListOfDtos()
     {
@@ -37,7 +38,7 @@ public class RegularIncomeServiceTest
             new CategoryDto("Job", 2),
             new CategoryDto("Side Job", 3)
         };
-        
+
         List<RegularIncome> mockRegularIncomes = new List<RegularIncome>
         {
             new RegularIncome
@@ -51,21 +52,21 @@ public class RegularIncomeServiceTest
         };
 
         _regularIncomeRepoMock.Setup(repo => repo.GetAllRegular(accountId)).ReturnsAsync(mockRegularIncomes);
-        _incomeCategoryServiceMock.Setup(service => service.GetAllCategory()).ReturnsAsync(new List<IncomeCategory>
+        _incomeCategoryServiceMock.Setup(service => service.GetAllCategory()).ReturnsAsync(new List<CategoryDto>
         {
-            new IncomeCategory() { IncomeCategoryId = 2, Name = "Job" },
-            new IncomeCategory() { IncomeCategoryId = 3, Name = "Side Job" }
+            new CategoryDto("Job", 2),
+            new CategoryDto("Side Job", 3)
         });
 
         var result = await _regularIncomeService.GetAllRegular(accountId);
-        
+
         Assert.NotNull(result);
         Assert.That(result.Count, Is.EqualTo(2));
         Assert.That(result[0].Label, Is.EqualTo("Salary"));
         Assert.That(result[1].Label, Is.EqualTo("Freelance"));
         Assert.That(result[0].Category.Name, Is.EqualTo("Job"));
         Assert.That(result[1].Category.Name, Is.EqualTo("Side Job"));
-        
+
         _regularIncomeRepoMock.Verify(repo => repo.GetAllRegular(accountId), Times.Once);
         // verify should also be called only once
         // because of current method implementation it's called as many times as number of incomes added
@@ -76,27 +77,27 @@ public class RegularIncomeServiceTest
     public async Task GetAllRegular_ReturnsEmptyList_WhenNoDataExists()
     {
         int accountId = 1;
-        
+
         _regularIncomeRepoMock.Setup(repo => repo.GetAllRegular(accountId)).ReturnsAsync(new List<RegularIncome>());
 
-        _incomeCategoryServiceMock.Setup(service => service.GetAllCategory()).ReturnsAsync(new List<IncomeCategory>());
+        _incomeCategoryServiceMock.Setup(service => service.GetAllCategory()).ReturnsAsync(new List<CategoryDto>());
 
         var result = await _regularIncomeService.GetAllRegular(accountId);
-        
+
         Assert.NotNull(result);
         Assert.IsEmpty(result);
-        
+
         _regularIncomeRepoMock.Verify(repo => repo.GetAllRegular(accountId), Times.Once);
     }
 
     [Test]
     public async Task CreateRegular_WithValidIncome_ReturnsRegularIncomeId()
     {
-        var modifyIncomeDto = new ModifyRegularIncomeDto(1, 
-            2, 
-            "Salary", 
-            5000, 
-            DateTime.UtcNow, 
+        var modifyIncomeDto = new ModifyRegularIncomeDto(1,
+            2,
+            "Salary",
+            5000,
+            DateTime.UtcNow,
             Regularity.Monthly);
 
         var expectedRegularIncome = new RegularIncome()
@@ -112,7 +113,7 @@ public class RegularIncomeServiceTest
         _regularIncomeRepoMock.Setup(repo => repo.CreateRegular(It.IsAny<RegularIncome>())).ReturnsAsync(1);
 
         var result = await _regularIncomeService.CreateRegular(modifyIncomeDto);
-        
+
         Assert.That(result, Is.EqualTo(1));
         _regularIncomeRepoMock.Verify(repo => repo.CreateRegular(It.IsAny<RegularIncome>()), Times.Once);
     }
@@ -121,11 +122,11 @@ public class RegularIncomeServiceTest
     public void CreateRegular_WithInvalidIncome_ThrowsInvalidOperationException()
     {
         var modifyIncomeDto = new ModifyRegularIncomeDto(
-            1, 
-            2, 
-            "Salary", 
-            5000, 
-            DateTime.UtcNow, 
+            1,
+            2,
+            "Salary",
+            5000,
+            DateTime.UtcNow,
             Regularity.Monthly);
 
         _regularIncomeRepoMock.Setup(repo => repo.CreateRegular(It.IsAny<RegularIncome>())).ReturnsAsync(0);
@@ -143,7 +144,7 @@ public class RegularIncomeServiceTest
         _regularIncomeRepoMock.Setup(repo => repo.DeleteRegular(regularIncomeId)).ReturnsAsync(true);
 
         var result = await _regularIncomeService.DeleteRegular(regularIncomeId);
-        
+
         Assert.That(result, Is.True);
     }
 
@@ -155,9 +156,9 @@ public class RegularIncomeServiceTest
         _regularIncomeRepoMock.Setup(repo => repo.DeleteRegular(regularIncomeId)).ReturnsAsync(false);
 
         var exception = Assert.ThrowsAsync<InvalidOperationException>(() => _regularIncomeService.DeleteRegular(regularIncomeId));
-        
+
         Assert.That(exception.Message, Is.EqualTo($"Could not delete income with id {regularIncomeId}"));
-        
+
         _regularIncomeRepoMock.Verify(repo => repo.DeleteRegular(regularIncomeId), Times.Once);
     }
 
@@ -175,17 +176,17 @@ public class RegularIncomeServiceTest
             StartDate = DateTime.UtcNow
         };
 
-        var mockCategories = new List<IncomeCategory>
+        var mockCategories = new List<CategoryDto>
         {
-            new IncomeCategory { IncomeCategoryId = 2, Name = "Job" },
-            new IncomeCategory { IncomeCategoryId = 3, Name = "Side Job" }
+	        new CategoryDto("Job", 2),
+	        new CategoryDto("Side Job", 3)
         };
 
         _incomeCategoryServiceMock.Setup(service => service.GetAllCategory()).ReturnsAsync(mockCategories);
 
         var expectedDto = new RegularIncomeDto(
             regularIncome.RegularIncomeId,
-            regularIncome.AccountId,
+            new CurrencyDto("Forint", "HUF", "Ft"),
             new CategoryDto("Job", 2),
             regularIncome.Label,
             regularIncome.Amount,
@@ -194,10 +195,10 @@ public class RegularIncomeServiceTest
         );
 
         var result = await InvokeConvertRegularIncomeToDto(regularIncome);
-        
+
         Assert.NotNull(result);
         Assert.That(result.RegularId, Is.EqualTo(expectedDto.RegularId));
-        Assert.That(result.AccountId, Is.EqualTo(expectedDto.AccountId));
+        Assert.That(result.Currency, Is.EqualTo(expectedDto.Currency));
         Assert.That(result.Category.Name, Is.EqualTo(expectedDto.Category.Name));
         Assert.That(result.Category.CategoryId, Is.EqualTo(expectedDto.Category.CategoryId));
         Assert.That(result.Label, Is.EqualTo(expectedDto.Label));
@@ -207,7 +208,7 @@ public class RegularIncomeServiceTest
 
         _incomeCategoryServiceMock.Verify(service => service.GetAllCategory(), Times.Once);
     }
-    
+
     private async Task<RegularIncomeDto> InvokeConvertRegularIncomeToDto(RegularIncome income)
     {
         var method = typeof(RegularIncomeService).GetMethod("ConvertRegularIncomeToDto", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);

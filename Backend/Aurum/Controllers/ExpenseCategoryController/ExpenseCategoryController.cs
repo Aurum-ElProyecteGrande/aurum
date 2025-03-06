@@ -10,17 +10,17 @@ public class ExpenseCategoryController(IExpenseCategoryService service, ILogger<
 {
 	private readonly IExpenseCategoryService _service = service;
 	private readonly ILogger<ExpenseCategoryController> _logger  = logger;
-	
+
 	[HttpGet("/categories/expense")]
 	public async Task<IActionResult> GetAll()
 	{
 		try
 		{
-			if (UserHelper.GetUserId(HttpContext,out var userId, out var unauthorized)) 
+			if (UserHelper.GetUserId(HttpContext,out var userId, out var unauthorized))
 				return unauthorized;
-			
+
 			var categories = await _service.GetAllExpenseCategories(userId);
-			
+
 			return Ok(categories);
 		}
 		catch (Exception e)
@@ -28,6 +28,6 @@ public class ExpenseCategoryController(IExpenseCategoryService service, ILogger<
 			_logger.LogError(e, "An error occurred while fetching expense categories.");
 			return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
 		}
-		
+
 	}
 }
