@@ -10,6 +10,7 @@ using Aurum.Services.IncomeCategoryServices;
 using Microsoft.Identity.Client;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Aurum.Models.CurrencyDtos;
 
 namespace Aurum.Services.IncomeServices
 {

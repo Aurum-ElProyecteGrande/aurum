@@ -5,6 +5,7 @@ using Aurum.Repositories.AccountRepository;
 using Aurum.Services.CurrencyServices;
 using Microsoft.Identity.Client;
 using System.Security.Principal;
+using Aurum.Models.CurrencyDtos;
 
 namespace Aurum.Services.AccountService
 {
@@ -51,9 +52,9 @@ namespace Aurum.Services.AccountService
 
             return accDtos;
         }
-        public async Task<int> Create(ModifyAccountDto account)
+        public async Task<int> Create(ModifyAccountDto account, string userId)
         {
-            var accountId = await _accountRepo.Create(ConvertModifDtoToAccount(account));
+            var accountId = await _accountRepo.Create(ConvertModifDtoToAccount(account, userId));
 
             if (accountId == 0) throw new InvalidOperationException("Failed to create account. Invalid input.");
             return accountId;
@@ -61,8 +62,7 @@ namespace Aurum.Services.AccountService
         public async Task<int> Update(ModifyAccountDto account, int accountId)
         {
             var accToUpdate = await _accountRepo.Get(accountId);
-
-            accToUpdate.UserId = account.UserId;
+            ;
             accToUpdate.DisplayName = account.DisplayName;
             accToUpdate.CurrencyId = account.CurrencyId;
             accToUpdate.Amount = account.Amount;
@@ -83,12 +83,15 @@ namespace Aurum.Services.AccountService
             return isDeleted;
         }
 
-        private Account ConvertModifDtoToAccount(ModifyAccountDto accDto) => new Account()
+        public async Task<bool> ValidCheck(string userId, int accountId) => 
+            await _accountRepo.Exists(userId, accountId);
+
+        private Account ConvertModifDtoToAccount(ModifyAccountDto accDto, string userId) => new Account()
         {
-            UserId = accDto.UserId,
             DisplayName = accDto.DisplayName,
             Amount = accDto.Amount,
             CurrencyId = accDto.CurrencyId,
+            UserId = userId
         };
 
         private AccountDto ConvertAccountToDto(Account acc)

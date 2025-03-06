@@ -1,7 +1,6 @@
 using Aurum.Data.Contracts;
 using Aurum.Data.Entities;
 using Aurum.Services.UserServices;
-using Aurum.Services.UserServices;
 using Aurum.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

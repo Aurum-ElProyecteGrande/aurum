@@ -10,6 +10,7 @@
       - db
     environment:
       - DbConnectionString=${DbConnectionString}
+      - RawSeedDataPath=${RawSeedDataPath}
   db:
     image: mcr.microsoft.com/mssql/server:latest
     container_name: aurum_db

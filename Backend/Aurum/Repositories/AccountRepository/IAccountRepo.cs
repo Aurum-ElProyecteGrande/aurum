@@ -10,5 +10,7 @@ namespace Aurum.Repositories.AccountRepository
         Task<int> Create(Account account);
         Task<int> Update(Account account);
         Task<bool> Delete(int accountId);
+        Task<bool> Exists(string userId, int accountId);
+        
     }
 }

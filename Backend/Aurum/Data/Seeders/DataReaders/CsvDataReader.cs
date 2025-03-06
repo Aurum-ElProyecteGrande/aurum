@@ -3,9 +3,9 @@
     public abstract class CsvDataReader<T> where T : class
     {
         protected StreamReader _reader;
-        public CsvDataReader(string fileName)
+        public CsvDataReader(string fileName, IConfiguration config)
         {
-            string _csvFilePath = Path.Combine(Directory.GetCurrentDirectory(), "raw-seeding-data", fileName);
+            string _csvFilePath = Path.Combine(config["RawSeedDataPath"] ?? "", fileName);
             _reader = new StreamReader(_csvFilePath);
         }
         public abstract IEnumerable<T> Read();

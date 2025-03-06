@@ -4,6 +4,7 @@ using System.Text.Json;
 using Aurum.Data.Context;
 using Aurum.Data.Entities;
 using Aurum.Data.Seeders;
+using Aurum.Middleware;
 using Aurum.Repositories.IncomeRepository.RegularIncomeRepository;
 using Aurum.Models.CustomJsonConverter;
 using Aurum.Models.RegularExpenseDto;
@@ -15,7 +16,6 @@ using Aurum.Repositories.ExpenseCategoryRepository;
 using Aurum.Repositories.ExpenseRepository;
 using Aurum.Repositories.IncomeRepository.IncomeCategoryRepository;
 using Aurum.Repositories.IncomeRepository.IncomeRepository;
-using Aurum.Repositories.IncomeRepository.RegularIncomeRepository;
 using Aurum.Repositories.RegularExpenseRepository;
 using Aurum.Services.AccountService;
 using Aurum.Services.BalanceService;
@@ -98,6 +98,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseMiddleware<AccountValidationMiddleware>();
 
 app.MapControllers();
 
