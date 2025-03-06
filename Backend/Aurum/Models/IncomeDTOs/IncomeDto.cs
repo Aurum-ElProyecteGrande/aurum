@@ -2,6 +2,7 @@
 using Aurum.Models.AccountDto;
 using Aurum.Models.CurrencyDtos;
 using Aurum.Models.CategoryDtos;
+using Aurum.Models.CurrencyDtos;
 
 namespace Aurum.Models.IncomeDTOs
 {

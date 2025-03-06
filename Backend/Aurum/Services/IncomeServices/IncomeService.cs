@@ -1,7 +1,7 @@
 ﻿using Aurum.Data.Entities;
 using Aurum.Models.AccountDto;
 using Aurum.Models.CategoryDtos;
-using Aurum.Models.CurrencyDtos;
+using Aurum.Models.CurrencyDtos
 using Aurum.Models.IncomeDTOs;
 using Aurum.Repositories.IncomeRepository.IncomeRepository;
 using Aurum.Services.AccountService;
@@ -10,6 +10,7 @@ using Aurum.Services.IncomeCategoryServices;
 using Microsoft.Identity.Client;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Aurum.Models.CurrencyDtos;
 
 namespace Aurum.Services.IncomeServices
 {
