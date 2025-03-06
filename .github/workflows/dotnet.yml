@@ -27,6 +27,10 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
       working-directory: ./Backend
+    - name: Copy raw-seeding-data folder
+      run: |
+        # Ensure the raw-seeding-data folder is copied after the build
+        cp -r Backend/raw-seeding-data $GITHUB_WORKSPACE/Backend/Aurum.IntegrationTests/bin/Debug/net8.0/Backend/raw-seeding-data
     - name: Test
       run: dotnet test --no-build --verbosity normal
       working-directory: ./Backend
