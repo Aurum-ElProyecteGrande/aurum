@@ -34,6 +34,8 @@ jobs:
       run: |
         # Copy the raw-seeding-data folder after ensuring the directory exists
         cp -r Backend/raw-seeding-data $GITHUB_WORKSPACE/Backend/Aurum.IntegrationTests/bin/Debug/net8.0/Backend/raw-seeding-data
+    - name: Verify directory contents
+      run: ls -l $GITHUB_WORKSPACE/Backend/Aurum.IntegrationTests/bin/Debug/net8.0/Backend/raw-seeding-data/
     - name: Test
       run: dotnet test --no-build --verbosity normal
       working-directory: ./Backend
