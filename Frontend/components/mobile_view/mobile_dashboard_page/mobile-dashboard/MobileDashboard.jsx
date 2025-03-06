@@ -9,11 +9,6 @@ const MobileDashboardPage = () => {
     const [accounts, setAccounts] = useState([]);
     const [fullData, setFullData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [activeItem, setActiveItem] = useState("dashboard");
-
-    const handleItemClick = (item) => {
-        setActiveItem(item);
-    };
 
     const getAccounts = async () => {
         const updatedAccounts = await fetchAccounts()
@@ -61,8 +56,8 @@ const MobileDashboardPage = () => {
 
     return (
         <section className="mobile-dashboard">
-            <MobileBottomBar handleItemClick={handleItemClick} activeItem={activeItem} />
-            {loading ? <div className="loading"></div> :
+            <MobileBottomBar />
+            {loading ? <div className="loader"></div> :
                 <>
                     <div className="mobile-dashboard-chart">
                         <h1>Account Balances Overview</h1>

@@ -19,9 +19,6 @@ const ProfilePage = () => {
     const [profilePicture, setProfilePicture] = useState(null);
     const [error, setError] = useState('');
     const isTabletPortrait = useDeviceDetect();
-    const [activeItem, setActiveItem] = useState("dashboard")
-
-    const handleItemClick = (item) => setActiveItem(item);
 
     const handleProfilePictureChange = (e) => {
         const file = e.target.files[0];
@@ -89,7 +86,7 @@ const ProfilePage = () => {
 
     return (
         <section className="user-profile">
-            {isTabletPortrait ? <MobileBottomBar handleItemClick={handleItemClick} activeItem={activeItem} /> : <TransactionSidebar />}
+            {isTabletPortrait ? <MobileBottomBar /> : <TransactionSidebar />}
             <div className="user-profile-container wrapper">
                 <ProfilePic profilePicture={profilePicture} handleProfilePictureChange={handleProfilePictureChange} />
                 <ProfileUsername isEditingUsername={isEditingUsername} setIsEditingUsername={setIsEditingUsername} username={username} setUsername={setUsername} handleSave={handleSave} />

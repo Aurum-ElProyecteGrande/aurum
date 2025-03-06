@@ -5,7 +5,7 @@ import { CgProfile } from "react-icons/cg";
 import { fetchLogout } from '@/scripts/landing_page_scripts/landing_page';
 import Link from 'next/link';
 
-const MobileBottomBar = ({ handleItemClick, activeItem}) => {
+const MobileBottomBar = ({ }) => {
     const handleLogOut = async () => {
         await fetchLogout()
     }
@@ -14,17 +14,17 @@ const MobileBottomBar = ({ handleItemClick, activeItem}) => {
         <div className="bottom-bar">
             <div className="bottom-bar-container">
                 <ul className="bottom-bar-menu">
-                    <li className={activeItem === "dashboard" ? "active" : ""} onClick={() => handleItemClick("dashboard")}>
+                    <li>
                         <Link href="/dashboard">
                             <LuLayoutDashboard />
                         </Link>
                     </li>
-                    <li className={activeItem === "transactions" ? "active" : ""} onClick={() => handleItemClick("transactions")}>
+                    <li>
                         <Link href="/transactions">
                             <MdFormatListBulleted />
                         </Link>
                     </li>
-                    <li className={activeItem === "profile" ? "active" : ""} onClick={() => handleItemClick("profile")}>
+                    <li>
                         <Link href="/profile">
                             <CgProfile />
                         </Link>

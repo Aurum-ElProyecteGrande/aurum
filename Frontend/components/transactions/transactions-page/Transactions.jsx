@@ -167,7 +167,7 @@ export default function Transactions() {
       <TransactionSidebar />
       <TransactionHeader onSearchChange={handleSearchChange} startDate={startDate} onStartDateChange={onStartDateChange} accountOptions={accountsWithChecked} handleCheckboxChange={handleCheckboxChange} />
       {loading ?
-        <div className="loading wrapper">
+        <div className="loader">
         </div>
         :
         <div className="transactions-container wrapper">

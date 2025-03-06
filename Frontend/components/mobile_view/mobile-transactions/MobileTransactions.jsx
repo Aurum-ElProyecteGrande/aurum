@@ -138,7 +138,7 @@ export default function MobileTransactionsPage() {
         <section className="transactions">
             <TransactionHeader onSearchChange={handleSearchChange} startDate={startDate} onStartDateChange={onStartDateChange} accountOptions={accountsWithChecked} handleCheckboxChange={handleCheckboxChange} />
             {loading ?
-                <div className="loading wrapper">
+                <div className="loader">
                 </div>
                 : <TransactionCards data={filteredData} />}
             <MobileBottomBar />
