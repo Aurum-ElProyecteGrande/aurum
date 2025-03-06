@@ -3,7 +3,7 @@ import { CiMenuKebab } from "react-icons/ci";
 import { FaRegSave } from "react-icons/fa";
 
 
-export default function Header({ setIsHamburgerOpen, isHamburgerOpen, isEditMode, chosenLayout, saveChoosenChartsForUser, username }) {
+export default function Header({ setIsHamburgerOpen, isHamburgerOpen, isEditMode, chosenLayout, saveChosenChartsForUser, username }) {
 
    useEffect(() => {
     const handleClick = (e) => {
@@ -28,13 +28,13 @@ export default function Header({ setIsHamburgerOpen, isHamburgerOpen, isEditMode
       {isEditMode ?
         <section className="sub-title-section">
           <p>Edit charts</p>
-          <div className="save-container" onClick={() => saveChoosenChartsForUser()}>
+          <div className="save-container" onClick={() => saveChosenChartsForUser()}>
             <FaRegSave className="save" />
             <div className="label">Save layout</div>
           </div>
         </section>
         :
-        <section className="choosen-layout">
+        <section className="chosen-layout">
           <div>
             {chosenLayout} layout
           </div>

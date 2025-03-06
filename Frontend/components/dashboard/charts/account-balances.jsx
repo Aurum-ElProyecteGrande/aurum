@@ -2,7 +2,7 @@ import { displayCurrency, fetchBalance } from "@/scripts/dashboard_scripts/dashb
 import { useEffect, useState } from "react"
 import ChangeChartForm from '../change-chart-form';
 
-export default function AccountBalances({ isEditMode, accounts, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts }) {
+export default function AccountBalances({ isEditMode, accounts, segmentIndex, chosenLayout, chosenCharts, possibleChartsBySegment, setChosenCharts }) {
 
     const [balances, setBalances] = useState([])
 
@@ -38,14 +38,14 @@ export default function AccountBalances({ isEditMode, accounts, segmentIndex, ch
                 {isEditMode &&
                     <div className="change-chart-types-container">
                         <ChangeChartForm
-                            choosenCharts={choosenCharts}
+                            chosenCharts={chosenCharts}
                             segmentIndex={segmentIndex}
                             possibleCharts={possibleChartsBySegment[segmentIndex]}
-                            setChoosenCharts={setChoosenCharts} />
+                            setChosenCharts={setChosenCharts} />
                     </div>
                 }
                 <div className="chart-title">
-                    <p>Account ballances</p>
+                    <p>Account balances</p>
                 </div>
             </div>
             <div className="chart">

@@ -5,7 +5,7 @@ import ProfileUsername from "@/components/profile_page/profile_username/ProfileU
 import ProfileEmail from "@/components/profile_page/profile_email/ProfileEmail";
 import ProfilePassword from "@/components/profile_page/profile_password/ProfilePassword";
 import { fetchUserInfo, fetchUserInfoChange, fetchPasswordChange } from "@/scripts/profile_scripts/profile_scripts";
-import MobileBottomBar from "@/components/mobile_dashboard_page/mobile_bottombar/MobileBottomBar";
+import MobileBottomBar from "@/components/mobile_view/mobile_dashboard_page/mobile_bottombar/MobileBottomBar";
 
 const MobileProfile = () => {
     const [isEditingUsername, setIsEditingUsername] = useState(false);
@@ -16,6 +16,7 @@ const MobileProfile = () => {
     const [password, setPassword] = useState({})
     const [profilePicture, setProfilePicture] = useState(null);
     const [error, setError] = useState('');
+    
     
 
     const handleProfilePictureChange = (e) => {

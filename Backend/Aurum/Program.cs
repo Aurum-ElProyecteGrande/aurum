@@ -101,7 +101,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 //TODO being called too many times, needs fixing
-// app.UseMiddleware<AccountValidationMiddleware>();
+app.UseMiddleware<AccountValidationMiddleware>();
 
 app.MapControllers();
 
