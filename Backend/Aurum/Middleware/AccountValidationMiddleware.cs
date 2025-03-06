@@ -3,9 +3,9 @@ using Aurum.Services.AccountService;
 
 namespace Aurum.Middleware;
 
-public class AccountValidationMiddleware(RequestDelegate next, IAccountService accountService)
+public class AccountValidationMiddleware(RequestDelegate next)
 {
-	public async Task InvokeAsync(HttpContext context)
+	public async Task InvokeAsync(HttpContext context, IAccountService accountService)
 	{
 		var accountId = context.GetRouteValue("accountId")?.ToString();
     
