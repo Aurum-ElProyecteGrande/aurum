@@ -1,4 +1,5 @@
 ﻿using Aurum.Data.Entities;
+using Aurum.Models.CategoryDtos;
 using Aurum.Repositories.IncomeRepository.IncomeCategoryRepository;
 
 namespace Aurum.Services.IncomeCategoryServices
@@ -7,13 +8,19 @@ namespace Aurum.Services.IncomeCategoryServices
     {
         private IIncomeCategoryRepo _incomeCategoryRepo;
 
-        public IncomeCategoryService (IIncomeCategoryRepo incomeCategoryRepo)
+        public IncomeCategoryService(IIncomeCategoryRepo incomeCategoryRepo)
         {
             _incomeCategoryRepo = incomeCategoryRepo;
         }
-        public async Task<List<IncomeCategory>> GetAllCategory()
+        public async Task<List<CategoryDto>> GetAllCategory()
         {
-            return await _incomeCategoryRepo.GetAllCategory();
+            var categories = await _incomeCategoryRepo.GetAllCategory();
+            return categories.Select(ConvertToDto).ToList();
+        }
+
+        private CategoryDto ConvertToDto(IncomeCategory category)
+        {
+            return new(category.Name, category.IncomeCategoryId);
         }
     }
 }

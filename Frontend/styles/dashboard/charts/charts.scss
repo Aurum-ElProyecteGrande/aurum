@@ -1,4 +1,3 @@
-@import "../../variables.scss";
 @import ".././layouts/basic.scss";
 @import ".././layouts/scientic.scss";
 @import ".././layouts/detailed.scss";
@@ -109,6 +108,10 @@
         align-items: center;
         flex-grow: 0.8;
     }
+    .last-transactions-body {
+        overflow-y: auto;
+        height: 40vh;
+    }
 }
 
 
@@ -135,8 +138,8 @@
 //transactions
 .transaction-container{
     display: flex;
-    flex-direction: column;
-    
+    flex-direction: column;    
+    height: 100%;
     .row {
         display: flex;
         flex-direction: row;

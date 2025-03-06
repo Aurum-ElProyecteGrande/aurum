@@ -14,9 +14,9 @@ namespace Aurum.Services.LayoutServices
         {
             _layoutRepo = layoutRepo;
         }
-        public async Task<int> CreateOrUpdateBasic(LayoutDto layout)
+        public async Task<int> CreateOrUpdateBasic(LayoutDto layout, string userId)
         {
-            var currentLayout = await _layoutRepo.GetBasic(layout.UserId);
+            var currentLayout = await _layoutRepo.GetBasic(userId);
 
             if (currentLayout is not null)
             {
@@ -34,7 +34,7 @@ namespace Aurum.Services.LayoutServices
 
             BasicLayout basicLayout = new()
             {
-                UserId = layout.UserId,
+                UserId = userId,
                 Chart1 = layout.Charts[0],
                 Chart2 = layout.Charts[1],
                 Chart3 = layout.Charts[2],
@@ -47,9 +47,9 @@ namespace Aurum.Services.LayoutServices
             return createdId;
 
         }
-        public async Task<int> CreateOrUpdateScientic(LayoutDto layout)
+        public async Task<int> CreateOrUpdateScientic(LayoutDto layout, string userId)
         {
-            var currentLayout = await _layoutRepo.GetScientic(layout.UserId);
+            var currentLayout = await _layoutRepo.GetScientic(userId);
 
             if (currentLayout is not null)
             {
@@ -68,7 +68,7 @@ namespace Aurum.Services.LayoutServices
 
             ScienticLayout scienticLayout = new()
             {
-                UserId = layout.UserId,
+                UserId = userId,
                 Chart1 = layout.Charts[0],
                 Chart2 = layout.Charts[1],
                 Chart3 = layout.Charts[2],
@@ -82,10 +82,10 @@ namespace Aurum.Services.LayoutServices
             var createdId = await _layoutRepo.UpdateScientic(scienticLayout);
             return createdId;
         }
-        public async Task<int> CreateOrUpdateDetailed(LayoutDto layout)
+        public async Task<int> CreateOrUpdateDetailed(LayoutDto layout, string userId)
         {
 
-            var currentLayout = await _layoutRepo.GetDetailed(layout.UserId);
+            var currentLayout = await _layoutRepo.GetDetailed(userId);
 
             if (currentLayout is not null)
             {
@@ -105,7 +105,7 @@ namespace Aurum.Services.LayoutServices
 
             DetailedLayout detailedLayout = new()
             {
-                UserId = layout.UserId,
+                UserId = userId,
                 Chart1 = layout.Charts[0],
                 Chart2 = layout.Charts[1],
                 Chart3 = layout.Charts[2],
@@ -136,7 +136,6 @@ namespace Aurum.Services.LayoutServices
             {
                 allLayoutsDto.Scientic.AddRange(new[] { scienticLayout.Chart1, scienticLayout.Chart2, scienticLayout.Chart3, scienticLayout.Chart4, scienticLayout.Chart5, scienticLayout.Chart6, scienticLayout.Chart7, scienticLayout.Chart8 });
             }
-
             if (detailedLayout is not null)
             {
                 allLayoutsDto.Detailed.AddRange(new[] { detailedLayout.Chart1, detailedLayout.Chart2, detailedLayout.Chart3, detailedLayout.Chart4, detailedLayout.Chart5, detailedLayout.Chart6, detailedLayout.Chart7, detailedLayout.Chart8, detailedLayout.Chart9 });

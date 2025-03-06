@@ -3,11 +3,13 @@
 import { useEffect, useState } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { fetchExpensesByDate } from "@/scripts/dashboard_scripts/dashboard_scripts";
-import ChangeChartType from "./chart-utils/change-chart-type";
+import ChangeChartAcc from "./chart-utils/change-chart-acc";
 import ChangeDaysShown from "./chart-utils/change-days-shown";
 import ChangeChartForm from '../change-chart-form';
 
-export default function ExpenseLineChart({ isEditMode, accounts, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts }) {
+export default function ExpenseLineChart({ isEditMode, accounts, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts, chartLoaded }) {
+
+    const chartName = "expense-line-chart"
 
     const [expensesByDateString, setExpensesByDateString] = useState([])
     const [startDate, setStartDate] = useState(new Date())
@@ -38,6 +40,7 @@ export default function ExpenseLineChart({ isEditMode, accounts, segmentIndex, c
                 updatedExpenseByDateString[key.toString().slice(0, 10)] = expensesByDate[key]
             }
             setExpensesByDateString(updatedExpenseByDateString)
+            chartLoaded(chartName)
         }
         if (curAccount) {
             getBalances(curAccount.accountId)
@@ -97,7 +100,7 @@ export default function ExpenseLineChart({ isEditMode, accounts, segmentIndex, c
             <div className='chart-title-container'>
                 {isEditMode &&
                     <div className="change-chart-types-container">
-                        <ChangeChartType handleChangeType={handleChangeType} accounts={accounts} curAccount={curAccount} />
+                        <ChangeChartAcc handleChangeType={handleChangeType} accounts={accounts} curAccount={curAccount} />
                         <ChangeDaysShown handleChangeDays={handleChangeDays} daysShown={daysShown} />
                         <ChangeChartForm
                             choosenCharts={choosenCharts}
@@ -107,7 +110,7 @@ export default function ExpenseLineChart({ isEditMode, accounts, segmentIndex, c
                     </div>
                 }
                 <div className="chart-title">
-                    <p>Expenses in last {daysShown} days #{curAccount && curAccount.displayName}</p>
+                    <p>Expenses in last <span className='highlight'>{daysShown}</span> days #<span className='highlight'>{curAccount && curAccount.displayName}</span></p>
                 </div>
             </div>
 

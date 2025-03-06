@@ -84,6 +84,7 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
     private Expense CreateRawExpenseDto(ModifyExpenseDto expenseDto, int? subCategoryId) =>
         new Expense()
         {
+            AccountId = expenseDto.AccountId,
             ExpenseCategoryId = expenseDto.CategoryId,
             ExpenseSubCategoryId = subCategoryId ?? null,
             Label = expenseDto.Label,
