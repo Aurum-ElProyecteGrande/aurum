@@ -6,7 +6,7 @@ namespace Aurum.Data.Seeders.DataReaders
     public class ExpenseSubCategoryReader : CsvDataReader<Dictionary<string, List<string>>>
     {
         private CsvDataReader<ExpenseCategory> _expenseCategoryReader;
-        public ExpenseSubCategoryReader(string fileName, CsvDataReader<ExpenseCategory> expenseCategoryReader) : base(fileName)
+        public ExpenseSubCategoryReader(string fileName, CsvDataReader<ExpenseCategory> expenseCategoryReader, IConfiguration config) : base(fileName, config)
         {
             _expenseCategoryReader = expenseCategoryReader;
         }

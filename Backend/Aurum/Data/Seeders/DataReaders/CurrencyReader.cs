@@ -8,7 +8,7 @@ namespace Aurum.Data.Seeders.DataReaders
 {
     public class CurrencyReader : CsvDataReader<Currency>
     {
-        public CurrencyReader(string fileName) : base(fileName) { }
+        public CurrencyReader(string fileName, IConfiguration config) : base(fileName, config) { }
 
         public override List<Currency> Read()
         {

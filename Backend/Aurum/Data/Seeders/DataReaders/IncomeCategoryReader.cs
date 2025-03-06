@@ -5,7 +5,7 @@ namespace Aurum.Data.Seeders.DataReaders
 {
     public class IncomeCategoryReader : CsvDataReader<IncomeCategory>
     {
-        public IncomeCategoryReader(string fileName) : base(fileName) { }
+        public IncomeCategoryReader(string fileName, IConfiguration config) : base(fileName, config) { }
 
         public override List<IncomeCategory> Read()
         {
