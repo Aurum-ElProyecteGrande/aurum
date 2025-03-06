@@ -3,22 +3,33 @@ import React, { useState, useEffect } from "react";
 import TransactionSidebar from "@/components/transactions/transaction_sidebar/TransactionSidebar";
 import TransactionTable from "@/components/transactions/transaction_table/TRansactionTable";
 import TransactionHeader from "@/components/transactions/transaction_header/TransactionHeader";
-import { fetchAccounts, fetchExpensesWithCurrency, fetchIncomesWithCurrency } from "@/scripts/dashboard_scripts/dashboard_scripts";
+import { fetchAccounts, fetchExpenses, fetchIncome } from "@/scripts/dashboard_scripts/dashboard_scripts";
 
 
 export default function TransactionsPage() {
   const [accounts, setAccounts] = useState([]);
-  const [data, setData] = useState([]);
+  const [accountsWithChecked, setAccountsWithChecked] = useState([]);
+  const [fullData, setFullData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(12);
+  const [itemsPerPage] = useState(14);
   const [search, setSearch] = useState("");
+  const [semiFilteredData, setSemiFilteredData] = useState([])
   const [filteredData, setFilteredData] = useState([])
   const [sort, setSort] = useState({ key: null, direction: "ascending" });
   const [loading, setLoading] = useState(true);
+  const [startDate, setStartDate] = useState("")
+  const [today, setToday] = useState("")
 
   const getAccounts = async () => {
     const updatedAccounts = await fetchAccounts()
+
+    const accountsWithChecked = updatedAccounts.map((account) => ({
+      ...account,
+      checked: true,
+    }));
+
     setAccounts(updatedAccounts)
+    setAccountsWithChecked(accountsWithChecked)
   }
 
   const getData = async () => {
@@ -26,20 +37,18 @@ export default function TransactionsPage() {
       setLoading(true)
       const mergedData = [];
 
-      // Process all accounts
       for (const acc of accounts) {
         const [expenses, incomes] = await Promise.all([
-          fetchExpensesWithCurrency(acc.accountId),
-          fetchIncomesWithCurrency(acc.accountId),
+          fetchExpenses(acc.accountId),
+          fetchIncome(acc.accountId),
         ]);
 
-        // Push directly into the merged data array
-        expenses.forEach((e) => mergedData.push({ ...e, isExpense: true }));
-        incomes.forEach((i) => mergedData.push({ ...i, isExpense: false }));
+        expenses.forEach((e) => mergedData.push({ ...e, isExpense: true, accountName: acc.displayName }));
+        incomes.forEach((i) => mergedData.push({ ...i, isExpense: false, accountName: acc.displayName }));
       }
 
-      setData(mergedData);
-      setFilteredData(mergedData);
+      setFullData(mergedData);
+      setFilteredData(mergedData)
       const startTime = Date.now();
       const elapsedTime = Date.now() - startTime;
       if (elapsedTime < 2000) {
@@ -52,37 +61,46 @@ export default function TransactionsPage() {
       setLoading(false)
     }
   };
-  // Fetch data
+
   useEffect(() => {
     getAccounts()
+
+    const today = new Date().toISOString().split('T')[0];
+    setToday(today);
+    setStartDate(today);
   }, []);
 
   useEffect(() => {
-    getData();
+      getData();
+   
   }, [accounts]);
+  
 
-  // Filter data when search changes
-  useEffect(() => {
-    let updatedFilteredData = data;
+   useEffect(() => {
+    const checkedAccounts = accountsWithChecked.filter(a => a.checked);
+    let updatedData = fullData.filter(d => checkedAccounts.find(a => a.displayName === d.accountName));
 
-    if (search) {
-      updatedFilteredData = data.filter(
-        (d) =>
-          d.category.name.toLowerCase().includes(search.toLowerCase()) ||
-          d.subcategory?.name.toLowerCase().includes(search.toLowerCase()) ||
-          d.label.toLowerCase().includes(search.toLowerCase())
+    if (startDate !== today)
+      updatedData = updatedData.filter(d => d.date >= startDate);
+
+
+    setSemiFilteredData(updatedData);
+  }, [accountsWithChecked, startDate]);
+
+
+   useEffect(() => {
+    let updatedData = [...semiFilteredData];
+
+    if (search)
+      updatedData = updatedData.filter(d =>
+        d.category.name.toLowerCase().includes(search.toLowerCase()) ||
+        d.subcategory?.name.toLowerCase().includes(search.toLowerCase()) ||
+        d.label.toLowerCase().includes(search.toLowerCase())
       );
-    }
 
-    setFilteredData(updatedFilteredData);
-  }, [search, data]);
 
-  // Sort data when sort key or direction changes
-  useEffect(() => {
-    let updatedFilteredData = [...filteredData];
-
-    if (sort.key !== null) {
-      updatedFilteredData.sort((a, b) => {
+    if (sort.key) {
+      updatedData.sort((a, b) => {
         const keyParts = sort.key.split('.');
         const aValue = keyParts.reduce((acc, part) => acc && acc[part], a);
         const bValue = keyParts.reduce((acc, part) => acc && acc[part], b);
@@ -97,8 +115,9 @@ export default function TransactionsPage() {
       });
     }
 
-    setFilteredData(updatedFilteredData);
-  }, [sort, data]);
+    setFilteredData(updatedData);
+  }, [search, sort, semiFilteredData]);  
+
 
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -108,8 +127,6 @@ export default function TransactionsPage() {
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
-  console.log(data.length, filteredData.length, currentData.length)
-
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -117,6 +134,22 @@ export default function TransactionsPage() {
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
   };
+
+  const onStartDateChange = (e) => {
+    setStartDate(e.target.value)
+  };
+
+  const handleCheckboxChange = (accountId) => {
+    const updatedAccounts = accountsWithChecked.map(account =>
+      account.accountId === accountId
+        ? { ...account, checked: !account.checked }
+        : account
+    );
+
+    setAccountsWithChecked(updatedAccounts);
+  };
+
+
 
   const handleSort = (key) => {
     let direction = 'ascending';
@@ -128,17 +161,15 @@ export default function TransactionsPage() {
     setSort({ key, direction });
   };
 
-
   return (
     <section className="transactions">
       <TransactionSidebar />
-      <TransactionHeader onChange={handleSearchChange} />
+      <TransactionHeader onSearchChange={handleSearchChange} startDate={startDate} onStartDateChange={onStartDateChange} accountOptions={accountsWithChecked} handleCheckboxChange={handleCheckboxChange} />
       {loading ?
         <div className="loading wrapper">
         </div>
         :
         <div className="transactions-container wrapper">
-          <TransactionTable data={currentData} onClick={handleSort} />
           <div className="transactions-pagination">
             <button
               className="primary-button"
@@ -160,6 +191,7 @@ export default function TransactionsPage() {
               Next
             </button>
           </div>
+          <TransactionTable data={currentData} onClick={handleSort} />
         </div>}
     </section>
   );

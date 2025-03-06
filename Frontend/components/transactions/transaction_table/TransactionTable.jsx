@@ -11,6 +11,7 @@ const TransactionTable = ({ data, onClick }) => {
                     <th onClick={() => onClick('subcategory.name')}>Subcategory</th>
                     <th onClick={() => onClick('amount')}>Amount</th>
                     <th onClick={() => onClick('date')}>Date</th>
+                    <th>Account</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,6 +22,7 @@ const TransactionTable = ({ data, onClick }) => {
                         <td>{item.subcategory?.name || "-"}</td>
                         <td>{item.isExpense ? "-" : "+"} {displayCurrency(item.amount, item.currency.currencyCode)}</td>
                         <td>{new Date(item.date).toLocaleDateString()}</td>
+                        <td>{item.accountName}</td>
                     </tr>
                 ))}
             </tbody>

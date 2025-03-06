@@ -21,18 +21,6 @@ const LandingNavbar = ({ useModal, userInfo, handleLinkClick }) => {
 					<li onClick={() => setShowNav(false)}>
 						<Link href="#footer">Socials</Link>
 					</li>
-					<li onClick={() => {
-						setShowNav(false)
-						handleLinkClick('/dashboard')
-					}}>
-						<Link href="/dashboard">Dashboard</Link>
-					</li>
-					<li onClick={() => {
-						setShowNav(false)
-						handleLinkClick('/transactions')
-					}}>
-						<Link href="/transactions">Transactions</Link>
-					</li>
 				</ul>
 				<div className="landing-navbar-buttons">
 					<button

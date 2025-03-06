@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { IoMdClose } from "react-icons/io";
 
-const AuthModal = ({ showModal, setShowModal, isSignUp, setUserInfo }) => {
+const AuthModal = ({ showModal, setShowModal, isSignUp, handleModalRoute }) => {
   const [isSignUpMode, setIsSignUpMode] = useState(isSignUp);
   const [formData, setFormData] = useState({
     name: '',
@@ -62,6 +62,7 @@ const AuthModal = ({ showModal, setShowModal, isSignUp, setUserInfo }) => {
     } finally {
       setLoading(false);
       setShowModal(false)
+      handleModalRoute(isSignUp)
     }
   };
 

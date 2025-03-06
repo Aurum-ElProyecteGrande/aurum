@@ -1,5 +1,5 @@
 "use client"
-import { useState ,useEffect } from "react";
+import { useState, useEffect } from "react";
 import LandingNavbar from "@/components/landing_page/landing_nav/LandingNavbar";
 import LandingHero from "@/components/landing_page/landing_hero/LandingHero";
 import LandingScroll from "@/components/landing_page/landing_scroll/LandingScroll";
@@ -19,20 +19,34 @@ export default function Home() {
   const [userInfo, setUserInfo] = useState({})
   const router = useRouter();
 
-	const handleLinkClick = async (url) => {
-		const isSuccess = await fetchValidate()
+  const handleLinkClick = async (url) => {
+    const isSuccess = await fetchValidate()
 
-		if (isSuccess) {
-			router.push(url);
-		} else {
-			router.push('/');
+    if (isSuccess) {
+      router.push(url);
+    } else {
+      router.push('/');
       handleModal(false)
-		}
-	};
+    }
+  };
 
   const handleModal = (signMode) => {
     setShowModal(true);
     setIsSignUp(signMode);
+  }
+
+  const handleModalRoute = async (isSignUp) => {
+    if(isSignUp)
+       return;
+
+    const isSuccess = await fetchValidate()
+
+    if (isSuccess) {
+      router.push('/dashboard');
+    } else {
+      router.push('/');
+      handleModal(false)
+    }
   }
 
   useEffect(() => {
@@ -41,14 +55,14 @@ export default function Home() {
 
   return (
     <>
-      <LandingNavbar useModal={handleModal} userInfo={userInfo} handleLinkClick={handleLinkClick}/>
-      <LandingHero handleLinkClick={handleLinkClick}/>
+      <LandingNavbar useModal={handleModal} userInfo={userInfo} handleLinkClick={handleLinkClick} />
+      <LandingHero handleLinkClick={handleLinkClick} />
       <LandingScroll />
       <LandingPrices />
       <LandingShowcase />
       <LandingNewsletter />
       <LandingFooter />
-      {showModal && <AuthModal showModal={showModal} setShowModal={setShowModal} isSignUp={isSignUp} setUserInfo={setUserInfo} />}
+      {showModal && <AuthModal showModal={showModal} setShowModal={setShowModal} isSignUp={isSignUp} handleModalRoute={handleModalRoute} />}
     </>
   );
 }
