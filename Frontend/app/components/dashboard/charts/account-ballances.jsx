@@ -21,7 +21,6 @@ export default function AccountBalances({ isEditMode, accounts, segmentIndex, ch
                 topBalances.push(topBalances[0], topBalances[1], topBalances[2])
                 return setBalances(topBalances)
             }
-
             setBalances(updatedBalances)
         }
         if (accounts) {

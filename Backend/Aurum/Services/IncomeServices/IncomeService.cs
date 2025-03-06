@@ -1,6 +1,7 @@
 ﻿using Aurum.Data.Entities;
 using Aurum.Models.AccountDto;
 using Aurum.Models.CategoryDtos;
+using Aurum.Models.CurrencyDtos;
 using Aurum.Models.IncomeDTOs;
 using Aurum.Repositories.IncomeRepository.IncomeRepository;
 using Aurum.Services.AccountService;

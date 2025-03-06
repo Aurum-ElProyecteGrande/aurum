@@ -3,11 +3,13 @@
 import { useEffect, useState } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { fetchBalanceForRange } from "@/scripts/dashboard_scripts/dashboard_scripts";
-import ChangeChartType from "./chart-utils/change-chart-type";
+import ChangeChartAcc from "./chart-utils/change-chart-acc";
 import ChangeDaysShown from "./chart-utils/change-days-shown";
 import ChangeChartForm from '../change-chart-form';
 
-export default function BalanceLineChart({ isEditMode, accounts, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts }) {
+export default function BalanceLineChart({ isEditMode, accounts, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts, chartLoaded }) {
+
+    const chartName = "balance-line-chart"
 
     const [balancesByDateString, setBalancesByDateString] = useState([])
     const [startDate, setStartDate] = useState(new Date())
@@ -32,8 +34,8 @@ export default function BalanceLineChart({ isEditMode, accounts, segmentIndex, c
         const getBalances = async (accId) => {
             let updatedBalances = await fetchBalanceForRange(accId, startDate.toISOString().slice(0, 10), today.toISOString().slice(0, 10))
             updatedBalances = updatedBalances.map(b => ({ ...b, date: b.date.slice(0, 10) }));
-            console.log(updatedBalances)
             setBalancesByDateString(updatedBalances)
+            chartLoaded(chartName)
         }
         if (curAccount) {
             getBalances(curAccount.accountId)
@@ -43,7 +45,6 @@ export default function BalanceLineChart({ isEditMode, accounts, segmentIndex, c
     
         useEffect(() => {
             let updatedRawChartData = []
-            console.log(balancesByDateString)
 
             for (const key in balancesByDateString) {
                 updatedRawChartData.push(balancesByDateString[key])
@@ -60,16 +61,14 @@ export default function BalanceLineChart({ isEditMode, accounts, segmentIndex, c
         const handleChangeDays = (e) => {
             setDaysShown(e.target.value)
         }
-        
-        console.log(rawChartData)
-    
+            
         return (
             <div key={segmentIndex} className={`${chosenLayout}-${segmentIndex + 1} chart-container ${isEditMode && "edit-mode"}`}>
 
                 <div className='chart-title-container'>
                     {isEditMode &&
                         <div className="change-chart-types-container">
-                            <ChangeChartType handleChangeType={handleChangeType} accounts={accounts} curAccount={curAccount} />
+                            <ChangeChartAcc handleChangeType={handleChangeType} accounts={accounts} curAccounts={curAccount} />
                             <ChangeDaysShown handleChangeDays={handleChangeDays} daysShown={daysShown} />
                             <ChangeChartForm
                                 choosenCharts={choosenCharts}
@@ -79,7 +78,7 @@ export default function BalanceLineChart({ isEditMode, accounts, segmentIndex, c
                         </div>
                     }
                     <div className="chart-title">
-                        <p>Balances in last {daysShown} days #{curAccount && curAccount.displayName}</p>
+                        <p>Balances in last <span className='highlight'>{daysShown}</span> days #<span className='highlight'>{curAccount && curAccount.displayName}</span></p>
                     </div>
                 </div>
     

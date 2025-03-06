@@ -1,5 +1,6 @@
 ﻿using Aurum.Data.Entities;
 using Aurum.Models.AccountDto;
+using Aurum.Models.CurrencyDtos;
 using Aurum.Repositories.AccountRepository;
 using Aurum.Services.CurrencyServices;
 using Microsoft.Identity.Client;

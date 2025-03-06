@@ -10,6 +10,9 @@ import Sidebar from "../components/sidebar";
 import { layouts } from "../../scripts/dashboard_scripts/layouts"
 import { fetchAccounts, fetchExpenses, fetchIncome, fetchLayouts, fetchPostLayout, fetchUserName } from "@/scripts/dashboard_scripts/dashboard_scripts";
 import { getIndexOfPossibleChart } from "@/scripts/dashboard_scripts/dashboard_scripts";
+import InfoToast from "../components/toasts/info-toast";
+import OpenAddModal from "../components/add_modal/open-add-modal";
+import AddModal from "../components/add_modal/add-modal";
 
 export default function DashboardPage() {
 
@@ -19,7 +22,15 @@ export default function DashboardPage() {
   const [isEditMode, setIsEditMode] = useState(false)
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false)
   const [userInitialChartNames, setUserInitialChartNames] = useState()
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [isToast, setIsToast] = useState(false)
+  const [toastText, setToastText] = useState("")
+  const [toastType, setToastType] = useState("") //succes / fail / null
+  const [loadedCharts, setLoadedCharts] = useState([])
+
+  //add-modal
+  const [isAddModal, setIsAddModal] = useState(false)
+
 
   //chart states
   const [accounts, setAccounts] = useState([])
@@ -27,7 +38,13 @@ export default function DashboardPage() {
   const [incomes, setIncomes] = useState([])
   const [username, setUsername] = useState("John Doe")
 
-  const chartProps = { isEditMode, accounts, expenses, incomes }
+  const chartLoaded = (chartName) => {
+    let updatedLoadedCharts = [...loadedCharts]
+    updatedLoadedCharts = updatedLoadedCharts.map(c => c.name === chartName ? { ...c, isLoaded: true } : c)
+    setLoadedCharts(updatedLoadedCharts)
+  }
+
+  const chartProps = { isEditMode, accounts, expenses, incomes, chartLoaded }
 
   //chart effects
   useEffect(() => {
@@ -72,8 +89,6 @@ export default function DashboardPage() {
   const loadLayouts = async () => {
     return setUserInitialChartNames(await fetchLayouts())
   }
-
-
   //\
 
   //gets saved layout if has in DB else initial layout
@@ -109,11 +124,41 @@ export default function DashboardPage() {
       charts: chosenChartNames
     }
 
-    await fetchPostLayout(layoutDto)
+    let isSaved = await fetchPostLayout(layoutDto)
     await loadLayouts()
 
-    window.alert("Layout saved!")
+    isSaved ? useInfoToast("Layout saved!", "success") : useInfoToast("Saving failed!", "fail")
   }
+
+  //handle dashboard loading
+  useEffect(() => {
+    if (choosenCharts) {
+      let updatedLoadedCharts = []
+      choosenCharts.forEach(c => {
+        updatedLoadedCharts.push(
+          {
+            name: c.name,
+            isLoaded: false
+          }
+        )
+      })
+      setLoadedCharts(updatedLoadedCharts)
+    }
+  }, [choosenCharts])
+
+  useEffect(() => {
+    if (loadedCharts) {
+      if (loadedCharts.every(c => c.isLoaded)) setIsLoading(false)
+    }
+  }, [loadedCharts])
+
+  const useInfoToast = (text, type) => {
+    setToastType(type)
+    setToastText(text)
+    setIsToast(true)
+    setTimeout(() => setIsToast(false), 5000);
+  }
+
 
   return (
     <div className="dashboard page">
@@ -131,14 +176,23 @@ export default function DashboardPage() {
           setIsEditMode={setIsEditMode}
           chosenLayout={chosenLayout}
           setChosenLayout={setChosenLayout} />
-      }      
-      <div className="dashboard-container">
-        {choosenCharts && choosenCharts.map((choosenChart, segmentIndex) => (
-          <React.Fragment key={segmentIndex}>
-            {accounts[0] && React.cloneElement(choosenChart.chart, { ...chartProps, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts })}
-          </React.Fragment>
-        ))}
-      </div>
+      }
+      {isLoading ?
+        <div className="loader"></div>
+        :
+        <div className="dashboard-container">
+          {choosenCharts && choosenCharts.map((choosenChart, segmentIndex) => (
+            <React.Fragment key={segmentIndex}>
+              {accounts[0] && React.cloneElement(choosenChart.chart, { ...chartProps, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts })}
+            </React.Fragment>
+          ))}
+        </div>
+      }
+      <OpenAddModal setIsAddModal={setIsAddModal} />
+      {isAddModal &&
+        <AddModal accounts={accounts} useInfoToast={useInfoToast} setIsAddModal={setIsAddModal}/>
+      }
+      <InfoToast toastText={toastText} isToast={isToast} setIsToast={setIsToast} toastType={toastType} />
     </div>
   );
 }

@@ -6,7 +6,7 @@ namespace Aurum.Data.Seeders.DataReaders
 {
     public class UserReader : CsvDataReader<IdentityUser>
     {
-        public UserReader(string fileName, UserManager<IdentityUser> userManager) : base(fileName) { }
+        public UserReader(string fileName, UserManager<IdentityUser> userManager, IConfiguration config) : base(fileName, config) { }
 
         public override List<IdentityUser> Read()
         {

@@ -2,6 +2,7 @@
 using Aurum.Data.Entities;
 using Aurum.Models.LayoutDTOs;
 using Aurum.Services.LayoutServices;
+using Aurum.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,9 +24,12 @@ public class LayoutController : ControllerBase
     {
         try
         {
+            if (UserHelper.GetUserId(HttpContext, out var userId, out var unauthorized))
+                return unauthorized;
+
             if (layout.LayoutName != "basic") BadRequest("wrong layout name");
 
-            var layoutId = await _layoutService.CreateOrUpdateBasic(layout);
+            var layoutId = await _layoutService.CreateOrUpdateBasic(layout, userId);
 
             return Ok(layoutId);
         }
@@ -41,9 +45,12 @@ public class LayoutController : ControllerBase
     {
         try
         {
+            if (UserHelper.GetUserId(HttpContext, out var userId, out var unauthorized))
+                return unauthorized;
+
             if (layout.LayoutName != "scientic") BadRequest("wrong layout name");
 
-            var layoutId = await _layoutService.CreateOrUpdateScientic(layout);
+            var layoutId = await _layoutService.CreateOrUpdateScientic(layout, userId);
 
             return Ok(layoutId);
         }
@@ -59,9 +66,12 @@ public class LayoutController : ControllerBase
     {
         try
         {
+            if (UserHelper.GetUserId(HttpContext, out var userId, out var unauthorized))
+                return unauthorized;
+
             if (layout.LayoutName != "detailed") BadRequest("wrong layout name");
 
-            var layoutId = await _layoutService.CreateOrUpdateDetailed(layout);
+            var layoutId = await _layoutService.CreateOrUpdateDetailed(layout, userId);
 
             return Ok(layoutId);
         }
@@ -74,10 +84,13 @@ public class LayoutController : ControllerBase
 
 
     [HttpGet("{userId}")]
-    public async Task<IActionResult> GetAll(string userId)
+    public async Task<IActionResult> GetAll()
     {
         try
         {
+            if (UserHelper.GetUserId(HttpContext, out var userId, out var unauthorized))
+                return unauthorized;
+
             var allLayout = await _layoutService.GetAll(userId);
 
             return Ok(allLayout);

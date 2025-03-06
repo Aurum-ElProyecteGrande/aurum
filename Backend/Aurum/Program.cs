@@ -16,7 +16,6 @@ using Aurum.Repositories.ExpenseCategoryRepository;
 using Aurum.Repositories.ExpenseRepository;
 using Aurum.Repositories.IncomeRepository.IncomeCategoryRepository;
 using Aurum.Repositories.IncomeRepository.IncomeRepository;
-using Aurum.Repositories.IncomeRepository.RegularIncomeRepository;
 using Aurum.Repositories.RegularExpenseRepository;
 using Aurum.Services.AccountService;
 using Aurum.Services.BalanceService;
