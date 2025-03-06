@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { layouts } from "../../../scripts/dashboard_scripts/layouts"
+import { layouts } from "@/scripts/dashboard_scripts/layouts"
 
 export default function LayoutMenu({ setChosenLayout, setIsLayoutMenu }) {
 

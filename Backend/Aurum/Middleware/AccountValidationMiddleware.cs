@@ -3,18 +3,18 @@ using Aurum.Services.AccountService;
 
 namespace Aurum.Middleware;
 
-public class AccountValidationMiddleware(RequestDelegate next, IAccountService accountService)
+public class AccountValidationMiddleware(RequestDelegate next)
 {
-	public async Task InvokeAsync(HttpContext context)
+	public async Task InvokeAsync(HttpContext context, IAccountService accountService)
 	{
 		var accountId = context.GetRouteValue("accountId")?.ToString();
-    
+
 		if (string.IsNullOrEmpty(accountId) || !int.TryParse(accountId, out var accountIdInt))
 		{
 			await next(context);
 			return;
 		}
-		
+
 		var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
 
@@ -30,5 +30,5 @@ public class AccountValidationMiddleware(RequestDelegate next, IAccountService a
 
 		await next(context);
 	}
-	
+
 }

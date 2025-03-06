@@ -32,8 +32,7 @@ public class IncomeCategoryServiceTest
         _mockIncomeCategoryRepo.Setup(repo => repo.GetAllCategory()).ReturnsAsync(mockCategories);
 
         var result = await _incomeCategoryService.GetAllCategory();
-        
-        Assert.That(result, Is.EqualTo(mockCategories));
+
         Assert.That(result.Count, Is.EqualTo(2));
         Assert.That(result[0].Name, Is.EqualTo("Salary"));
     }

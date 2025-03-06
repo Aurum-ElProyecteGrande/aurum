@@ -65,7 +65,11 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AurumContext>();
-    dbContext.Database.Migrate();
+    // momentary fix for integration testing 
+    if (dbContext.Database.IsRelational())  
+    {
+        dbContext.Database.Migrate();
+    }
 }
 
 using (var scope = app.Services.CreateScope())
@@ -77,11 +81,14 @@ using (var scope = app.Services.CreateScope())
     await SeedRolesAndAdminAsync(userManager, roleManager, app);
 }
 
-using (var scope = app.Services.CreateScope())
+if (!app.Environment.IsEnvironment("Testing"))
 {
-    var services = scope.ServiceProvider;
-    var seeder = services.GetRequiredService<DataSeeder>();
-    await seeder.SeedAsync();
+    using (var scope = app.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+            var seeder = services.GetRequiredService<DataSeeder>();
+            await seeder.SeedAsync();
+        }
 }
 
 // Configure the HTTP request pipeline.
@@ -100,8 +107,7 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-//TODO being called too many times, needs fixing
-// app.UseMiddleware<AccountValidationMiddleware>();
+app.UseMiddleware<AccountValidationMiddleware>();
 
 app.MapControllers();
 
@@ -241,3 +247,5 @@ async Task SeedRolesAndAdminAsync(UserManager<IdentityUser> userManager, RoleMan
         authenticationSeeder.CreateAdminIfNotExists();
     }
 }
+
+public partial class Program { }
