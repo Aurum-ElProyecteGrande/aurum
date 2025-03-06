@@ -7,8 +7,8 @@ function ExpenseForm({ formProps }) {
 
     const { accounts, expenseCategories, useInfoToast } = formProps
 
-    const [chosenAccount, setChosenAccount] = useState("")
-    const [chosenCategory, setChosenCategory] = useState("")
+    const [chosenAccount, setChosenAccount] = useState(null)
+    const [chosenCategory, setChosenCategory] = useState(null)
     const [chosenSubCategory, setChosenSubCategory] = useState("")
     const [possibleSubCategories, setPossibleSubCategories] = useState("")
     const [label, setLabel] = useState("")
@@ -60,7 +60,6 @@ function ExpenseForm({ formProps }) {
             !expenseDto.amount ||
             !expenseDto.date
         ) {
-            console.log("helo")
             useInfoToast("Missing expense details.", "fail")
             return false
         }
@@ -72,7 +71,7 @@ function ExpenseForm({ formProps }) {
         <>
             <form className='expense-form'>
                 <div className='acc dropdown'>
-                    <select id="acc" value={chosenAccount.displayName} onChange={(e) => handleAccChange(e.target.value)}>
+                    <select id="acc" value={chosenAccount ? chosenAccount.displayName : ""} onChange={(e) => handleAccChange(e.target.value)}>
                         <option disabled value="">Select an account</option>
                         {accounts && accounts.map(acc => (
                             <option name={acc.displayName} key={acc.displayName} value={acc.displayName} >{acc.displayName}</option>
@@ -80,7 +79,7 @@ function ExpenseForm({ formProps }) {
                     </select>
                 </div>
                 <div className='cat dropdown'>
-                    <select id="cat" value={chosenCategory.name} onChange={(e) => handleCatChange(e.target.value)}>
+                    <select id="cat" value={chosenCategory ? chosenCategory.name : ""} onChange={(e) => handleCatChange(e.target.value)}>
                         <option disabled value="">Select a category</option>
                         {expenseCategories && expenseCategories.map(cat => (
                             <option name={cat.name} key={cat.name} value={cat.name} >{cat.name}</option>
@@ -93,7 +92,7 @@ function ExpenseForm({ formProps }) {
                 </div>
                 <div className='amount input'>
                     <input id="amount" type="number" step="0.01" placeholder='Amount' onChange={(e) => setAmount(e.target.value)} />
-                    <label className='currency' htmlFor='amount'>{chosenAccount.currency && chosenAccount.currency.currencyCode}</label>
+                    <label className='currency' htmlFor='amount'>{chosenAccount?.currency && chosenAccount.currency.currencyCode}</label>
                 </div>
             </form>
             <button className='submit expense-side' onClick={() => handleSubmit()}><span>Submit</span></button>

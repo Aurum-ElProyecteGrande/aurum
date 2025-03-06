@@ -5,8 +5,8 @@ import React, { useEffect, useState } from 'react'
 function IncomeForm({ formProps }) {
     const { accounts, incomeCategories, useInfoToast } = formProps
 
-    const [chosenAccount, setChosenAccount] = useState("")
-    const [chosenCategory, setChosenCategory] = useState("")
+    const [chosenAccount, setChosenAccount] = useState(null)
+    const [chosenCategory, setChosenCategory] = useState(null)
     const [label, setLabel] = useState("")
     const [amount, setAmount] = useState(0)
 
@@ -17,7 +17,9 @@ function IncomeForm({ formProps }) {
 
     const handleCatChange = (catName) => {
         const updatedChosenCategory = incomeCategories.find(i => i.name === catName)
+        console.log(updatedChosenCategory)
         setChosenCategory(updatedChosenCategory)
+
     }
 
     const handleSubmit = async () => {
@@ -30,7 +32,6 @@ function IncomeForm({ formProps }) {
         }
 
         console.log(incomeDto)
-
         if (!checkIncomeDtoValidity(incomeDto)) return
 
         const isSucces = await fetchPostIncome(incomeDto)
@@ -52,13 +53,14 @@ function IncomeForm({ formProps }) {
             useInfoToast("Missing income details.", "fail")
             return false
         }
+        return true
     }
 
     return (
         <>
             <form className='income-form'>
                 <div className='acc dropdown'>
-                    <select id="acc" value={chosenAccount} onChange={(e) => handleAccChange(e.target.value)}>
+                    <select id="acc" value={chosenAccount ? chosenAccount.displayName : ""} onChange={(e) => handleAccChange(e.target.value)}>
                         <option disabled value="">Select an account</option>
                         {accounts && accounts.map(acc => (
                             <option name={acc.displayName} key={acc.displayName} value={acc.displayName} >{acc.displayName}</option>
@@ -66,7 +68,7 @@ function IncomeForm({ formProps }) {
                     </select>
                 </div>
                 <div className='cat dropdown'>
-                    <select id="cat" value={chosenCategory} onChange={(e) => handleCatChange(e.target.value)}>
+                    <select id="cat" value={chosenCategory ? chosenCategory.name : ""} onChange={(e) => handleCatChange(e.target.value)}>
                         <option disabled value="">Select a category</option>
                         {incomeCategories && incomeCategories.map(cat => (
                             <option name={cat.name} key={cat.name} value={cat.name} >{cat.name}</option>
@@ -78,7 +80,7 @@ function IncomeForm({ formProps }) {
                 </div>
                 <div className='amount input'>
                     <input id="amount" type="number" placeholder='Amount' onChange={(e) => setAmount(e.target.value)} />
-                    <label className='currency' htmlFor='amount'>{chosenAccount.currency && chosenAccount.currency.currencyCode}</label>
+                    <label className='currency' htmlFor='amount'>{chosenAccount?.currency && chosenAccount.currency.currencyCode}</label>
                 </div>
             </form>
             <button className="submit income-side" onClick={() => handleSubmit()}><span>Submit</span></button>
