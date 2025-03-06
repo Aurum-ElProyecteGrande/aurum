@@ -6,6 +6,8 @@ import ProfileUsername from "@/components/profile_page/profile_username/ProfileU
 import ProfileEmail from "@/components/profile_page/profile_email/ProfileEmail";
 import ProfilePassword from "@/components/profile_page/profile_password/ProfilePassword";
 import { fetchUserInfo, fetchUserInfoChange, fetchPasswordChange } from "@/scripts/profile_scripts/profile_scripts";
+import useDeviceDetect from "@/hook/useDeviceDetect";
+import MobileBottomBar from "@/components/mobile_view/mobile_dashboard_page/mobile_bottombar/MobileBottomBar";
 
 const ProfilePage = () => {
     const [isEditingUsername, setIsEditingUsername] = useState(false);
@@ -16,6 +18,7 @@ const ProfilePage = () => {
     const [password, setPassword] = useState({})
     const [profilePicture, setProfilePicture] = useState(null);
     const [error, setError] = useState('');
+    const isTabletPortrait = useDeviceDetect();
 
     const handleProfilePictureChange = (e) => {
         const file = e.target.files[0];
@@ -83,7 +86,7 @@ const ProfilePage = () => {
 
     return (
         <section className="user-profile">
-            <TransactionSidebar />
+            {isTabletPortrait ? <MobileBottomBar /> : <TransactionSidebar />}
             <div className="user-profile-container wrapper">
                 <ProfilePic profilePicture={profilePicture} handleProfilePictureChange={handleProfilePictureChange} />
                 <ProfileUsername isEditingUsername={isEditingUsername} setIsEditingUsername={setIsEditingUsername} username={username} setUsername={setUsername} handleSave={handleSave} />

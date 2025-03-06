@@ -8,13 +8,13 @@ public class AccountValidationMiddleware(RequestDelegate next)
 	public async Task InvokeAsync(HttpContext context, IAccountService accountService)
 	{
 		var accountId = context.GetRouteValue("accountId")?.ToString();
-    
+
 		if (string.IsNullOrEmpty(accountId) || !int.TryParse(accountId, out var accountIdInt))
 		{
 			await next(context);
 			return;
 		}
-		
+
 		var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
 
@@ -30,5 +30,5 @@ public class AccountValidationMiddleware(RequestDelegate next)
 
 		await next(context);
 	}
-	
+
 }

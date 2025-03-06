@@ -3,10 +3,10 @@ import React, { useState, useEffect } from "react";
 import TransactionHeader from "@/components/transactions/transaction_header/TransactionHeader";
 import TransactionCards from "@/components/transactions/transaction_cards/TransactionsCard";
 import { fetchAccounts, fetchExpenses, fetchIncome } from "@/scripts/dashboard_scripts/dashboard_scripts";
-import MobileBottomBar from "@/components/mobile_dashboard_page/mobile_bottombar/MobileBottomBar";
+import MobileBottomBar from "@/components/mobile_view/mobile_dashboard_page/mobile_bottombar/MobileBottomBar";
 
 
-export default function TransactionsPage() {
+export default function MobileTransactionsPage() {
     const [accounts, setAccounts] = useState([]);
     const [accountsWithChecked, setAccountsWithChecked] = useState([]);
     const [fullData, setFullData] = useState([]);
@@ -138,7 +138,7 @@ export default function TransactionsPage() {
         <section className="transactions">
             <TransactionHeader onSearchChange={handleSearchChange} startDate={startDate} onStartDateChange={onStartDateChange} accountOptions={accountsWithChecked} handleCheckboxChange={handleCheckboxChange} />
             {loading ?
-                <div className="loading wrapper">
+                <div className="loader">
                 </div>
                 : <TransactionCards data={filteredData} />}
             <MobileBottomBar />

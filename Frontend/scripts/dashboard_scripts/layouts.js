@@ -1,16 +1,16 @@
-import ExpenseLineChart from "../../app/components/dashboard/charts/expense-line-chart";
-import IncomeLineChart from "../../app/components/dashboard/charts/income-line-chart";
-import AccountBallances from "../../app/components/dashboard/charts/account-ballances";
-import LastTransactions from "../../app/components/dashboard/charts/last-transactions";
-import ExpenseByCategory from "../../app/components/dashboard/charts/expense-by-category";
-import IncomesByCategory from "@/app/components/dashboard/charts/income-by-category";
-import AccountsThisMonth from "../../app/components/dashboard/charts/accounts-this-month";
-import BalanceLineChart from "../../app/components/dashboard/charts/balance-line-chart";
+import ExpenseLineChart from "@/components/dashboard/charts/expense-line-chart";
+import IncomeLineChart from "@/components/dashboard/charts/income-line-chart";
+import AccountBalances from "@/components/dashboard/charts/account-balances";
+import LastTransactions from "@/components/dashboard/charts/last-transactions";
+import ExpenseByCategory from "@/components/dashboard/charts/expense-by-category";
+import IncomesByCategory from "@/components/dashboard/charts/income-by-category";
+import AccountsThisMonth from "@/components/dashboard/charts/accounts-this-month";
+import BalanceLineChart from "@/components/dashboard/charts/balance-line-chart";
 
 const charts2x1 = [
     { name: "expense-by-category", chart: <ExpenseByCategory /> },
     { name: "income-by-category", chart: <IncomesByCategory /> },
-    { name: "account-ballances", chart: <AccountBallances /> }
+    { name: "account-balances", chart: <AccountBalances /> }
 ]
 const charts3x3 = [
     { name: "last-transactions", chart: <LastTransactions /> }
@@ -40,7 +40,7 @@ export const layouts = {
             charts3x3,  //.basic-4
             charts3x2,  //.basic-5
             charts3x1,  //.basic-6
-            charts3x2   //.basci-7
+            charts3x2   //.basic-7
         ],
         initialCharts: [
             charts2x1[0],
