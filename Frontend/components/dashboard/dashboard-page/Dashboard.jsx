@@ -43,6 +43,13 @@ export default function Dashboard() {
     setLoadedCharts(updatedLoadedCharts)
   }
 
+  useEffect(() => {
+    if (loadedCharts) {
+      if (loadedCharts.every(c => c.isLoaded)) setIsLoading(false)
+    }
+  }, [loadedCharts])
+
+
   const chartProps = { isEditMode, accounts, expenses, incomes, chartLoaded }
 
   //chart effects
@@ -145,12 +152,6 @@ export default function Dashboard() {
     }
   }, [chosenCharts])
 
-  useEffect(() => {
-    if (loadedCharts) {
-      if (loadedCharts.every(c => c.isLoaded)) setIsLoading(false)
-    }
-  }, [loadedCharts])
-
   const useInfoToast = (text, type) => {
     setToastType(type)
     setToastText(text)
@@ -158,6 +159,8 @@ export default function Dashboard() {
     setTimeout(() => setIsToast(false), 5000);
   }
 
+
+  console.log(chosenCharts)
 
   return (
     <div className="dashboard page">

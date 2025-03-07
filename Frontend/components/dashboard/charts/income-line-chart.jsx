@@ -7,7 +7,7 @@ import ChangeChartAcc from "./chart-utils/change-chart-acc";
 import ChangeDaysShown from "./chart-utils/change-days-shown";
 import ChangeChartForm from '../change-chart-form';
 
-export default function IncomeLineChart({ isEditMode, accounts, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts, chartLoaded }) {
+export default function IncomeLineChart({ isEditMode, accounts, segmentIndex, chosenLayout, chosenCharts, possibleChartsBySegment, setChosenCharts, chartLoaded }) {
 
     const chartName = "income-line-chart"
 
@@ -103,10 +103,10 @@ export default function IncomeLineChart({ isEditMode, accounts, segmentIndex, ch
                         <ChangeChartAcc handleChangeType={handleChangeType} accounts={accounts} curAccount={curAccount} />
                         <ChangeDaysShown handleChangeDays={handleChangeDays} daysShown={daysShown} />
                         <ChangeChartForm
-                            choosenCharts={choosenCharts}
+                            chosenCharts={chosenCharts}
                             segmentIndex={segmentIndex}
                             possibleCharts={possibleChartsBySegment[segmentIndex]}
-                            setChoosenCharts={setChoosenCharts} />
+                            setChosenCharts={setChosenCharts} />
                     </div>
                 }
                 <div className="chart-title">
