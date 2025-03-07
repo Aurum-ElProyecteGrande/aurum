@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import ChangeChartTransactions from './chart-utils/change-chart-transactions';
 import ChangeChartType from './chart-utils/change-chart-acc';
 
-export default function LastTransactions({ isEditMode, expenses, incomes, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts, chartLoaded }) {
+export default function LastTransactions({ isEditMode, expenses, incomes, segmentIndex, chosenLayout, chosenCharts, possibleChartsBySegment, setChosenCharts, chartLoaded }) {
     
     const chartName = "last-transactions" 
     
@@ -65,10 +65,10 @@ export default function LastTransactions({ isEditMode, expenses, incomes, segmen
                         <ChangeChartTransactions handleChangeTransactions={handleChangeNrOfTransactions} nrOfTransactions={numberOfTransactions} curNrOfTransactions={maxTransactions} />
                         <ChangeChartType />
                         <ChangeChartForm
-                            choosenCharts={choosenCharts}
+                            chosenCharts={chosenCharts}
                             segmentIndex={segmentIndex}
                             possibleCharts={possibleChartsBySegment[segmentIndex]}
-                            setChoosenCharts={setChoosenCharts} />
+                            setChosenCharts={setChosenCharts} />
                     </div>
                 }
                 <div className="chart-title">

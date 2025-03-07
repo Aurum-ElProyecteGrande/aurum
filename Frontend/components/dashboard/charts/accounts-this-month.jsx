@@ -3,7 +3,7 @@ import ChangeChartForm from '../change-chart-form';
 import { displayCurrency, fetchExpensesByDate, fetchIncomeByDate } from '@/scripts/dashboard_scripts/dashboard_scripts';
 
 
-export default function AccountsThisMonth({ isEditMode, segmentIndex, chosenLayout, choosenCharts, possibleChartsBySegment, setChoosenCharts, accounts, chartLoaded }) {
+export default function AccountsThisMonth({ isEditMode, segmentIndex, chosenLayout, chosenCharts, possibleChartsBySegment, setChosenCharts, accounts, chartLoaded }) {
 
     const chartName = "accounts-this-month"
 
@@ -52,10 +52,10 @@ export default function AccountsThisMonth({ isEditMode, segmentIndex, chosenLayo
                 {isEditMode &&
                     <div className="change-chart-types-container">
                         <ChangeChartForm
-                            choosenCharts={choosenCharts}
+                            chosenCharts={chosenCharts}
                             segmentIndex={segmentIndex}
                             possibleCharts={possibleChartsBySegment[segmentIndex]}
-                            setChoosenCharts={setChoosenCharts} />
+                            setChosenCharts={setChosenCharts} />
                     </div>
                 }
                 <div className="chart-title">
@@ -68,15 +68,15 @@ export default function AccountsThisMonth({ isEditMode, segmentIndex, chosenLayo
                         <div key={acc.name} className='column'>
                             <div className='acc-name'> {acc.name}</div>
                             <div className='row exp'>
-                                <div >Total expense</div>
+                                <div >Eexpense</div>
                                 <div className='exp'>- {displayCurrency(acc.exp, acc.currencyCode)}</div>
                             </div>
                             <div className='row inc'>
-                                <div>Total income</div>
+                                <div>Income</div>
                                 <div  className='inc'>+ {displayCurrency(acc.exp, acc.currencyCode)}</div>
                             </div>
                             <div className={`row total${acc.inc - acc.exp > 0 ? "inc" : "exp"}`}>
-                                <div className={acc.inc - acc.exp > 0 ? "inc" : "exp"}>Total sum</div>
+                                <div className={acc.inc - acc.exp > 0 ? "inc" : "exp"}>Sum</div>
                                 <div className={acc.inc - acc.exp > 0 ? "inc" : "exp"}>{displayCurrency(acc.inc - acc.exp, acc.currencyCode)}</div>
                             </div>
                         </div>
