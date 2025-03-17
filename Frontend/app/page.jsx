@@ -11,12 +11,13 @@ import Aos from 'aos';
 import 'aos/dist/aos.css';
 import AuthModal from "@/components/modal/AuthModal";
 import { useRouter } from 'next/navigation';
-import { fetchValidate } from "@/scripts/landing_page_scripts/landing_page";
+import { fetchValidate, fetchAllCurrency } from "@/scripts/landing_page_scripts/landing_page";
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false)
   const [isSignUp, setIsSignUp] = useState(false)
   const [userInfo, setUserInfo] = useState({})
+  const [currencies, setCurrencies] = useState([])
   const router = useRouter();
 
   const handleLinkClick = async (url) => {
@@ -36,8 +37,8 @@ export default function Home() {
   }
 
   const handleModalRoute = async (isSignUp) => {
-    if(isSignUp)
-       return;
+    if (isSignUp)
+      return;
 
     const isSuccess = await fetchValidate()
 
@@ -53,16 +54,24 @@ export default function Home() {
     Aos.init({ duration: 750 });
   }, []);
 
+  useEffect(() => {
+    const getCurrencies = async () => {
+      const currencies = await fetchAllCurrency()
+      setCurrencies(currencies)
+    }
+    getCurrencies()
+  }, [])
+
   return (
     <>
-      <LandingNavbar useModal={handleModal} userInfo={userInfo} handleLinkClick={handleLinkClick} />
+      <LandingNavbar useModal={handleModal} userInfo={userInfo} handleLinkClick={handleLinkClick}  />
       <LandingHero handleLinkClick={handleLinkClick} />
       <LandingScroll />
       <LandingPrices />
       <LandingShowcase />
       <LandingNewsletter />
       <LandingFooter />
-      {showModal && <AuthModal showModal={showModal} setShowModal={setShowModal} isSignUp={isSignUp} handleModalRoute={handleModalRoute} />}
+      {showModal && <AuthModal showModal={showModal} setShowModal={setShowModal} isSignUp={isSignUp} handleModalRoute={handleModalRoute} currencies={currencies} />}
     </>
   );
 }

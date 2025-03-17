@@ -28,16 +28,16 @@ export default function AccountsThisMonth({ isEditMode, segmentIndex, chosenLayo
                 acc3Inc = await fetchIncomeByDate(accounts[2].accountId, firstDayOfMonth, today)
             }
 
+
             const updatedAccsWithTrxs = [
                 { name: accounts[0].displayName, inc: acc1Inc, exp: acc1Exp, currencyCode: accounts[0].currency.currencyCode },
-                accounts[1] && { name: accounts[1].displayName, inc: acc2Inc, exp: acc2Exp, currencyCode: accounts[1].currency.currencyCode},
-                accounts[2] && { name: accounts[2].displayName, inc: acc3Inc, exp: acc3Exp, currencyCode: accounts[2].currency.currencyCode}
+                accounts[1] && { name: accounts[1].displayName, inc: acc2Inc, exp: acc2Exp, currencyCode: accounts[1].currency.currencyCode },
+                accounts[2] && { name: accounts[2].displayName, inc: acc3Inc, exp: acc3Exp, currencyCode: accounts[2].currency.currencyCode }
             ]
 
-
             updatedAccsWithTrxs.forEach(acc => {
-                acc.inc = acc.inc.reduce((a, c) => a += c.amount, 0)
-                acc.exp = acc.exp.reduce((a, c) => a += c.amount, 0)
+                if (acc1Inc[0]) acc.inc = acc.inc.reduce((a, c) => a += c.amount, 0)
+                if (acc1Exp[0]) acc.exp = acc.exp.reduce((a, c) => a += c.amount, 0)
             });
             setAccountsWithTotals(updatedAccsWithTrxs)
             chartLoaded(chartName)
@@ -65,6 +65,7 @@ export default function AccountsThisMonth({ isEditMode, segmentIndex, chosenLayo
             <div className="chart">
                 <div className="account-this-month">
                     {accountsWithTotals && accountsWithTotals.map(acc => (
+                        acc &&
                         <div key={acc.name} className='column'>
                             <div className='acc-name'> {acc.name}</div>
                             <div className='row exp'>
@@ -73,7 +74,7 @@ export default function AccountsThisMonth({ isEditMode, segmentIndex, chosenLayo
                             </div>
                             <div className='row inc'>
                                 <div>Income</div>
-                                <div  className='inc'>+ {displayCurrency(acc.exp, acc.currencyCode)}</div>
+                                <div className='inc'>+ {displayCurrency(acc.exp, acc.currencyCode)}</div>
                             </div>
                             <div className={`row total${acc.inc - acc.exp > 0 ? "inc" : "exp"}`}>
                                 <div className={acc.inc - acc.exp > 0 ? "inc" : "exp"}>Sum</div>

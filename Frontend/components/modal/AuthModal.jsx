@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { IoMdClose } from "react-icons/io";
 
-const AuthModal = ({ showModal, setShowModal, isSignUp, handleModalRoute }) => {
+const AuthModal = ({ showModal, setShowModal, isSignUp, handleModalRoute, currencies }) => {
   const [isSignUpMode, setIsSignUpMode] = useState(isSignUp);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
+    accountName: '',
+    accountAmount: 0,
+    accountCurrencyId: 1
   });
+  const [chosenCurrency, setChosenCurrency] = useState({})
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -36,9 +40,17 @@ const AuthModal = ({ showModal, setShowModal, isSignUp, handleModalRoute }) => {
     const endpoint = isSignUpMode ? '/api/user/register' : '/api/user/login';
     const payload = isSignUpMode
       ? {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
+        RegistrationRequest: {
+          username: formData.name,
+          email: formData.email,
+          password: formData.password,
+          role: "User"
+        },
+        ModifyAccountDto: {
+          displayName: formData.accountName,
+          amount: formData.accountAmount,
+          currencyId: formData.accountCurrencyId
+        }
       }
       : {
         email: formData.email,
@@ -65,6 +77,15 @@ const AuthModal = ({ showModal, setShowModal, isSignUp, handleModalRoute }) => {
       handleModalRoute(isSignUp)
     }
   };
+
+  const handleCurrencyChange = (currencyName) => {
+    const curCurrency = currencies.find(c => c.name === currencyName)
+    setChosenCurrency(curCurrency)
+    setFormData({
+      ...formData,
+      ["accountCurrencyId"]: curCurrency.currencyId,
+    });
+  }
 
   return (
     <div className={`auth-modal ${showModal ? 'visible' : ''}`}>
@@ -108,6 +129,31 @@ const AuthModal = ({ showModal, setShowModal, isSignUp, handleModalRoute }) => {
                 onChange={handleChange}
                 required
               />
+            )}
+            {isSignUpMode && (
+              <>
+                <input
+                  type="text"
+                  name="accountName"
+                  placeholder="Account Name"
+                  value={formData.accountName}
+                  onChange={handleChange}
+                  required
+                />
+                <input
+                  type="number"
+                  name="accountAmount"
+                  placeholder="Initial Amount"
+                  value={formData.accountAmount}
+                  onChange={handleChange}
+                  required
+                />
+                <select id="currency" value={chosenCurrency ? chosenCurrency.name : ""} onChange={(e) => handleCurrencyChange(e.target.value)}>
+                  {currencies && currencies.map(c => (
+                    <option name={c.name} key={c.name} value={c.name} >{c.name}</option>
+                  ))}
+                </select>
+              </>
             )}
             {error ? <p className="error-message">{error}</p> :
               <button className="primary-button" type="submit" disabled={loading}>
