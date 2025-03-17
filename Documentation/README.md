@@ -1,7 +1,3 @@
-# aurum
-
-https://freecurrencyapi.com/docs/currencies#request-parameters
-
 # Aurum Documentation
 
 ## Project Overview
@@ -75,6 +71,9 @@ npm run dev
 dotnet ef database update
 ```
 - integrated dataseeding sets up up-to-date 
+
+### 3.5 External dependencies
+- https://freecurrencyapi.com/docs/currencies#request-parameters
 
 ## 4. Usage Examples
 
