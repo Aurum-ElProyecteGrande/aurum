@@ -1,7 +1,3 @@
-# aurum
-
-https://freecurrencyapi.com/docs/currencies#request-parameters
-
 # Aurum Documentation
 
 ## Project Overview
@@ -30,7 +26,7 @@ The product runs in Docker containers.
 - Responsive mobile view
 
 ## 2. Technology Stack
-- **Frontend:** React, Next.js
+- **Frontend:** React, Next.js, sass
 - **Backend:** ASP.NET Core, C#
 - **Database:** MSSQL (Entity Framework)
 - **Containerization:** Docker
@@ -46,14 +42,12 @@ The product runs in Docker containers.
 - MSSQL
 
 ### 3.2 Enviroment variables
-**RawSeedDataPath** *sets path for the folder with .csv files for the seeder in docker (default: "/app/raw-seeding-data")
-**Database:**
-    **ConnectionString**
-    **DbPassword**
-  **Token:** 
-    **Issuer**
-    **Audience**
-    **Key**
+- **RawSeedDataPath** *sets path for the folder with .csv files for the seeder in docker (default: "/app/raw-seeding-data")
+- **Database:ConnectionString**
+- **Database:DbPassword**
+- **Token:Issuer**
+- **Token:Audience**
+- **Token:Key**
 
 ### 3.2. Starting the Backend
 ```sh
@@ -75,6 +69,9 @@ npm run dev
 dotnet ef database update
 ```
 - integrated dataseeding sets up up-to-date 
+
+### 3.5 External dependencies
+- https://freecurrencyapi.com/docs/currencies#request-parameters
 
 ## 4. Usage Examples
 
@@ -117,7 +114,7 @@ dotnet ef database update
 The project is built with a **RESTful API backend** and a **component-based frontend**.
 
 ## 6. Database Structure (SQL)
-(database-stucture.png)
+![database-structure](./database-structure.png)
 
 ## 7. Contribution
 - **Fork the repo**
