@@ -68,7 +68,7 @@ export default function AccountsThisMonth({ isEditMode, segmentIndex, chosenLayo
                         <div key={acc.name} className='column'>
                             <div className='acc-name'> {acc.name}</div>
                             <div className='row exp'>
-                                <div >Eexpense</div>
+                                <div >Expense</div>
                                 <div className='exp'>- {displayCurrency(acc.exp, acc.currencyCode)}</div>
                             </div>
                             <div className='row inc'>

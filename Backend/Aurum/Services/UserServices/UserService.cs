@@ -1,4 +1,4 @@
-﻿using Aurum.Data.Contracts;
+using Aurum.Data.Contracts;
 using Aurum.Data.Entities;
 using Aurum.Repositories.UserRepository;
 using Microsoft.AspNetCore.Identity;
@@ -61,7 +61,8 @@ namespace Aurum.Services.UserServices
                 return FailedRegistration(result, email, username);
 		
             await userManager.AddToRoleAsync(user, role);
-            return new AuthResult(true, email, username, "", "");
+
+            return new AuthResult(true, email, username, "", user.Id);
         }
 
         private static AuthResult FailedRegistration(IdentityResult result, string email, string username)
