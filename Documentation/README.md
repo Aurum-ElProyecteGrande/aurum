@@ -114,7 +114,7 @@ dotnet ef database update
 The project is built with a **RESTful API backend** and a **component-based frontend**.
 
 ## 6. Database Structure (SQL)
-![database-structure](./database-stucture.png)
+![database-structure](./database-structure.png)
 
 ## 7. Contribution
 - **Fork the repo**
