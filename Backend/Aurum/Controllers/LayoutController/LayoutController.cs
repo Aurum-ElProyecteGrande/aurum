@@ -1,10 +1,11 @@
-﻿using Aurum.Data.Context;
+using Aurum.Data.Context;
 using Aurum.Data.Entities;
 using Aurum.Models.LayoutDTOs;
 using Aurum.Services.LayoutServices;
 using Aurum.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 
 namespace Aurum.Controllers.LayoutControllers;
 
@@ -13,11 +14,13 @@ namespace Aurum.Controllers.LayoutControllers;
 [Route("[controller]")]
 public class LayoutController : ControllerBase
 {
-    private ILayoutService _layoutService;
-    public LayoutController(ILayoutService layoutService)
+    private readonly ILayoutService _layoutService;
+	private readonly ILogger<LayoutController> _logger;
+    public LayoutController(ILayoutService layoutService, ILogger<LayoutController> logger)
     {
         _layoutService = layoutService;
-    }
+		_logger = logger;
+	}
 
     [HttpPost("basic")]
     public async Task<IActionResult> CreateBasicLayout([FromBody] LayoutDto layout)
@@ -33,11 +36,11 @@ public class LayoutController : ControllerBase
 
             return Ok(layoutId);
         }
-        catch (Exception ex)
+		catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
-            return BadRequest(ex.Message);
-        }
+			_logger.LogError($"An error occured while creating basic layout: {ex.Message}");
+			return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
+		}
     }
 
     [HttpPost("scientic")]
@@ -55,10 +58,10 @@ public class LayoutController : ControllerBase
             return Ok(layoutId);
         }
         catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            return BadRequest(ex.Message);
-        }
+		{
+			_logger.LogError($"An error occured while creating scientic layout: {ex.Message}");
+			return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
+		}
     }
 
     [HttpPost("detailed")]
@@ -76,10 +79,10 @@ public class LayoutController : ControllerBase
             return Ok(layoutId);
         }
         catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            return BadRequest(ex.Message);
-        }
+		{
+			_logger.LogError($"An error occured while creating detailed layout: {ex.Message}");
+			return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
+		}
     }
 
 
@@ -96,9 +99,9 @@ public class LayoutController : ControllerBase
             return Ok(allLayout);
         }
         catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            return BadRequest(ex.Message);
-        }
+		{
+			_logger.LogError($"An error occured while getting layouts: {ex.Message}");
+			return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
+		}
     }
 }
