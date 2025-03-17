@@ -26,7 +26,7 @@ The product runs in Docker containers.
 - Responsive mobile view
 
 ## 2. Technology Stack
-- **Frontend:** React, Next.js
+- **Frontend:** React, Next.js, sass
 - **Backend:** ASP.NET Core, C#
 - **Database:** MSSQL (Entity Framework)
 - **Containerization:** Docker
