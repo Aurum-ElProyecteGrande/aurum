@@ -7,9 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace Aurum.Controllers.RegularExpressController;
 
 [Authorize]
-public class RegularExpenseController(IRegularExpenseService service):ControllerBase
+public class RegularExpenseController(IRegularExpenseService service, ILogger<RegularExpenseController> logger):ControllerBase
 {
 	private readonly IRegularExpenseService _service = service;
+	private readonly ILogger<RegularExpenseController> _logger = logger;
 	
 	[HttpGet("/expenses/regulars/{accountId:int}")]
 	public async Task<IActionResult> GetAll([FromRoute]int accountId)
@@ -24,8 +25,8 @@ public class RegularExpenseController(IRegularExpenseService service):Controller
 		}
 		catch (Exception e)
 		{
-			Console.WriteLine(e);
-			return StatusCode(500, e.Message);
+			_logger.LogError($"An error occured while getting regular expenses: {e.Message}");
+			return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
 		}
 	}
 
@@ -39,8 +40,8 @@ public class RegularExpenseController(IRegularExpenseService service):Controller
 		}
 		catch (Exception e)
 		{
-			Console.WriteLine(e);
-			return StatusCode(500, e.Message);
+			_logger.LogError($"An error occured while creating regular expenses: {e.Message}");
+			return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
 		}
 	}
 	
@@ -54,8 +55,8 @@ public class RegularExpenseController(IRegularExpenseService service):Controller
 		}
 		catch (Exception e)
 		{
-			Console.WriteLine(e);
-			return StatusCode(500, e.Message);
+			_logger.LogError($"An error occured while updating regular expenses: {e.Message}");
+			return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
 		}
 	}
 
@@ -69,8 +70,8 @@ public class RegularExpenseController(IRegularExpenseService service):Controller
 		}
 		catch (Exception e)
 		{
-			Console.WriteLine(e);
-			return StatusCode(500, e.Message);
+			_logger.LogError($"An error occured while deleting regular expenses: {e.Message}");
+			return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
 		}
 	}
 }
