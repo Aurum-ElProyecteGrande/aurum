@@ -150,60 +150,32 @@ public class IncomeServiceTest
         Assert.That(result, Is.EqualTo(0m));
     }
 
-    /*[Test]
-    public async Task GetAll_WithAccountId_ReturnsListOfIncomeDtos()
-    {
-        int accountId = 1;
+    [Test]
+   public async Task GetAll_WithAccountId_ReturnsListOfIncomeDtos()
+   {
+       int accountId = 1;
 
-        List<Income> mockIncomes = new List<Income>
-        {
-            new Income
-            {
-                IncomeId = 1,
-                AccountId = accountId,
-                IncomeCategoryId = 10,
-                Label = "Salary",
-                Amount = 1000,
-                Date = DateTime.Now
-            },
-            new Income
-            {
-                IncomeId = 2,
-                AccountId = accountId,
-                IncomeCategoryId = 20,
-                Label = "Bonus",
-                Amount = 500,
-                Date = DateTime.Now
-            }
-        };
+       List<Income> mockIncomes = new List<Income>
+       {
+           new Income {
+               Amount = 100.50m,
+               Date = DateTime.Now,
+               Label = "Salary",
+               IncomeCategory = new IncomeCategory { Name = "Job" },
+               Account = new Account { Currency = new Currency { Name = "USD", CurrencyCode = "USD", Symbol = "$" } }
+           }
+       };
 
-        List<CategoryDto> mockCategories = new()
-        {
-            new  CategoryDto ("Salary Category", 10 ),
-            new CategoryDto ("Bonus Category", 20)
-        };
+       _incomeRepoMock.Setup(repo => repo.GetAll(accountId)).ReturnsAsync(mockIncomes);
 
-        _incomeRepoMock.Setup(repo => repo.GetAll(accountId)).ReturnsAsync(mockIncomes);
+       var result = await _incomeService.GetAll(accountId);
 
-        _incomeCategoryServiceMock.Setup(service => service.GetAllCategory()).ReturnsAsync(mockCategories);
-
-        var result = await _incomeService.GetAll(accountId);
-
-        Assert.That(result, Is.Not.Null);
-
-        Assert.That(result, Has.Count.EqualTo(2));
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(result[0].Category.Name, Is.EqualTo("Salary Category"));
-            Assert.That(result[0].Label, Is.EqualTo("Salary"));
-            Assert.That(result[0].Amount, Is.EqualTo(1000));
-
-            Assert.That(result[1].Category.Name, Is.EqualTo("Bonus Category"));
-            Assert.That(result[1].Label, Is.EqualTo("Bonus"));
-            Assert.That(result[1].Amount, Is.EqualTo(500));
-        });
-    }*/
+       Assert.That(result, Is.Not.Null);
+       Assert.That(result.Count, Is.EqualTo(1));
+       Assert.That(result[0].Amount, Is.EqualTo(100.50m));
+       Assert.That(result[0].Label, Is.EqualTo("Salary"));
+       Assert.That(result[0].Category.Name, Is.EqualTo("Job"));
+   }
 
     [Test]
     public async Task GetAll_WithNoIncomes_ReturnsEmptyList()
@@ -218,7 +190,7 @@ public class IncomeServiceTest
         Assert.That(result, Is.Empty);
     }
 
-    /*[Test]
+    [Test]
     public async Task GetAll_WithAccountIdAndEndDate_ReturnsListOfIncomeDtos()
     {
         int accountId = 1;
@@ -226,30 +198,48 @@ public class IncomeServiceTest
 
         List<Income> mockIncomes = new List<Income>
         {
-            new Income { IncomeId = 1, AccountId = accountId, IncomeCategoryId = 10, Label = "Freelance", Amount = 200, Date = endDate }
-        };
-
-        List<CategoryDto> mockCategories = new List<CategoryDto>
-        {
-            new CategoryDto("Freelance Work", 10)
+            new Income
+            {
+                IncomeId = 1,
+                AccountId = accountId,
+                IncomeCategoryId = 2,
+                IncomeCategory = new IncomeCategory { IncomeCategoryId = 2, Name = "Salary" },
+                Label = "Monthly Salary",
+                Amount = 5000m,
+                Date = endDate.AddDays(-2),
+                Account = new Account
+                {
+                    AccountId = accountId,
+                    Currency = new Currency
+                    {
+                        CurrencyId = 1,
+                        Name = "USD",
+                        CurrencyCode = "USD",
+                        Symbol = "$"
+                    }
+                }
+            }
         };
 
         _incomeRepoMock.Setup(repo => repo.GetAll(accountId, endDate)).ReturnsAsync(mockIncomes);
-        _incomeCategoryServiceMock.Setup(service => service.GetAllCategory()).ReturnsAsync(mockCategories);
 
         var result = await _incomeService.GetAll(accountId, endDate);
 
         Assert.That(result, Is.Not.Null);
-        Assert.That(result, Has.Count.EqualTo(1));
+        Assert.That(result.Count, Is.EqualTo(mockIncomes.Count));
+
         Assert.Multiple(() =>
         {
-            Assert.That(result[0].Category.Name, Is.EqualTo("Freelance Work"));
-            Assert.That(result[0].Label, Is.EqualTo("Freelance"));
-            Assert.That(result[0].Amount, Is.EqualTo(200));
+            Assert.That(result[0].Category.Name, Is.EqualTo("Salary"));
+            Assert.That(result[0].Label, Is.EqualTo("Monthly Salary"));
+            Assert.That(result[0].Amount, Is.EqualTo(5000m));
+            Assert.That(result[0].Currency.Name, Is.EqualTo("USD"));
+            Assert.That(result[0].Currency.CurrencyCode, Is.EqualTo("USD"));
+            Assert.That(result[0].Currency.Symbol, Is.EqualTo("$"));
         });
-    }*/
+    }
 
-    /*[Test]
+    [Test]
     public async Task GetAll_WithStartAndEndDate_ReturnsListOfIncomeDtos()
     {
         int accountId = 1;
@@ -260,31 +250,44 @@ public class IncomeServiceTest
         {
             new Income
             {
-                IncomeId = 1, AccountId = accountId, IncomeCategoryId = 15, Label = "Consulting", Amount = 300,
-                Date = new DateTime(2025, 6, 15)
+                IncomeId = 1,
+                AccountId = accountId,
+                IncomeCategoryId = 2,
+                IncomeCategory = new IncomeCategory { IncomeCategoryId = 2, Name = "Salary" },
+                Label = "Monthly Salary",
+                Amount = 5000m,
+                Date = endDate.AddDays(-2),
+                Account = new Account
+                {
+                    AccountId = accountId,
+                    Currency = new Currency
+                    {
+                        CurrencyId = 1,
+                        Name = "USD",
+                        CurrencyCode = "USD",
+                        Symbol = "$"
+                    }
+                }
             }
         };
 
-
-        List<CategoryDto> mockCategories = new List<CategoryDto>
-        {
-	        new CategoryDto("Consulting Services", 15)
-        };
-
         _incomeRepoMock.Setup(repo => repo.GetAll(accountId, startDate, endDate)).ReturnsAsync(mockIncomes);
-        _incomeCategoryServiceMock.Setup(service => service.GetAllCategory()).ReturnsAsync(mockCategories);
 
         var result = await _incomeService.GetAll(accountId, startDate, endDate);
 
         Assert.That(result, Is.Not.Null);
-        Assert.That(result, Has.Count.EqualTo(1));
+        Assert.That(result.Count, Is.EqualTo(mockIncomes.Count));
+
         Assert.Multiple(() =>
         {
-            Assert.That(result[0].Category.Name, Is.EqualTo("Consulting Services"));
-            Assert.That(result[0].Label, Is.EqualTo("Consulting"));
-            Assert.That(result[0].Amount, Is.EqualTo(300));
+            Assert.That(result[0].Category.Name, Is.EqualTo("Salary"));
+            Assert.That(result[0].Label, Is.EqualTo("Monthly Salary"));
+            Assert.That(result[0].Amount, Is.EqualTo(5000m));
+            Assert.That(result[0].Currency.Name, Is.EqualTo("USD"));
+            Assert.That(result[0].Currency.CurrencyCode, Is.EqualTo("USD"));
+            Assert.That(result[0].Currency.Symbol, Is.EqualTo("$"));
         });
-    }*/
+    }
 
     [Test]
     public async Task Create_ValidModifyIncomeDto_ReturnsIncomeId()
