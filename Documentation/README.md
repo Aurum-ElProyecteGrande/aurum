@@ -43,13 +43,11 @@ The product runs in Docker containers.
 
 ### 3.2 Enviroment variables
 -**RawSeedDataPath** *sets path for the folder with .csv files for the seeder in docker (default: "/app/raw-seeding-data")
--**Database:**
--    **ConnectionString**
--    **DbPassword**
--  **Token:**
--    **Issuer**
--    **Audience**
--    **Key**
+-    **Database:ConnectionString**
+-    **Database:DbPassword**
+-    **Token:Issuer**
+-    **Token:Audience**
+-    **Token:Key**
 
 ### 3.2. Starting the Backend
 ```sh
