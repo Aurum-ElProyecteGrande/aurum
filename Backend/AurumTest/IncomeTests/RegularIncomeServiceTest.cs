@@ -78,16 +78,16 @@ public class RegularIncomeServiceTest
     {
         int accountId = 1;
 
-        _regularIncomeRepoMock.Setup(repo => repo.GetAllRegular(accountId)).ReturnsAsync(new List<RegularIncome>());
+        _regularIncomeRepoMock.Setup(repo => repo.GetAllRegularWithId(accountId)).ReturnsAsync(new List<RegularIncome>());
 
         _incomeCategoryServiceMock.Setup(service => service.GetAllCategory()).ReturnsAsync(new List<CategoryDto>());
 
-        var result = await _regularIncomeService.GetAllRegular(accountId);
+        var result = await _regularIncomeService.GetAllRegularWithId(accountId);
 
         Assert.NotNull(result);
         Assert.IsEmpty(result);
 
-        _regularIncomeRepoMock.Verify(repo => repo.GetAllRegular(accountId), Times.Once);
+        _regularIncomeRepoMock.Verify(repo => repo.GetAllRegularWithId(accountId), Times.Once);
     }
 
     [Test]

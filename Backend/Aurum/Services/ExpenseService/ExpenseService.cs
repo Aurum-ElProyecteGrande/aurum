@@ -22,9 +22,9 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
     {
         var rawData = await _repository.GetAll(accountId);
 
-        if (rawData.Count == 0) 
+        if (rawData.Count == 0)
             return [];
-        
+
         return rawData.Select(CreateExpenseDto).ToList();
 
     }
@@ -35,10 +35,10 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
 
         if (rawData.Count == 0)
             return [];
-        
+
         return rawData.Select(CreateExpenseDto).ToList();
     }
-    
+
     public async Task<int> Create(ModifyExpenseDto expenseDto)
     {
         var subCategoryId = string.IsNullOrEmpty(expenseDto.SubCategoryName) ? (int?)null :
@@ -51,24 +51,24 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
 
     public async Task<bool> Delete(int expenseId) =>
         await _repository.Delete(expenseId);
-    
+
     private ExpenseDto CreateExpenseDto(Expense expense)
     {
         var categoryDto = new CategoryDto(expense.ExpenseCategory.Name, expense.ExpenseCategoryId);
-        
+
         SubCategoryDto subCategoryDto = null;
         if (expense.ExpenseSubCategoryId != null)
         {
             subCategoryDto = new SubCategoryDto(
-                expense.ExpenseSubCategory.Name, 
-                expense.ExpenseSubCategory.ExpenseSubCategoryId, 
+                expense.ExpenseSubCategory.Name,
+                expense.ExpenseSubCategory.ExpenseSubCategoryId,
                 expense.ExpenseCategoryId
             );
         }
 
         var currency = new CurrencyDto(expense.Account.Currency.Name, expense.Account.Currency.CurrencyCode,
             expense.Account.Currency.Symbol);
-        
+
         return new ExpenseDto(
             currency,
             categoryDto,
@@ -106,6 +106,21 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
             .Select(e => e.Amount)
             .Sum();
     }
+
+    public async Task<bool> CreateRangeFromRegular(List<RegularExpense> expenses) =>
+	    await _repository.CreateRange(expenses.Select(CreateExpenseFromRegular).ToList());
+
+
+    private Expense CreateExpenseFromRegular(RegularExpense expense) =>
+	    new Expense()
+	    {
+		    AccountId = expense.AccountId,
+		    ExpenseCategoryId = expense.ExpenseCategoryId,
+		    ExpenseSubCategoryId = expense.ExpenseSubCategoryId,
+		    Label = expense.Label,
+		    Amount = expense.Amount,
+		    Date = DateTime.Today
+	    };
 
 }
 

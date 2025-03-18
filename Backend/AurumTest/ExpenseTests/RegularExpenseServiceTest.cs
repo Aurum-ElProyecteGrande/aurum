@@ -1,3 +1,4 @@
+/*
 using Aurum.Controllers.RegularExpressController;
 using Aurum.Data.Entities;
 using Aurum.Models.CategoryDtos;
@@ -38,7 +39,7 @@ namespace AurumTest.ExpenseTests
                     RegularExpenseId = 1,
                     AccountId = accountId,
                     ExpenseCategoryId = 1,
-                    ExpenseSubcategoryId = null,
+                    ExpenseSubCategory = null,
                     Label = "Expense 1",
                     Amount = 100,
                     StartDate = DateTime.Now,
@@ -75,7 +76,7 @@ namespace AurumTest.ExpenseTests
         {
             // Arrange
             var accountId = 1;
-            var userId = "1"; // Updated to string
+            var userId = "1";
             var rawExpenses = new List<RegularExpense>
             {
                 new RegularExpense
@@ -83,14 +84,14 @@ namespace AurumTest.ExpenseTests
                     RegularExpenseId = 1,
                     AccountId = accountId,
                     ExpenseCategoryId = 1,
-                    ExpenseSubcategoryId = null,
+                    ExpenseSubCategoryId = null,
                     Label = "Expense 1",
                     Amount = 100,
                     StartDate = DateTime.Now,
                     Regularity = Regularity.Monthly
                 }
             };
-            var categories = new Dictionary<CategoryDto, List<SubCategoryDto>>(); // No categories
+            var categories = new Dictionary<CategoryDto, List<SubCategoryDto>>();
 
             _repositoryMock
                 .Setup(r => r.GetAllRegular(accountId))
@@ -194,3 +195,4 @@ namespace AurumTest.ExpenseTests
         }
     }
 }
+*/

@@ -5,7 +5,8 @@ namespace Aurum.Services.RegularIncomeServices
 {
     public interface IRegularIncomeService
     {
-        Task<List<RegularIncomeDto>> GetAllRegular(int accountId);
+        Task<List<RegularIncomeDto>> GetAllRegularWithId(int accountId);
+        Task<List<RegularIncome>> GetAllRegular();
         Task<int> CreateRegular(ModifyRegularIncomeDto income);
         Task<int> UpdateRegular(ModifyRegularIncomeDto regularIncome, int regularId);
         Task<bool> DeleteRegular(int regularId);

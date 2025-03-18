@@ -113,12 +113,16 @@ namespace Aurum.Services.IncomeServices
 
         public async Task<bool> Delete(int incomeId)
         {
-            var isDeleted = await _incomeRepo.Delete(incomeId);
+	        var isDeleted = await _incomeRepo.Delete(incomeId);
 
-            if (!isDeleted) throw new InvalidOperationException($"Could not delete income with id {incomeId}");
+	        if (!isDeleted) throw new InvalidOperationException($"Could not delete income with id {incomeId}");
 
-            return isDeleted;
+	        return isDeleted;
         }
+
+
+        public async Task<bool> CreateRangeFromRegular(List<RegularIncome> incomes) =>
+	        await _incomeRepo.CreateRange(incomes.Select(ConvertRegularToIncome).ToList());
 
         private IncomeDto ConvertIncomeToDto(Income income)
         {
@@ -136,6 +140,16 @@ namespace Aurum.Services.IncomeServices
                 Amount = income.Amount,
                 Date = income.Date
             };
+
+        private Income ConvertRegularToIncome(RegularIncome income) =>
+	        new Income()
+	        {
+		        AccountId = income.AccountId,
+		        IncomeCategoryId = income.IncomeCategoryId,
+		        Label = income.Label,
+		        Amount = income.Amount,
+		        Date = DateTime.Today
+	        };
 
     }
 }

@@ -10,16 +10,16 @@ namespace Aurum.Controllers.RegularExpressController;
 public class RegularExpenseController(IRegularExpenseService service):ControllerBase
 {
 	private readonly IRegularExpenseService _service = service;
-	
+
 	[HttpGet("/expenses/regulars/{accountId:int}")]
 	public async Task<IActionResult> GetAll([FromRoute]int accountId)
 	{
 		try
 		{
-			if (UserHelper.GetUserId(HttpContext,out var userId, out var unauthorized)) 
+			if (UserHelper.GetUserId(HttpContext,out var userId, out var unauthorized))
 				return unauthorized;
-			
-			var expenses = await _service.GetAll(accountId, userId);
+
+			var expenses = await _service.GetAllWithId(accountId);
 			return Ok(expenses);
 		}
 		catch (Exception e)
@@ -29,12 +29,12 @@ public class RegularExpenseController(IRegularExpenseService service):Controller
 		}
 	}
 
-	[HttpPost("/expenses/regulars/")]
-	public async Task<IActionResult> Create([FromQuery]int regularId,[FromBody]ModifyRegularExpenseDto expense)
+	[HttpPost("/expenses/regulars")]
+	public async Task<IActionResult> Create([FromBody]ModifyRegularExpenseDto expense)
 	{
 		try
 		{
-			var id = await _service.Create(regularId,expense);
+			var id = await _service.Create(expense);
 			return Ok(id);
 		}
 		catch (Exception e)
@@ -43,7 +43,7 @@ public class RegularExpenseController(IRegularExpenseService service):Controller
 			return StatusCode(500, e.Message);
 		}
 	}
-	
+
 	[HttpPut("/expenses/regulars/{regularId:int}")]
 	public async Task<IActionResult> Update([FromRoute]int regularId,[FromBody]ModifyRegularExpenseDto expense)
 	{

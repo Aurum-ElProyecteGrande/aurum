@@ -19,12 +19,17 @@ namespace Aurum.Repositories.IncomeRepository.RegularIncomeRepository
             .Include(i => i.Account)
                 .ThenInclude(a => a.Currency)
             .FirstOrDefault(ri => ri.RegularIncomeId == regularId);
-        public async Task<List<RegularIncome>> GetAllRegular(int accountId) => _dbContext.RegularIncomes
+        public async Task<List<RegularIncome>> GetAllRegularWithId(int accountId) => await _dbContext.RegularIncomes
             .Where(ri => ri.AccountId == accountId)
             .Include(i => i.IncomeCategory)
             .Include(i => i.Account)
                 .ThenInclude(a => a.Currency)
-            .ToList();
+            .ToListAsync();
+        public async Task<List<RegularIncome>> GetAllRegular() => await _dbContext.RegularIncomes
+	        .Include(i => i.IncomeCategory)
+	        .Include(i => i.Account)
+	        .ThenInclude(a => a.Currency)
+	        .ToListAsync();
         public async Task<int> CreateRegular(RegularIncome income)
         {
             await _dbContext.RegularIncomes.AddAsync(income);

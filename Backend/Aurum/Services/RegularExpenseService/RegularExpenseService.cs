@@ -1,6 +1,8 @@
 using Aurum.Data.Entities;
 using Aurum.Models.CategoryDtos;
+using Aurum.Models.CurrencyDtos;
 using Aurum.Models.ExpenseDto;
+using Aurum.Models.ExpenseDTO;
 using Aurum.Models.RegularExpenseDto;
 using Aurum.Repositories.RegularExpenseRepository;
 using Aurum.Services.ExpenseCategoryService;
@@ -12,99 +14,90 @@ public class RegularExpenseService(IRegularExpenseRepository repository,IExpense
 {
 	private readonly IRegularExpenseRepository _repository = repository;
 	private readonly IExpenseCategoryService _categoryService = categoryService;
-	
-	public async Task<List<RegularExpenseDto>> GetAll(int accountId, string userId)
+
+	public async Task<List<RegularExpenseDto>> GetAllWithId(int accountId)
 	{
-		var rawExpenses = await _repository.GetAllRegular(accountId);
-		
+		var rawExpenses = await _repository.GetAllRegularWithId(accountId);
+
 		if (rawExpenses.Count == 0)
 			return [];
-		
-		var categories = await _categoryService.GetAllExpenseCategories(userId);
-		
-		if (categories.Count == 0)
-			throw new InvalidDataException("No categories found");
-		
-		return CreateRegularExpenseDtoList(rawExpenses, categories);
+
+		return rawExpenses.Select(CreateRegularExpenseDto).ToList();
 	}
 
-	public async Task<int> Create(int regularId, ModifyRegularExpenseDto expenseDto)
+	public async Task<List<RegularExpense>> GetAll()
+	{
+		var rawExpenses = await _repository.GetAllRegular();
+
+		if (rawExpenses.Count == 0)
+			return [];
+
+		return rawExpenses;
+	}
+
+	public async Task<int> Create(ModifyRegularExpenseDto expenseDto)
 	{
 		var subCategoryId = string.IsNullOrEmpty(expenseDto.SubCategoryName) ? (int?)null :
 			await _categoryService.AcquireSubCategoryId(expenseDto.CategoryId,expenseDto.SubCategoryName);
-		var expense = CreateRawRegularExpenseDto(expenseDto, regularId, subCategoryId);
-		
-		return await _repository.Create(expense); 
+		var expense = CreateRegularExpense(expenseDto, subCategoryId);
+
+		return await _repository.Create(expense);
 	}
 
 	public async Task<int> Update(int regularId, ModifyRegularExpenseDto expenseDto)
 	{
 		var subCategoryId = string.IsNullOrEmpty(expenseDto.SubCategoryName) ? (int?)null :
 			await _categoryService.AcquireSubCategoryId(expenseDto.CategoryId,expenseDto.SubCategoryName);
-		var expense = CreateRawRegularExpenseDto(expenseDto, regularId, subCategoryId);
-		
-		return await _repository.Update(expense); 
+		var expense = CreateRegularExpense(expenseDto, subCategoryId);
+
+		return await _repository.Update(expense);
 	}
 
-	public async Task<bool> Delete(int expenseId) => 
+	public async Task<bool> Delete(int expenseId) =>
 		await _repository.Delete(expenseId);
 
-	private List<RegularExpenseDto> CreateRegularExpenseDtoList(
-		List<RegularExpense> expenseDtoList,
-		Dictionary<CategoryDto, List<SubCategoryDto>> categories
-	)
-	{
-		var categoryDict = categories.ToDictionary(c => c.Key.CategoryId);
-		var expenses = new List<RegularExpenseDto>();
-
-		foreach (var expenseDto in expenseDtoList)
-		{
-			//For faster lookup time
-			if (!categoryDict.TryGetValue(expenseDto.ExpenseCategoryId, out var categoryKvp))
-				throw new KeyNotFoundException($"Category with ID {expenseDto.ExpenseSubcategoryId} not found");
-
-			var category = categoryKvp.Key;
-			var subCategories = categoryKvp.Value;
-			
-			var subCategory = subCategories.FirstOrDefault(s => s.SubCategoryId == expenseDto.ExpenseSubcategoryId);
-			
-			var expense = CreateRegularExpenseDto(expenseDto, category, subCategory);
-			expenses.Add(expense);
-		}
-		
-		return expenses;
-	}
-
-	private RegularExpense CreateRawRegularExpenseDto(
+	private RegularExpense CreateRegularExpense(
 		ModifyRegularExpenseDto expense,
-		int regularId,
 		int? subCategoryId
 	) =>
 		new RegularExpense()
 		{
-			RegularExpenseId = regularId,
 			AccountId = expense.AccountId,
 			ExpenseCategoryId = expense.CategoryId,
-			ExpenseSubcategoryId = subCategoryId ?? null,
+			ExpenseSubCategoryId = subCategoryId ?? null,
 			Label = expense.Label,
 			Amount = expense.Amount,
 			StartDate = expense.StartDate,
 			Regularity = expense.Regularity
 		};
-	private RegularExpenseDto CreateRegularExpenseDto(
-		RegularExpense expense, 
-		CategoryDto category, 
-		SubCategoryDto? subCategory
-		) => 
-		new RegularExpenseDto(
-			expense.RegularExpenseId,
-			expense.AccountId,
-			category,
-			subCategory ?? null,
-			expense.Label,
-			expense.Amount,
-			expense.StartDate,
-			expense.Regularity
+
+	private RegularExpenseDto CreateRegularExpenseDto(RegularExpense regularExpense)
+	{
+		var categoryDto = new CategoryDto(regularExpense.ExpenseCategory.Name, regularExpense.ExpenseCategoryId);
+
+		SubCategoryDto subCategoryDto = null;
+		if (regularExpense.ExpenseSubCategoryId != null)
+		{
+			subCategoryDto = new SubCategoryDto(
+				regularExpense.ExpenseSubCategory.Name,
+				regularExpense.ExpenseSubCategory.ExpenseSubCategoryId,
+				regularExpense.ExpenseCategoryId
+			);
+		}
+
+		var currency = new CurrencyDto(regularExpense.Account.Currency.Name, regularExpense.Account.Currency.CurrencyCode,
+			regularExpense.Account.Currency.Symbol);
+
+		return new RegularExpenseDto(
+			regularExpense.RegularExpenseId,
+			currency,
+			categoryDto,
+			subCategoryDto,
+			regularExpense.Label,
+			regularExpense.Amount,
+			regularExpense.StartDate,
+			regularExpense.Regularity
 		);
-	
+	}
+
 }

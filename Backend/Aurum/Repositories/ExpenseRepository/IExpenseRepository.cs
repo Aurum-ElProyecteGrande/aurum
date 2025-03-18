@@ -10,4 +10,5 @@ public interface IExpenseRepository
 	Task<List<Expense>> GetAll(int accountId, DateTime startDate, DateTime endDate);
 	Task<int> Create(Expense expense);
 	Task<bool> Delete(int expenseId);
+	Task<bool> CreateRange(List<Expense> expenses);
 }

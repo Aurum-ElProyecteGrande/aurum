@@ -84,7 +84,7 @@ namespace Aurum.Controllers.IncomeControllers
         {
             try
             {
-                var regularIncomes = _regularIncomeService.GetAllRegular(accountId);
+                var regularIncomes = _regularIncomeService.GetAllRegularWithId(accountId);
                 return Ok(regularIncomes);
             }
             catch (Exception ex)

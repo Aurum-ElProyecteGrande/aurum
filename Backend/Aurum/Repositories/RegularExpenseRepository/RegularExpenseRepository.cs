@@ -9,9 +9,21 @@ public class RegularExpenseRepository(AurumContext aurumContext) : IRegularExpen
 {
 	private AurumContext _context = aurumContext;
 
-	public async Task<List<RegularExpense>> GetAllRegular(int accountId) =>
+	public async Task<List<RegularExpense>> GetAllRegularWithId(int accountId) =>
 		await _context.RegularExpenses
 			.Where(r => r.AccountId == accountId)
+			.Include(e => e.ExpenseCategory)
+			.Include(e => e.ExpenseSubCategory)
+			.Include(e => e.Account)
+				.ThenInclude(a => a.Currency)
+			.ToListAsync();
+
+	public async Task<List<RegularExpense>> GetAllRegular() =>
+		await _context.RegularExpenses
+			.Include(e => e.ExpenseCategory)
+			.Include(e => e.ExpenseSubCategory)
+			.Include(e => e.Account)
+			.ThenInclude(a => a.Currency)
 			.ToListAsync();
 
 	public async Task<int> Create(RegularExpense expense)
@@ -43,11 +55,11 @@ public class RegularExpenseRepository(AurumContext aurumContext) : IRegularExpen
 		try
 		{
 			var expense = new RegularExpense() { RegularExpenseId = regularId };
-			
+
 			_context.Entry(expense).State = EntityState.Deleted;
-			
+
 			await _context.SaveChangesAsync();
-			
+
 			return true;
 		}
 		catch (Exception e)

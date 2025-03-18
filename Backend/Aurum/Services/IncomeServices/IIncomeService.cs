@@ -13,5 +13,6 @@ namespace Aurum.Services.IncomeServices
         Task<List<IncomeDto>> GetAll(int accountId, DateTime startDate, DateTime endDate);
         Task<int> Create(ModifyIncomeDto income);
         Task<bool> Delete(int incomeId);
+        Task<bool> CreateRangeFromRegular(List<RegularIncome> income);
     }
 }
