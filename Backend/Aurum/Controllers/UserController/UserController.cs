@@ -1,5 +1,7 @@
 using Aurum.Data.Contracts;
 using Aurum.Data.Entities;
+using Aurum.Models.UserDTO;
+using Aurum.Services.AccountService;
 using Aurum.Services.UserServices;
 using Aurum.Utils;
 
@@ -13,11 +15,13 @@ namespace Aurum.Controllers.UserController;
 public class UserController : ControllerBase
 {
 	private readonly IUserService _userService;
+	private readonly IAccountService _accountService;
 	private readonly ILogger<UserController> _logger;
 
-	public UserController(IUserService userService, ILogger<UserController> logger)
+	public UserController(IUserService userService, ILogger<UserController> logger, IAccountService accountService)
 	{
 		_userService = userService;
+		_accountService = accountService;
 		_logger = logger;
 	}
 
@@ -80,18 +84,35 @@ public class UserController : ControllerBase
 	}
 
 	[HttpPost("register")]
-	public async Task<ActionResult<RegistrationResponse>> Register(RegistrationRequest request)
+	public async Task<ActionResult<RegistrationResponse>> Register(UserCreationDto userCreationDto)
 	{
-		if (!ModelState.IsValid)
-			return BadRequest(ModelState);
+		try
+		{
 
-		var result = await _userService.RegisterAsync(request.Email, request.Username, request.Password, request.Role);
+			var regRequest = userCreationDto.RegistrationRequest;
+			var newAccount = userCreationDto.ModifyAccountDto;
 
-		if (result.Success)
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
+
+			var result = await _userService.RegisterAsync(regRequest.Email, regRequest.Username, regRequest.Password, regRequest.Role);
+
+			if (!result.Success)
+			{
+				AddErrors(result);
+				return BadRequest(ModelState);
+			}
+
+			await _accountService.Create(newAccount, result.UserId);
+
 			return CreatedAtAction(nameof(Register), new RegistrationResponse(result.Email, result.UserName));
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError($"An error occured while creating user: {ex.Message}");
+			return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
+		}
 
-		AddErrors(result);
-		return BadRequest(ModelState);
 
 	}
 

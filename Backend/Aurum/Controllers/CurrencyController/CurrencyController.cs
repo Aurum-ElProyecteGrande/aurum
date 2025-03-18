@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace Aurum.Controllers.CurrencyController;
 
 [ApiController]
-[Authorize]
 [Route("[controller]")]
 public class CurrencyController : ControllerBase
 {
