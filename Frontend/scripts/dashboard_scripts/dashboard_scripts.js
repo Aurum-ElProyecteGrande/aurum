@@ -56,7 +56,7 @@ export const fetchAccounts = async () => {
 		headers: {},
 		credentials: "include",
 	});
-	if (!response.ok) throw new Error(`Fetching accounts for user: ${accId} went wrong`);
+	if (!response.ok) throw new Error(`Fetching accounts for user went wrong`);
 	const accounts = await response.json();
 	return accounts;
 };

@@ -13,12 +13,12 @@ export default function AccountBalances({ isEditMode, accounts, segmentIndex, ch
                     name: acc.displayName, balance: await fetchBalance(acc.accountId), currency: acc.currency
                 }))
             )
-
+            
             updatedBalances = [...updatedBalances.sort((a, b) => b.balance - a.balance)]
 
             if (updatedBalances.length > 3) {
                 let topBalances = []
-                topBalances.push(topBalances[0], topBalances[1], topBalances[2])
+                topBalances.push(updatedBalances[0], updatedBalances[1], updatedBalances[2])
                 return setBalances(topBalances)
             }
             setBalances(updatedBalances)

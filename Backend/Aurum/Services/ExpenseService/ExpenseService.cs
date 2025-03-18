@@ -66,7 +66,7 @@ public class ExpenseService(IExpenseRepository repository, IExpenseCategoryServi
             );
         }
 
-        var currency = new CurrencyDto(expense.Account.Currency.Name, expense.Account.Currency.CurrencyCode,
+        var currency = new CurrencyDto(expense.Account.CurrencyId, expense.Account.Currency.Name, expense.Account.Currency.CurrencyCode,
             expense.Account.Currency.Symbol);
         
         return new ExpenseDto(
