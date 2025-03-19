@@ -12,7 +12,7 @@ function Accounts() {
 
     const [accounts, setAccounts] = useState([])
     const [accountsWithBalance, setAccountsWithBalance] = useState([])
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
     const [isAdd, setIsAdd] = useState(false)
     const [addAccName, setAddAccName] = useState("")
     const [addAccAmount, setAddAccAmount] = useState(0)
@@ -33,10 +33,10 @@ function Accounts() {
 
     useEffect(() => {
         const getAccounts = async () => {
-//            setIsLoading(true)
+            setIsLoading(true)
             const accs = await fetchAccounts()
             setAccounts(accs)
-  //          setIsLoading(false)
+            setIsLoading(false)
         }
         getAccounts()
     }, [])

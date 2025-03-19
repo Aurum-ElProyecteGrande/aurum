@@ -84,9 +84,11 @@ function AccountTable({ accountsWithBalance, setAccounts, accounts, useInfoToast
                                             <div className='edit'>
                                                 <MdEdit onClick={() => handleEditClick(acc)} />
                                             </div>
-                                            <div className='delete'>
-                                                <MdDelete onClick={() => handleDeleteClick(acc.accountId)} />
-                                            </div>
+                                            {accounts.length > 1 &&
+                                                <div className='delete'>
+                                                    <MdDelete onClick={() => handleDeleteClick(acc.accountId)} />
+                                                </div>
+                                            }
                                         </div>
                                     }
                                 </div>
