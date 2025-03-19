@@ -11,8 +11,7 @@ public class DailyRegularService(IHostedServiceHelper hostedServiceHelper, ILogg
 	{
 		while (!stoppingToken.IsCancellationRequested)
 		{
-			// var scheduledTime = new TimeSpan(2, 0, 0);
-			var scheduledTime =DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(3));
+			var scheduledTime = new TimeSpan(2, 0, 0);
 			var timeToWait = scheduledTime - DateTime.Now.TimeOfDay;
 
 			if (timeToWait < TimeSpan.Zero)
