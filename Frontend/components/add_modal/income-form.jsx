@@ -37,14 +37,14 @@ function IncomeForm({ formProps }) {
             incomeDto.regularity = regularity
         }
         else
-            expenseDto.date = new Date().toISOString()
+        incomeDto.date = new Date().toISOString()
 
         console.log(incomeDto)
         if (!checkIncomeDtoValidity(incomeDto)) return
 
         const isSucces = regularity == "None" ?
-                    await fetchPostIncome(expenseDto) :
-                    await fetchPostRegularIncome(expenseDto)
+                    await fetchPostIncome(incomeDto) :
+                    await fetchPostRegularIncome(incomeDto)
         
 
         if (isSucces) {

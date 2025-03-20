@@ -321,9 +321,7 @@ export const fetchUpdateRegularExpense = async (regularExpense) => {
 };
 
 export const fetchPostRegularIncome = async (regularIncome) => {
-
-
-	const response = await fetch(`${apiUrl}/income/regulars}`, {
+	const response = await fetch(`${apiUrl}/income/regulars`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -351,4 +349,26 @@ export const fetchPostRegularExpense = async (regularExpense) => {
 		throw new Error(`Fetching expenses for account: ${regularExpense.regularId} went wrong`);
 	const expenses = await response.json();
 	return expenses;
+};
+
+export const fetchDeleteRegularExpense = async (id) => {
+
+	const response = await fetch(`${apiUrl}/expenses/regulars/${id}`, {
+		method: "DELETE",
+		headers: {},
+		credentials: "include",
+	});
+	if (!response.ok)
+		throw new Error(`Deleting went wrong`);
+};
+
+export const fetchDeleteRegularIncome = async (id) => {
+
+	const response = await fetch(`${apiUrl}/income/regulars/${id}`, {
+		method: "DELETE",
+		headers: {},
+		credentials: "include",
+	});
+	if (!response.ok)
+		throw new Error(`Deleting went wrong`);
 };

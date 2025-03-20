@@ -7,7 +7,9 @@ import {
 	fetchRegularExpenses,
 	fetchRegularIncome,
 	fetchUpdateRegularExpense,
-	fetchUpdateRegularIncome
+	fetchUpdateRegularIncome,
+	fetchDeleteRegularExpense,
+	fetchDeleteRegularIncome
 } from "@/scripts/dashboard_scripts/dashboard_scripts";
 import RegularsTable from "../regulars_table/RegularsTable";
 
@@ -206,6 +208,15 @@ export default function Regulars() {
 		setSort({ key, direction });
 	};
 
+	const onDelete = async (regularId, isExpense) => {
+		isExpense ? 
+			fetchDeleteRegularExpense(regularId) :
+			fetchDeleteRegularIncome(regularId) 
+
+		const updatedData = [...filteredData].filter(d => d.regularId != regularId)
+		setSemiFilteredData(updatedData)
+	}
+
 	return (
 		<section className="transactions">
 			<TransactionSidebar />
@@ -241,7 +252,7 @@ export default function Regulars() {
 							Next
 						</button>
 					</div>
-					<RegularsTable data={currentData} onClick={handleSort} isEditing={isEditing} handleSelectChange={handleSelectChange} />
+					<RegularsTable data={currentData} onClick={handleSort} isEditing={isEditing} handleSelectChange={handleSelectChange} onDelete={onDelete} />
 				</div>
 			)}
 		</section>

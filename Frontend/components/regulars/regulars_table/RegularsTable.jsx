@@ -1,7 +1,8 @@
 import React from 'react';
 import { displayCurrency } from '@/scripts/dashboard_scripts/dashboard_scripts';
+import { MdClose } from "react-icons/md";
 
-const RegularsTable = ({ data, onClick, isEditing, handleSelectChange }) => {
+const RegularsTable = ({ data, onClick, isEditing, handleSelectChange, onDelete }) => {
     return (
         <table className="transactions-table wrapper">
             <thead>
@@ -24,20 +25,30 @@ const RegularsTable = ({ data, onClick, isEditing, handleSelectChange }) => {
                         <td>{item.isExpense ? "-" : "+"} {displayCurrency(item.amount, item.currency.currencyCode)}</td>
                         <td>{new Date(item.startDate).toLocaleDateString()}</td>
                         {isEditing ? (
-                            <td>
-                                <select
-                                    value={item.regularity}
-                                    onChange={(e) => handleSelectChange(index, e.target.value)}
-                                >
-                                    <option value="Daily">Daily</option>
-                                    <option value="Weekly">Weekly</option>
-                                    <option value="Monthly">Monthly</option>
-                                </select>
-                            </td>
+                            <>
+                                <td>
+                                    <select
+                                        value={item.regularity}
+                                        onChange={(e) => handleSelectChange(index, e.target.value)}
+                                    >
+                                        <option value="Daily">Daily</option>
+                                        <option value="Weekly">Weekly</option>
+                                        <option value="Monthly">Monthly</option>
+                                    </select>
+                                </td>
+                                <td className="deletable">
+                                    <div>
+                                        {item.accountName}
+                                        <MdClose onClick={() => onDelete(item.regularId, item.isExpense)}/>
+                                    </div>
+                                </td>
+                            </>
                         ) : (
-                            <td>{item.regularity}</td>
+                            <>
+                                <td>{item.regularity}</td>
+                                <td>{item.accountName}</td>
+                            </>
                         )}
-                        <td>{item.accountName}</td>
                     </tr>
                 ))}
             </tbody>
