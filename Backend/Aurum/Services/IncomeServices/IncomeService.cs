@@ -1,4 +1,4 @@
-﻿using Aurum.Data.Entities;
+using Aurum.Data.Entities;
 using Aurum.Models.AccountDto;
 using Aurum.Models.CategoryDtos;
 using Aurum.Models.CurrencyDtos;
@@ -127,7 +127,7 @@ namespace Aurum.Services.IncomeServices
         private IncomeDto ConvertIncomeToDto(Income income)
         {
             var categoryDto = new CategoryDto(income.IncomeCategory.Name, income.IncomeCategoryId);
-            var currencyDto = new CurrencyDto(income.Account.Currency.Name, income.Account.Currency.CurrencyCode, income.Account.Currency.Symbol);
+            var currencyDto = new CurrencyDto(income.Account.CurrencyId, income.Account.Currency.Name, income.Account.Currency.CurrencyCode, income.Account.Currency.Symbol);
 
             return new(categoryDto, currencyDto, income.Label, income.Amount, income.Date);
         }

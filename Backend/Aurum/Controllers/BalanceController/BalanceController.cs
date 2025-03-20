@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Aurum.Services.BalanceService;
 using Aurum.Models.IncomeDTOs;
 using Microsoft.AspNetCore.Authorization;
@@ -11,10 +11,12 @@ namespace Aurum.Controllers.BalanceController
     [Route("[controller]")]
     public class BalanceController : ControllerBase
     {
-        IBalanceService _balanceService;
-        public BalanceController(IBalanceService balanceService)
+        private readonly IBalanceService _balanceService;
+		private readonly ILogger<BalanceController> _logger;
+		public BalanceController(IBalanceService balanceService, ILogger<BalanceController> logger)
         {
             _balanceService = balanceService;
+			_logger = logger;
         }
 
         [HttpGet("{accountId:int}")]
@@ -37,10 +39,10 @@ namespace Aurum.Controllers.BalanceController
                 return Ok(balance);
             }
             catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return BadRequest(ex.Message);
-            }
+			{
+				_logger.LogError($"An error occured while getting accounts balance: {ex.Message}");
+				return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
+			}
         }
 
         [HttpGet("{accountId:int}/range")]
@@ -62,10 +64,10 @@ namespace Aurum.Controllers.BalanceController
                 return Ok(balances);
             }
             catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return BadRequest(ex.Message);
-            }
+			{
+				_logger.LogError($"An error occured while getting accounts balance: {ex.Message}");
+				return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
+			}
         }
     }
 }

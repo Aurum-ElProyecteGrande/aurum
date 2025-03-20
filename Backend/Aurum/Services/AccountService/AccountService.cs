@@ -1,4 +1,4 @@
-﻿using Aurum.Data.Entities;
+using Aurum.Data.Entities;
 using Aurum.Models.AccountDto;
 using Aurum.Models.CurrencyDtos;
 using Aurum.Repositories.AccountRepository;
@@ -96,7 +96,7 @@ namespace Aurum.Services.AccountService
 
         private AccountDto ConvertAccountToDto(Account acc)
         {
-            var currency = new CurrencyDto (acc.Currency.Name, acc.Currency.CurrencyCode, acc.Currency.Symbol);
+            var currency = new CurrencyDto (acc.CurrencyId, acc.Currency.Name, acc.Currency.CurrencyCode, acc.Currency.Symbol);
             AccountDto accDto = new(acc.AccountId, acc.UserId, acc.DisplayName, acc.Amount, currency);
             return accDto;
         }

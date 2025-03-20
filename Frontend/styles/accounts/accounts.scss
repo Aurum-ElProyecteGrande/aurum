@@ -1,0 +1,574 @@
+.accounts {
+    display: grid;
+    grid-template-areas:
+        "sidebar header"
+        "sidebar main";
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: auto 1fr;
+    height: 100svh;
+
+    @include respond(tablet-portrait) {
+        display: flex;
+        flex-direction: column;
+    }
+
+    transaction-sidebar {
+        grid-area: sidebar;
+        background-color: $primary;
+        height: 100%;
+        width: auto;
+
+        &-logo {
+            padding: 1rem 0.5rem 0rem;
+
+            img {
+                width: 10rem;
+                height: auto;
+            }
+        }
+
+        &-container {
+            display: flex;
+            flex-direction: column;
+            gap: 3.5rem;
+            height: 100%;
+        }
+
+        &-menu {
+            background-color: $primary;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+
+            li {
+                font-size: 1.5rem;
+                padding-block: 0.35rem;
+                position: relative;
+                display: flex;
+                align-items: center;
+                width: 100%;
+
+                &:last-child {
+                    margin-top: auto;
+                    margin-bottom: 1rem;
+
+                }
+
+                a {
+                    position: relative;
+                    display: block;
+                    margin-left: 0.5rem;
+                    padding: 0.5rem 1rem;
+                    width: 100%;
+                    z-index: 1;
+
+                    &::before {
+                        content: '';
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        width: 0;
+                        height: 100%;
+                        background-color: $background;
+                        border-radius: 15px 0 0 15px;
+                        z-index: -1;
+                        transition: all 0.3s ease;
+                    }
+
+                    &:hover::before {
+                        width: 100%;
+                    }
+                }
+            }
+
+            &-item {
+                display: flex;
+                gap: 0.3rem;
+                align-items: center;
+            }
+        }
+    }
+
+    &-container {
+        grid-area: main;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        form {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            align-items: center;
+            width: 100%;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            padding-top: 0.4rem;
+            padding-bottom: 0.4rem;
+            border: 2.5px solid $primary-shade;
+            background-color: $primary-shade;
+            border-radius: 15px;
+            box-shadow: 0px 0px 12px $background-shade;
+
+            select{
+                width: 15%;
+                padding: 8px;
+                border-radius: 10px;
+                font-size: 1rem;
+                outline: none;
+                font-family: $font;
+                font-size: 1.2rem; 
+            }
+
+            input {
+                width: 30%;
+                padding: 8px;
+                border-radius: 10px;
+                font-size: 1rem;
+                outline: none;
+                font-family: $font;
+                font-size: 1.2rem;
+            }
+
+            .buttons {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-evenly;
+                align-items: center;
+                width: 10%;
+                height: 100%;
+                
+                button {
+                    background-color: $primary;
+                    height: 100%;
+                    width: 50%;
+                    border-radius: 0.5rem;
+                    font-size: 1.15rem;
+                    transition: all 0.3s ease;
+                    display: inline-block;
+                    border: 1px solid transparent;
+                    box-shadow: 2px 2px 4px $background-shade;
+                    
+                    &:hover {
+                        background-color: transparent;
+                        border-color: $primary;
+                    }
+                }
+                
+                .close-add {
+                    color: $fail;
+                }
+            }
+            
+        }
+
+        .add-acc {
+            margin-top: 1rem;
+        }
+    }
+
+    &-header {
+        padding: 1rem 0 4rem 0;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+
+        .profile-pic {
+            margin-right: 0.5rem;
+            font-size: 4rem;
+        }
+
+        @include respond(tablet-portrait) {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 0;
+            height: 11rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    &-search {
+        grid-area: header;
+        display: flex;
+        padding: 0.75rem;
+        width: fit-content;
+        height: 5rem;
+        margin-inline: auto;
+        gap: 7.85rem;
+        border: 2px solid $text-shade;
+        background-color: $background-shade;
+        transition: all 0.2s ease;
+        border-radius: 15px;
+        justify-content: center;
+        align-items: center;
+        height: fit-content;
+
+        &:focus-within {
+            border: 2px solid $primary;
+        }
+
+        @include respond(tablet-portrait) {
+            gap: 1.5rem;
+        }
+
+        input {
+            background: transparent;
+            color: $text;
+            border: none;
+            padding-left: 0.75rem;
+            width: 17.5rem;
+
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+
+    &-table {
+        width: 100%;
+        border-collapse: separate;
+        table-layout: fixed;
+        color: $accent;
+        font-size: 1.3rem;
+        border: 2.5px solid $primary-shade;
+        border-spacing: 0;
+        border-radius: 15px;
+        overflow: hidden;
+        padding: 0;
+        box-shadow: 0px 12px 24px $background-shade;
+
+        tbody {
+            tr {
+                height:3.5rem;
+            }
+        }
+
+        th,
+        td {
+            align-items: center;
+            padding: 0.5rem;
+            text-align: left;
+            border: 1px solid $text-shade;
+            
+            input {
+                width: 100%;
+                padding: 8px;
+                border-radius: 5px;
+                font-size: 1rem;
+                outline: none;
+                font-family: $font;
+                font-size: 1.2rem;
+            }
+
+            .td-wrapper{   
+                display: flex;
+                flex-direction: row;
+                width: 100%;
+                height: 2.5rem;
+                justify-content: space-between;
+                align-items: center;
+
+                .icons {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-evenly;
+                    width: 5rem;
+                    align-items: center;
+
+                    .edit{
+                        cursor: pointer;                         
+                        :hover {
+                            color: $accent;
+                        }                        
+                    }
+                    .delete{
+                        cursor:pointer;
+                        :hover {
+                            color: $fail;
+                        }
+                    }
+                    .submit {
+                        text-align: center;
+                        font-size: 2rem;
+                        cursor: pointer;
+                        :hover {
+                            color: $success
+                        }
+                    }
+                    .back {
+                        text-align: center;
+                        font-size: 1.2rem;
+                        cursor: pointer;
+                        :hover {
+                            color:$fail
+                        }
+                    }
+
+
+                }
+            }
+        }
+
+        th {
+            background-color: $background-shade;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        tr:nth-child(even) {
+            background-color: $background-shade;
+        }
+
+        tbody tr:hover {
+            background-color: $accent-shade;
+        }
+    }
+
+    &-pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        font-size: 1.2rem;
+
+
+        button {
+            width: 7rem;
+
+            &:disabled {
+                background-color: $background-shade;
+                cursor: not-allowed;
+                border: none;
+            }
+
+            &:hover:not(:disabled) {
+                transform: scale(1.05);
+            }
+        }
+
+
+        span {
+            font-size: 1rem;
+        }
+    }
+
+    &-date {
+        grid-area: header;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 4rem;
+        border: 2px solid $text-shade;
+        background-color: $background-shade;
+        border-radius: 15px;
+        transition: all 0.2s ease;
+        justify-content: center;
+
+        &:focus-within {
+            border: 2px solid $primary;
+        }
+
+        input[type="date"] {
+            background: transparent;
+            color: $text;
+            border: none;
+            padding-left: 0.75rem;
+            width: 15rem;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            padding-right: 0.5rem;
+
+            &:focus {
+                outline: none;
+            }
+
+            @include respond(tablet-portrait) {
+                width: 100%;
+                font-size: 1rem;
+                padding: 0.5rem;
+                text-align: center;
+            }
+        }
+
+        @include respond(tablet-portrait) {
+            flex-direction: column;
+            margin-left: 0;
+            width: fit-content;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 10px;
+        }
+    }
+
+    &-accounts {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+        margin-right: 4rem;
+
+        &-menu {
+            position: absolute;
+            top: 3.5rem;
+            background-color: $background-shade;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            width: 12rem;
+
+            ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+
+                li {
+                    font-size: 1rem;
+                    padding: 0.5rem 1rem;
+                    cursor: pointer;
+                    transition: background-color 0.2s ease;
+                    border-radius: 10px;
+
+                    &:hover {
+                        background-color: $primary;
+                    }
+
+                    input[type="checkbox"] {
+                        &:checked {
+                            accent-color: $accent;
+                            background-color: $accent;
+                            border-color: $accent;
+                        }
+
+                        &:checked::before {
+                            background-color: $primary;
+                        }
+                    }
+
+                }
+            }
+        }
+
+        @include respond(tablet-portrait) {
+            margin-right: 0;
+            gap: 0.75rem;
+            flex-direction: row;
+
+            &-menu {
+                position: relative;
+                top: unset;
+                width: 100%;
+                box-shadow: none;
+                padding: 0.5rem;
+
+                ul {
+                    flex-direction: row;
+                    justify-content: space-around;
+                    gap: 1rem;
+
+                    li {
+                        font-size: 0.9rem;
+                        padding: 0.5rem;
+                    }
+                }
+            }
+        }
+    }
+
+    &-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin: 11rem 1rem 5rem 1rem;
+        overflow-y: auto;
+        position: relative;
+        padding-bottom: 1rem;   
+        
+        scroll-behavior: smooth;
+        
+        &::-webkit-scrollbar {
+            display: none;
+        }    
+        
+        -ms-overflow-style: none; 
+        scrollbar-width: none; 
+    }
+    
+    
+
+    &-card {
+        background-color: $background-shade;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+        &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        &-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+
+            h3 {
+                font-size: 1.2rem;
+                font-weight: bold;
+                margin: 0;
+            }
+
+            span {
+                font-size: 0.9rem;
+            }
+        }
+
+        &-body {
+            margin-bottom: 1rem;
+
+            .positive {
+                color: $accent;
+            }
+
+            .negative {
+                color: $error;
+            }
+
+            p {
+                font-size: 1rem;
+                margin: 0.5rem 0;
+
+                strong {
+                    font-weight: bold;
+                }
+            }
+        }
+
+        &-footer {
+            font-size: 0.9rem;
+            margin-top: 1rem;
+
+            span {
+                font-size: 0.9rem;
+
+                strong {
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+
+
+}
