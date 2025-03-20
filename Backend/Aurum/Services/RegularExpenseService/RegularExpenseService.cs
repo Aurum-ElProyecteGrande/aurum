@@ -85,7 +85,7 @@ public class RegularExpenseService(IRegularExpenseRepository repository,IExpense
 			);
 		}
 
-		var currency = new CurrencyDto(regularExpense.Account.Currency.Name, regularExpense.Account.Currency.CurrencyCode,
+		var currency = new CurrencyDto(regularExpense.Account.Currency.CurrencyId,regularExpense.Account.Currency.Name, regularExpense.Account.Currency.CurrencyCode,
 			regularExpense.Account.Currency.Symbol);
 
 		return new RegularExpenseDto(
