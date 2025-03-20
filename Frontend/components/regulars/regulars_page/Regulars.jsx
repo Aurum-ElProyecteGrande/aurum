@@ -215,6 +215,8 @@ export default function Regulars() {
 
 		const updatedData = [...filteredData].filter(d => d.regularId != regularId)
 		setSemiFilteredData(updatedData)
+		const updatedModifyData = [...modifiedRows].filter(d => d.regularId != regularId)
+		setModifiedRows(updatedModifyData)
 	}
 
 	return (
