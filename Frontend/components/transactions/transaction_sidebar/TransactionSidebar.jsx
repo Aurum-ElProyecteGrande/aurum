@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { MdLogout, MdFormatListBulleted } from "react-icons/md";
+import { MdLogout, MdFormatListBulleted, MdOutlineAccountBalance } from "react-icons/md";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { CgProfile } from "react-icons/cg";
 import Image from 'next/image'
@@ -37,6 +37,14 @@ function TransactionSidebar() {
                             <div className='transactions-sidebar-menu-item'>
                                 <MdFormatListBulleted />
                                 <p>Transactions</p>
+                            </div>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href="/accounts">
+                            <div className='transactions-sidebar-menu-item'>
+                                <MdOutlineAccountBalance />
+                                <p>Accounts</p>
                             </div>
                         </Link>
                     </li>

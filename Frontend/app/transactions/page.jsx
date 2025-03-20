@@ -13,8 +13,5 @@ export default function TransactionsPage()
      isTabletPortrait ? <MobileTransactionsPage /> : <Transactions />
     }
     </>
-      
- 
-
   );
 }
