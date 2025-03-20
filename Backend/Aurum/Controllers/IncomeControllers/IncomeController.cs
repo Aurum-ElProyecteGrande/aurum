@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Aurum.Models.IncomeDTOs;
 using System;
 using Aurum.Services.IncomeServices;
 using Aurum.Services.RegularIncomeServices;
 using Aurum.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Identity.Client;
 
 namespace Aurum.Controllers.IncomeControllers
 {
@@ -13,12 +14,14 @@ namespace Aurum.Controllers.IncomeControllers
     [Route("[controller]")]
     public class IncomeController : ControllerBase
     {
-        private IIncomeService _incomeService;
-        private IRegularIncomeService _regularIncomeService;
-        public IncomeController(IIncomeService incomeService, IRegularIncomeService regularIncomeService)
+        private readonly IIncomeService _incomeService;
+        private readonly IRegularIncomeService _regularIncomeService;
+		private readonly ILogger<IncomeController> _logger;
+		public IncomeController(IIncomeService incomeService, IRegularIncomeService regularIncomeService, ILogger<IncomeController> logger)
         {
             _incomeService = incomeService;
             _regularIncomeService = regularIncomeService;
+			_logger = logger;
         }
 
 
@@ -42,10 +45,10 @@ namespace Aurum.Controllers.IncomeControllers
                 return Ok(incomes);
             }
             catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return BadRequest(ex.Message);
-            }
+			{
+				_logger.LogError($"An error occured while getting incomes for acc#{accountId}: {ex.Message}");
+				return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
+			}
         }
 
         [HttpPost]
@@ -58,9 +61,9 @@ namespace Aurum.Controllers.IncomeControllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return BadRequest(ex.Message);
-            }
+				_logger.LogError($"An error occured while creating income {ex.Message}");
+				return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
+			}
         }
 
         [HttpDelete("{incomeId:int}")]
@@ -73,10 +76,10 @@ namespace Aurum.Controllers.IncomeControllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return BadRequest(ex.Message);
+				_logger.LogError($"An error occured while deleting income#{incomeId}: {ex.Message}");
+				return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
 
-            }
+			}
         }
 
         [HttpGet("regulars/{accountId:int}")]
@@ -89,9 +92,9 @@ namespace Aurum.Controllers.IncomeControllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return BadRequest(ex.Message);
-            }
+				_logger.LogError($"An error occured while getting regular incomes for acc#{accountId}: {ex.Message}");
+				return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
+			}
         }
 
         [HttpPost("regulars")]
@@ -104,9 +107,9 @@ namespace Aurum.Controllers.IncomeControllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return BadRequest(ex.Message);
-            }
+				_logger.LogError($"An error occured while creating regular income: {ex.Message}");
+				return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
+			}
         }
 
         [HttpPut("regulars/{regularId}")]
@@ -119,9 +122,9 @@ namespace Aurum.Controllers.IncomeControllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return BadRequest(ex.Message);
-            }
+				_logger.LogError($"An error occured while updating regular income for regular income#{regularId}: {ex.Message}");
+				return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
+			}
         }
 
         [HttpDelete("regulars/{regularId:int}")]
@@ -134,9 +137,9 @@ namespace Aurum.Controllers.IncomeControllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return BadRequest(ex.Message);
-            }
+				_logger.LogError($"An error occured while deleting regular income#{regularId}: {ex.Message}");
+				return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
+			}
         }
     }
 }

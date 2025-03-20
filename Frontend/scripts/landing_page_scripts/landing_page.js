@@ -74,16 +74,16 @@ export async function fetchTest() {
 }
 
 export const fetchLogout = async () => {
-    const response = await fetch("api/user/logout", {
-        method: "POST",
-        headers: {
-        },
-        credentials: "include",
-    });
-    if (!response.ok) 
-        throw new Error(response.statusText);
+	const response = await fetch("api/user/logout", {
+		method: "POST",
+		headers: {
+		},
+		credentials: "include",
+	});
+	if (!response.ok)
+		throw new Error(response.statusText);
 
-    return true;
+	return true;
 };
 
 export const fetchValidate = async () => {
@@ -95,5 +95,14 @@ export const fetchValidate = async () => {
 		credentials: 'include',
 	});
 
-    return response.ok;
+	return response.ok;
 };
+
+
+export const fetchAllCurrency = async () => {
+	const response = await fetch("api/currency",);
+	if (!response.ok)
+		throw new Error(response.statusText);
+	const currencies = await response.json()
+	return currencies;
+}

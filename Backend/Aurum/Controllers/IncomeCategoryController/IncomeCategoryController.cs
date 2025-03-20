@@ -1,4 +1,4 @@
-﻿using Aurum.Models.CategoryDtos;
+using Aurum.Models.CategoryDtos;
 using Aurum.Repositories.IncomeRepository.IncomeCategoryRepository;
 using Aurum.Services.IncomeCategoryServices;
 using Microsoft.AspNetCore.Authorization;
@@ -11,12 +11,14 @@ namespace Aurum.Controllers.IncomeCategoriyControllers
     [Route("/categories/income")]
     public class IncomeCategoryController : ControllerBase
     {
-        private IIncomeCategoryService _incomeCategoryService;
+        private readonly IIncomeCategoryService _incomeCategoryService;
+		private readonly ILogger<IncomeCategoryController> _logger;
 
-        public IncomeCategoryController(IIncomeCategoryService incomeCategoryService)
+		public IncomeCategoryController(IIncomeCategoryService incomeCategoryService, ILogger<IncomeCategoryController> logger)
         {
             _incomeCategoryService = incomeCategoryService;
-        }
+			_logger = logger;
+		}
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -28,10 +30,10 @@ namespace Aurum.Controllers.IncomeCategoriyControllers
                 return Ok(incomeCategories);
             }
             catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return BadRequest(ex.Message);
-            }
+			{
+				_logger.LogError($"An error occured while getting income categories: {ex.Message}");
+				return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
+			}
         }
     }
 

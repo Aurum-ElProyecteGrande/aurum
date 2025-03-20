@@ -159,9 +159,6 @@ export default function Dashboard() {
     setTimeout(() => setIsToast(false), 5000);
   }
 
-
-  console.log(chosenCharts)
-
   return (
     <div className="dashboard page">
       <Header

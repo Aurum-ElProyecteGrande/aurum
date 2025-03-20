@@ -14,11 +14,13 @@ namespace Aurum.Controllers.AccountController
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
+		private readonly ILogger<AccountController> _logger;
 
-        public AccountController(IAccountService accountService)
+        public AccountController(IAccountService accountService, ILogger<AccountController> logger)
         {
             _accountService = accountService;
-        }
+			_logger = logger;
+		}
 
         [HttpGet()]
         public async Task<IActionResult> GetAll()
@@ -27,18 +29,16 @@ namespace Aurum.Controllers.AccountController
             {
                 if (UserHelper.GetUserId(HttpContext,out var userId, out var unauthorized)) 
                     return unauthorized;
-                
-                Console.WriteLine(userId);
-                
+                                
                 var accounts = await _accountService.GetAll(userId);
                 return Ok(accounts);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return BadRequest(ex.Message);
-            }
-        }
+                _logger.LogError($"An error occured while getting accounts: {ex.Message}");
+				return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
+			}
+		}
 
         [HttpPost]
         public async Task<IActionResult> Create(ModifyAccountDto account)
@@ -54,9 +54,9 @@ namespace Aurum.Controllers.AccountController
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return BadRequest(ex.Message);
-            }
+				_logger.LogError($"An error occured while creating account: {ex.Message}");
+				return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
+			}
         }
 
         [HttpPut("{accountId:int}")]
@@ -68,10 +68,10 @@ namespace Aurum.Controllers.AccountController
                 return Ok(updatedId);
             }
             catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return BadRequest(ex.Message);
-            }
+			{
+				_logger.LogError($"An error occured while updating account: {ex.Message}");
+				return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
+			}
         }
 
         [HttpDelete("{accountId:int}")]
@@ -83,10 +83,10 @@ namespace Aurum.Controllers.AccountController
                 return Ok(isDeleted);
             }
             catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return BadRequest(ex.Message);
-            }
+			{
+				_logger.LogError($"An error occured while deleting account: {ex.Message}");
+				return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
+			}
         }
     }
 }

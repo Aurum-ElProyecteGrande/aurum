@@ -1,4 +1,4 @@
-﻿using Aurum.Data.Context;
+using Aurum.Data.Context;
 using Aurum.Data.Entities;
 using Aurum.Data.Utils;
 
@@ -6,7 +6,7 @@ namespace Aurum.Data.Seeders.DataGenerators
 {
     public class ExpenseGenerator
     {
-        private const int enoughExpenses = 25;
+        private const int enoughExpenses = 30;
         private AurumContext _context;
         private Dictionary<string, Dictionary<string, List<string>>> _expensesByCatBySub;
 
