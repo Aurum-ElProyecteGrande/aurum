@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MdLogout, MdFormatListBulleted } from "react-icons/md";
-import { LuLayoutDashboard } from "react-icons/lu";
+import { LuLayoutDashboard, LuCalendarRange } from "react-icons/lu";
 import { CgProfile } from "react-icons/cg";
 import { fetchLogout } from '@/scripts/landing_page_scripts/landing_page';
 import Link from 'next/link';
@@ -22,6 +22,11 @@ const MobileBottomBar = ({ }) => {
                     <li>
                         <Link href="/transactions">
                             <MdFormatListBulleted />
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href="/regulars">
+                                <LuCalendarRange />
                         </Link>
                     </li>
                     <li>

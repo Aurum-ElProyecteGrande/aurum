@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { MdLogout, MdFormatListBulleted } from "react-icons/md";
-import { LuLayoutDashboard } from "react-icons/lu";
+import { LuLayoutDashboard, LuCalendarRange } from "react-icons/lu";
 import { CgProfile } from "react-icons/cg";
 import Image from 'next/image'
 import Logo from '@/imgs/aurum_logo.png'
@@ -37,6 +37,14 @@ function TransactionSidebar() {
                             <div className='transactions-sidebar-menu-item'>
                                 <MdFormatListBulleted />
                                 <p>Transactions</p>
+                            </div>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href="/regulars">
+                            <div className='transactions-sidebar-menu-item'>
+                                <LuCalendarRange />
+                                <p>Regulars</p>
                             </div>
                         </Link>
                     </li>
