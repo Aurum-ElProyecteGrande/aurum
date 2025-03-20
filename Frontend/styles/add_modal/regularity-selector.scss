@@ -1,0 +1,48 @@
+.regularity-selector {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-evenly;
+    text-align: center;
+    grid-area: regularity;
+  }
+  
+  .regularity-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+  }
+  
+  .regularity-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    
+    input{
+        margin-bottom: 0.35rem;
+        
+        &:checked{
+            accent-color: $accent;
+        }
+    }
+}
+
+.regularity-option {
+    display: flex;
+    align-items: center;
+    margin-right: 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .regularity-input {
+    margin-right: 0.5rem;
+    cursor: pointer;    
+  }
+  
+  .regularity-option input[type="radio"]:checked + span {
+    font-weight: bold;
+  }
+  
