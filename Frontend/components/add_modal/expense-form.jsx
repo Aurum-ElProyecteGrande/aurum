@@ -1,7 +1,8 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import InputWithOptions from './form-components/input-with-options'
-import { fetchPostExpense } from '@/scripts/dashboard_scripts/dashboard_scripts'
+import { fetchPostExpense, fetchPostRegularExpense } from '@/scripts/dashboard_scripts/dashboard_scripts'
+import RegularitySelector from './regularity-selector'
 
 function ExpenseForm({ formProps }) {
 
@@ -13,6 +14,7 @@ function ExpenseForm({ formProps }) {
     const [possibleSubCategories, setPossibleSubCategories] = useState("")
     const [label, setLabel] = useState("")
     const [amount, setAmount] = useState(0)
+    const [regularity, setRegularity] = useState("None")
 
 
     useEffect(() => {
@@ -35,15 +37,24 @@ function ExpenseForm({ formProps }) {
         const expenseDto = {
             accountId: chosenAccount.accountId,
             categoryId: chosenCategory.categoryId,
-            subCategoryName: chosenSubCategory.name ?? null,
+            subCategoryName: chosenSubCategory ?? null,
             label,
-            amount,
-            date: new Date().toISOString()
+            amount
         }
+
+        if (regularity != "None") {
+            expenseDto.startDate = new Date().toISOString()
+            expenseDto.regularity = regularity
+        }
+        else
+            expenseDto.date = new Date().toISOString()
+
 
         console.log(expenseDto)
         if (!checkExpenseDtoValidity(expenseDto)) return
-        const isSucces = await fetchPostExpense(expenseDto)
+        const isSucces = regularity == "None" ?
+            await fetchPostExpense(expenseDto) :
+            await fetchPostRegularExpense(expenseDto)
 
 
         if (isSucces) {
@@ -58,12 +69,17 @@ function ExpenseForm({ formProps }) {
             !expenseDto.categoryId ||
             !expenseDto.label ||
             !expenseDto.amount ||
-            !expenseDto.date
+            !(expenseDto.date ||
+                (expenseDto.startDate && expenseDto.regularity))
         ) {
             useInfoToast("Missing expense details.", "fail")
             return false
         }
         return true
+    }
+
+    const onSelect = (value) => {
+        setRegularity(value)
     }
 
 
@@ -87,6 +103,7 @@ function ExpenseForm({ formProps }) {
                     </select>
                 </div>
                 <InputWithOptions id="sub-cat" options={possibleSubCategories} inputValue={chosenSubCategory} setInputValue={setChosenSubCategory} />
+                <RegularitySelector onSelect={onSelect} />
                 <div className='label input'>
                     <input id="label" type='text' placeholder='Label' onChange={(e) => setLabel(e.target.value)} />
                 </div>

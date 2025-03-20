@@ -56,5 +56,13 @@ namespace Aurum.Repositories.IncomeRepository.IncomeRepository
             }
             return false;
         }
+
+        public async Task<bool> CreateRange(List<Income> incomes)
+        {
+	        _dbContext.Incomes.AddRange(incomes);
+	        var result = await _dbContext.SaveChangesAsync();
+
+	        return result > 0;
+        }
     }
 }

@@ -1,3 +1,4 @@
+using Aurum.Data.Entities;
 using Aurum.Models.ExpenseDto;
 using Aurum.Models.ExpenseDTO;
 
@@ -11,4 +12,5 @@ public interface IExpenseService
 	Task<bool> Delete(int expenseId);
 	Task<decimal> GetTotalExpense(int accountId);
 	Task<decimal> GetTotalExpense(int accountId, DateTime date);
+	Task<bool> CreateRangeFromRegular(List<RegularExpense> expense);
 }

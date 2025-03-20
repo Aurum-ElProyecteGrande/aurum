@@ -4,6 +4,7 @@ using System.Text.Json;
 using Aurum.Data.Context;
 using Aurum.Data.Entities;
 using Aurum.Data.Seeders;
+using Aurum.HostedServices;
 using Aurum.Middleware;
 using Aurum.Repositories.IncomeRepository.RegularIncomeRepository;
 using Aurum.Models.CustomJsonConverter;
@@ -31,6 +32,7 @@ using Aurum.Services.UserServices;
 using Aurum.Repositories.UserRepository;
 using Aurum.Services.CurrencyServices;
 using Aurum.Repositories.LayoutRepository;
+using Aurum.Services.HostedHelperServices;
 using Aurum.Services.LayoutServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.CookiePolicy;
@@ -60,13 +62,14 @@ AddCookiePolicy(builder);
 AddServices(builder);
 AddCors(builder);
 
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AurumContext>();
-    // momentary fix for integration testing 
-    if (dbContext.Database.IsRelational())  
+    // momentary fix for integration testing
+    if (dbContext.Database.IsRelational())
     {
         dbContext.Database.Migrate();
     }
@@ -139,7 +142,8 @@ void AddServices(WebApplicationBuilder webApplicationBuilder)
     webApplicationBuilder.Services.AddScoped<ILayoutService, LayoutService>();
     webApplicationBuilder.Services.AddScoped<AuthenticationSeeder>();
     webApplicationBuilder.Services.AddScoped<DataSeeder>();
-
+    webApplicationBuilder.Services.AddScoped<IHostedServiceHelper, HostedServiceHelper>();
+    webApplicationBuilder.Services.AddHostedService<DailyRegularService>();
 }
 
 void AddCors(WebApplicationBuilder builder1)

@@ -17,10 +17,10 @@ public class RegularExpenseController(IRegularExpenseService service, ILogger<Re
 	{
 		try
 		{
-			if (UserHelper.GetUserId(HttpContext,out var userId, out var unauthorized)) 
+			if (UserHelper.GetUserId(HttpContext,out var userId, out var unauthorized))
 				return unauthorized;
-			
-			var expenses = await _service.GetAll(accountId, userId);
+
+			var expenses = await _service.GetAllWithId(accountId);
 			return Ok(expenses);
 		}
 		catch (Exception e)
@@ -30,12 +30,12 @@ public class RegularExpenseController(IRegularExpenseService service, ILogger<Re
 		}
 	}
 
-	[HttpPost("/expenses/regulars/")]
-	public async Task<IActionResult> Create([FromQuery]int regularId,[FromBody]ModifyRegularExpenseDto expense)
+	[HttpPost("/expenses/regulars")]
+	public async Task<IActionResult> Create([FromBody]ModifyRegularExpenseDto expense)
 	{
 		try
 		{
-			var id = await _service.Create(regularId,expense);
+			var id = await _service.Create(expense);
 			return Ok(id);
 		}
 		catch (Exception e)
@@ -44,7 +44,7 @@ public class RegularExpenseController(IRegularExpenseService service, ILogger<Re
 			return StatusCode(500, "Uh-oh, the gold slipped out of our grasp! Please try again later.");
 		}
 	}
-	
+
 	[HttpPut("/expenses/regulars/{regularId:int}")]
 	public async Task<IActionResult> Update([FromRoute]int regularId,[FromBody]ModifyRegularExpenseDto expense)
 	{

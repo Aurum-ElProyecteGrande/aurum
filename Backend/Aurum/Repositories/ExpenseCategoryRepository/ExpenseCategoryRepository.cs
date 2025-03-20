@@ -11,9 +11,9 @@ public class ExpenseCategoryRepository(AurumContext aurumContext): IExpenseCateg
 
 	public async Task<List<ExpenseCategory>> GetAllCategory() =>
 		await _context.ExpenseCategories.ToListAsync();
-		
 
-	public async Task<List<ExpenseSubCategory>> GetAllSubCategory(string userId) => 
+
+	public async Task<List<ExpenseSubCategory>> GetAllSubCategory(string userId) =>
 		await _context.ExpenseSubCategories
 			.Where(s => s.IsBase || s.UserId == userId)
 			.ToListAsync();
@@ -22,7 +22,7 @@ public class ExpenseCategoryRepository(AurumContext aurumContext): IExpenseCateg
 	{
 		var category = await _context.ExpenseCategories
 			.Where(c => c.ExpenseCategoryId == categoryId && c.ExpenseSubCategories
-				.Any(s => s.Name.Equals(subCategoryName, StringComparison.OrdinalIgnoreCase)))
+				.Any(s => s.Name.ToLower() == subCategoryName.ToLower()))
 			.FirstOrDefaultAsync();
 
 		return category?.ExpenseCategoryId;
@@ -34,7 +34,7 @@ public class ExpenseCategoryRepository(AurumContext aurumContext): IExpenseCateg
 			ExpenseCategoryId = categoryId,
 			Name = subCategoryName
 		};
-		
+
 		_context.ExpenseSubCategories.Add(subCategory);
 		await _context.SaveChangesAsync();
 

@@ -1,7 +1,7 @@
 import { allCharts } from "./layouts";
 
-const exchangeApiKey = "fca_live_1D7AbjPoPrq9dGaRwMjLdVWlpBTrJ3cFMK25qOYO"
-const exchangeApiUrl = `https://api.freecurrencyapi.com/v1/latest?apikey=${exchangeApiKey}`
+const exchangeApiKey = "fca_live_1D7AbjPoPrq9dGaRwMjLdVWlpBTrJ3cFMK25qOYO";
+const exchangeApiUrl = `https://api.freecurrencyapi.com/v1/latest?apikey=${exchangeApiKey}`;
 const apiUrl = "/api";
 
 export const fetchExpenses = async (accId) => {
@@ -73,15 +73,18 @@ export const fetchBalance = async (accId) => {
 };
 
 export const fetchBalanceForRange = async (accId, startDate, endDate) => {
-	const response = await fetch(`${apiUrl}/balance/${accId}/range/?startDate=${startDate}&endDate=${endDate}`, {
-		method: "Get",
-		headers: {},
-		credentials: "include"
-	})
-	if (!response.ok) throw new Error(`Fetching balance for account: ${accId} went wrong`)
-	const balance = await response.json()
-	return balance
-}
+	const response = await fetch(
+		`${apiUrl}/balance/${accId}/range/?startDate=${startDate}&endDate=${endDate}`,
+		{
+			method: "Get",
+			headers: {},
+			credentials: "include",
+		}
+	);
+	if (!response.ok) throw new Error(`Fetching balance for account: ${accId} went wrong`);
+	const balance = await response.json();
+	return balance;
+};
 
 export const fetchLayouts = async (userId) => {
 	const response = await fetch(`${apiUrl}/Layout/${userId}`, {
@@ -102,8 +105,8 @@ export const fetchPostLayout = async (layoutDto) => {
 		credentials: "include",
 		body: JSON.stringify(layoutDto),
 	});
-	if (!response.ok) return false
-	return true
+	if (!response.ok) return false;
+	return true;
 };
 
 export const getIndexOfPossibleChart = (chartName) => {
@@ -128,56 +131,56 @@ export const fetchUserName = async () => {
 };
 
 export const displayCurrency = (amount, curCurrency) => {
-	return amount.toLocaleString('hu-HU', { style: 'currency', currency: curCurrency })
+	return amount.toLocaleString("hu-HU", { style: "currency", currency: curCurrency });
 };
 
-
 export const shortenTitle = (title, maxLength) => {
-	title = title.trim()
-	if (!title) return
+	title = title.trim();
+	if (!title) return;
 	if (title.length <= maxLength) {
-		return title
+		return title;
 	}
 
-	const words = title.split(" ")
-	let wordIndex = 0
-	let totalChar = 0
+	const words = title.split(" ");
+	let wordIndex = 0;
+	let totalChar = 0;
 
 	for (let i = 0; i < words.length; i++) {
-		totalChar += words[i].length + 1
+		totalChar += words[i].length + 1;
 		if (totalChar >= maxLength) {
-			wordIndex = i
-			break
+			wordIndex = i;
+			break;
 		}
 	}
 
-	const wordsOfShortTitle = []
+	const wordsOfShortTitle = [];
 	for (let i = 0; i < wordIndex; i++) {
-		wordsOfShortTitle.push(words[i])
+		wordsOfShortTitle.push(words[i]);
 	}
 
-	let shortenedTitle = wordsOfShortTitle.join(" ")
-	shortenedTitle = shortenedTitle + "..."
-	return shortenedTitle
-}
+	let shortenedTitle = wordsOfShortTitle.join(" ");
+	shortenedTitle = shortenedTitle + "...";
+	return shortenedTitle;
+};
 
 export const fetchCurrencyExchanges = async (base, currencies) => {
-	let currencyList = currencies.join(",")
-	let url = exchangeApiUrl
-	if (base) url += `&base_currency=${base}`
-	if (currencies) url += `&currencies=${currencyList}`
+	let currencyList = currencies.join(",");
+	let url = exchangeApiUrl;
+	if (base) url += `&base_currency=${base}`;
+	if (currencies) url += `&currencies=${currencyList}`;
 
 	const response = await fetch(url);
-	if (!response.ok) throw new Error(`Fetching exchange rates for ${base} to ${currencyList} went wrong`);
+	if (!response.ok)
+		throw new Error(`Fetching exchange rates for ${base} to ${currencyList} went wrong`);
 	const exchangeRates = await response.json();
 	return exchangeRates;
-}
+};
 
 export const convertExchangeRate = (amount, exchangeRates, originalCurrencyCode) => {
-	if (!originalCurrencyCode in exchangeRates) return amount
-	let exchangeRate = exchangeRates[originalCurrencyCode]
-	return amount / exchangeRate
-}
+	if (!originalCurrencyCode in exchangeRates) return amount;
+	let exchangeRate = exchangeRates[originalCurrencyCode];
+	return amount / exchangeRate;
+};
 
 export const fetchIncomeCategories = async () => {
 	const response = await fetch(`${apiUrl}/categories/income`, {
@@ -187,8 +190,8 @@ export const fetchIncomeCategories = async () => {
 	});
 	if (!response.ok) throw new Error(`Fetching income categories went wrong`);
 	const categories = await response.json();
-	return categories
-}
+	return categories;
+};
 
 export const fetchExpenseCategories = async () => {
 	const response = await fetch(`${apiUrl}/categories/expense`, {
@@ -198,8 +201,8 @@ export const fetchExpenseCategories = async () => {
 	});
 	if (!response.ok) throw new Error(`Fetching expense categories went wrong`);
 	const categories = await response.json();
-	return categories
-}
+	return categories;
+};
 
 export const fetchPostIncome = async (income) => {
 	const response = await fetch(`${apiUrl}/income`, {
@@ -209,13 +212,13 @@ export const fetchPostIncome = async (income) => {
 		},
 		credentials: "include",
 		body: JSON.stringify(income),
-	})
+	});
 	if (!response.ok) {
 		console.error(`Creating income went wrong`);
-		return false
+		return false;
 	}
-	return true
-}
+	return true;
+};
 
 export const fetchPostExpense = async (expense) => {
 	const response = await fetch(`${apiUrl}/expenses`, {
@@ -225,10 +228,127 @@ export const fetchPostExpense = async (expense) => {
 		},
 		credentials: "include",
 		body: JSON.stringify(expense),
-	})
+	});
 	if (!response.ok) {
 		console.error(`Creating expense went wrong`);
-		return false
+		return false;
 	}
-	return true
-}
+	return true;
+};
+
+export const fetchRegularExpenses = async (accId) => {
+	const response = await fetch(`${apiUrl}/expenses/regulars/${accId}`, {
+		method: "Get",
+		headers: {},
+		credentials: "include",
+	});
+	if (!response.ok) throw new Error(`Fetching expenses for account: ${accId} went wrong`);
+	const expenses = await response.json();
+	return expenses;
+};
+export const fetchRegularIncome = async (accId) => {
+	const response = await fetch(`${apiUrl}/income/regulars/${accId}`, {
+		method: "Get",
+		headers: {},
+		credentials: "include",
+	});
+	if (!response.ok) throw new Error(`Fetching expenses for account: ${accId} went wrong`);
+	const incomes = await response.json();
+	return incomes;
+};
+
+export const regularity = {
+	Daily: "Daily",
+	Weekly: "Weekly",
+	Monthly: "Monthly",
+};
+
+const convertToModifyRegularIncomeDto = (data) => {
+	return {
+		AccountId: data.accountId,
+		CategoryId: data.category.categoryId,
+		Label: data.label,
+		Amount: data.amount,
+		StartDate: new Date(data.startDate).toISOString(),
+		Regularity: regularity[data.regularity],
+	};
+};
+
+const convertToModifyRegularExpenseDto = (data) => {
+	return {
+		AccountId: data.accountId,
+		CategoryId: data.category.categoryId,
+		SubCategoryName: data.subcategory?.name || null,
+		Label: data.label,
+		Amount: data.amount,
+		StartDate: new Date(data.startDate).toISOString(),
+		Regularity: data.regularity,
+	};
+};
+
+export const fetchUpdateRegularIncome = async (regularIncome) => {
+	const data = convertToModifyRegularIncomeDto(regularIncome);
+
+	const response = await fetch(`${apiUrl}/income/regulars/${regularIncome.regularId}`, {
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		credentials: "include",
+		body: JSON.stringify(data),
+	});
+	if (!response.ok)
+		throw new Error(`Fetching expenses for account: ${regularIncome.regularId} went wrong`);
+	const incomes = await response.json();
+	return incomes;
+};
+
+export const fetchUpdateRegularExpense = async (regularExpense) => {
+	const data = convertToModifyRegularExpenseDto(regularExpense);
+
+	const response = await fetch(`${apiUrl}/expenses/regulars/${regularExpense.regularId}`, {
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		credentials: "include",
+		body: JSON.stringify(data),
+	});
+	if (!response.ok)
+		throw new Error(`Fetching expenses for account: ${regularExpense.regularId} went wrong`);
+	const expenses = await response.json();
+	return expenses;
+};
+
+export const fetchPostRegularIncome = async (regularIncome) => {
+
+
+	const response = await fetch(`${apiUrl}/income/regulars}`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		credentials: "include",
+		body: JSON.stringify(regularIncome),
+	});
+	if (!response.ok)
+		throw new Error(`Fetching expenses for account: ${regularIncome.accountId} went wrong`);
+	const incomes = await response.json();
+	return incomes;
+};
+
+export const fetchPostRegularExpense = async (regularExpense) => {
+
+	const response = await fetch(`${apiUrl}/expenses/regulars`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		credentials: "include",
+		body: JSON.stringify(regularExpense),
+	});
+	if (!response.ok)
+		throw new Error(`Fetching expenses for account: ${regularExpense.regularId} went wrong`);
+	const expenses = await response.json();
+	return expenses;
+};

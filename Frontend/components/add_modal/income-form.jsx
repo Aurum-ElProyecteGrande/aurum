@@ -1,5 +1,6 @@
-import { displayCurrency, fetchPostIncome } from '@/scripts/dashboard_scripts/dashboard_scripts'
+import { displayCurrency, fetchPostIncome, fetchPostRegularIncome } from '@/scripts/dashboard_scripts/dashboard_scripts'
 import React, { useEffect, useState } from 'react'
+import RegularitySelector from './regularity-selector'
 
 
 function IncomeForm({ formProps }) {
@@ -9,6 +10,7 @@ function IncomeForm({ formProps }) {
     const [chosenCategory, setChosenCategory] = useState(null)
     const [label, setLabel] = useState("")
     const [amount, setAmount] = useState(0)
+    const [regularity, setRegularity] = useState("None")
 
     const handleAccChange = (accName) => {
         const updatedChosenAccount = accounts.find(a => a.displayName === accName)
@@ -27,14 +29,23 @@ function IncomeForm({ formProps }) {
             accountId: chosenAccount.accountId,
             categoryId: chosenCategory.categoryId,
             label,
-            amount,
-            date: new Date().toISOString()
+            amount
         }
+
+        if (regularity != "None") {
+            incomeDto.startDate = new Date().toISOString()
+            incomeDto.regularity = regularity
+        }
+        else
+            expenseDto.date = new Date().toISOString()
 
         console.log(incomeDto)
         if (!checkIncomeDtoValidity(incomeDto)) return
 
-        const isSucces = await fetchPostIncome(incomeDto)
+        const isSucces = regularity == "None" ?
+                    await fetchPostIncome(expenseDto) :
+                    await fetchPostRegularIncome(expenseDto)
+        
 
         if (isSucces) {
             useInfoToast("Income added successfully!", "success")
@@ -48,12 +59,17 @@ function IncomeForm({ formProps }) {
             !incomeDto.categoryId ||
             !incomeDto.label ||
             !incomeDto.amount ||
-            !incomeDto.date
+            !(incomeDto.date ||
+                (incomeDto.startDate && incomeDto.regularity))
         ) {
             useInfoToast("Missing income details.", "fail")
             return false
         }
         return true
+    }
+
+    const onSelect = (value) => {
+        setRegularity(value)
     }
 
     return (
@@ -75,6 +91,7 @@ function IncomeForm({ formProps }) {
                         ))}
                     </select>
                 </div>
+                <RegularitySelector onSelect={onSelect}/>
                 <div className='label input'>
                     <input id="label" type='text' placeholder='Label' onChange={(e) => setLabel(e.target.value)} />
                 </div>
