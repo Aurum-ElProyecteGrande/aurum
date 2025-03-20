@@ -1,4 +1,3 @@
-/*
 using Aurum.Controllers.RegularExpressController;
 using Aurum.Data.Entities;
 using Aurum.Models.CategoryDtos;
@@ -52,14 +51,14 @@ namespace AurumTest.ExpenseTests
             };
 
             _repositoryMock
-                .Setup(r => r.GetAllRegular(accountId))
+                .Setup(r => r.GetAllRegular())
                 .ReturnsAsync(rawExpenses);
             _categoryServiceMock
                 .Setup(c => c.GetAllExpenseCategories(userId))
                 .ReturnsAsync(categories);
 
             // Act
-            var result = await _service.GetAll(accountId, userId);
+            var result = await _service.GetAll();
 
             // Assert
             Assert.Multiple(() =>
@@ -69,40 +68,6 @@ namespace AurumTest.ExpenseTests
                 Assert.That(result[0].Label, Is.EqualTo("Expense 1"));
                 Assert.That(result[0].Amount, Is.EqualTo(100));
             });
-        }
-
-        [Test]
-        public async Task GetAll_NoCategories_ThrowsInvalidDataException()
-        {
-            // Arrange
-            var accountId = 1;
-            var userId = "1";
-            var rawExpenses = new List<RegularExpense>
-            {
-                new RegularExpense
-                {
-                    RegularExpenseId = 1,
-                    AccountId = accountId,
-                    ExpenseCategoryId = 1,
-                    ExpenseSubCategoryId = null,
-                    Label = "Expense 1",
-                    Amount = 100,
-                    StartDate = DateTime.Now,
-                    Regularity = Regularity.Monthly
-                }
-            };
-            var categories = new Dictionary<CategoryDto, List<SubCategoryDto>>();
-
-            _repositoryMock
-                .Setup(r => r.GetAllRegular(accountId))
-                .ReturnsAsync(rawExpenses);
-            _categoryServiceMock
-                .Setup(c => c.GetAllExpenseCategories(userId))
-                .ReturnsAsync(categories);
-
-            // Act & Assert
-            var ex = Assert.ThrowsAsync<InvalidDataException>(() => _service.GetAll(accountId, userId));
-            Assert.That(ex.Message, Is.EqualTo("No categories found"));
         }
 
         [Test]
@@ -120,7 +85,7 @@ namespace AurumTest.ExpenseTests
                 .ReturnsAsync(createdId);
 
             // Act
-            var result = await _service.Create(regularId, expenseDto);
+            var result = await _service.Create(expenseDto);
 
             // Assert
             Assert.That(result, Is.EqualTo(createdId));
@@ -131,13 +96,12 @@ namespace AurumTest.ExpenseTests
         {
             // Arrange
             var expenseDto = new ModifyRegularExpenseDto( 1, 1, "NonExistingSubCategory", "Expense 1", 100, DateTime.Now, Regularity.Monthly);
-            var regularId = 0;
             _categoryServiceMock
                 .Setup(c => c.AcquireSubCategoryId(expenseDto.CategoryId, expenseDto.SubCategoryName))
                 .ThrowsAsync(new KeyNotFoundException("SubCategory not found"));
 
             // Act & Assert
-            var ex = Assert.ThrowsAsync<KeyNotFoundException>(() => _service.Create(regularId, expenseDto));
+            var ex = Assert.ThrowsAsync<KeyNotFoundException>(() => _service.Create(expenseDto));
             Assert.That(ex.Message, Is.EqualTo("SubCategory not found"));
         }
 
@@ -195,4 +159,3 @@ namespace AurumTest.ExpenseTests
         }
     }
 }
-*/

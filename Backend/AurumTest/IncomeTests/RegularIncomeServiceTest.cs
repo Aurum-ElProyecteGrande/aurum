@@ -51,27 +51,28 @@ public class RegularIncomeServiceTest
             },
         };
 
-        _regularIncomeRepoMock.Setup(repo => repo.GetAllRegular(accountId)).ReturnsAsync(mockRegularIncomes);
+        _regularIncomeRepoMock.Setup(repo => repo.GetAllRegular()).ReturnsAsync(mockRegularIncomes);
         _incomeCategoryServiceMock.Setup(service => service.GetAllCategory()).ReturnsAsync(new List<CategoryDto>
         {
             new CategoryDto("Job", 2),
             new CategoryDto("Side Job", 3)
         });
 
-        var result = await _regularIncomeService.GetAllRegular(accountId);
+        var result = await _regularIncomeService.GetAllRegular();
 
         Assert.NotNull(result);
         Assert.That(result.Count, Is.EqualTo(2));
         Assert.That(result[0].Label, Is.EqualTo("Salary"));
         Assert.That(result[1].Label, Is.EqualTo("Freelance"));
-        Assert.That(result[0].Category.Name, Is.EqualTo("Job"));
-        Assert.That(result[1].Category.Name, Is.EqualTo("Side Job"));
+        Assert.That(result[0].IncomeCategory.Name, Is.EqualTo("Job"));
+        Assert.That(result[1].IncomeCategory.Name, Is.EqualTo("Side Job"));
 
-        _regularIncomeRepoMock.Verify(repo => repo.GetAllRegular(accountId), Times.Once);
+        _regularIncomeRepoMock.Verify(repo => repo.GetAllRegular(), Times.Once);
         // verify should also be called only once
         // because of current method implementation it's called as many times as number of incomes added
         _incomeCategoryServiceMock.Verify(service => service.GetAllCategory(), Times.AtLeastOnce);
-    }*/
+    }
+    */
 
     [Test]
     public async Task GetAllRegular_ReturnsEmptyList_WhenNoDataExists()
