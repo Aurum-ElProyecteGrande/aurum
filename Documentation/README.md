@@ -124,4 +124,4 @@ The project is built with a **RESTful API backend** and a **component-based fron
 ## 8. Contact
 Developers: **[Bartos Gábor, Fekete Nándor, Gelecsák Tamás]**  
 Emails: **[aurumelproyectegrande@gmail.com]**  
-LinkedIns: **[https://www.linkedin.com/in/gaborbartos731, NÁNDI-LINKEDIN, https://www.linkedin.com/in/tamasgelecsak]**
+LinkedIns: **[https://www.linkedin.com/in/gaborbartos731, https://www.linkedin.com/in/nándor-fekete-fn97, https://www.linkedin.com/in/tamasgelecsak]**
