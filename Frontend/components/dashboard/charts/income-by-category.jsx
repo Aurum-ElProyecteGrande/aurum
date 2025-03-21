@@ -93,7 +93,7 @@ export default function IncomesByCategory({ isEditMode, incomes, segmentIndex, c
 
             if (updatedFiltered[0]) {
                 updatedFiltered = updatedFiltered.map(e => {
-                    return {
+                    if (e) return {
                         category: shortenTitle(e.category, 13),
                         categorySum: e.categorySum
                     }
@@ -147,9 +147,9 @@ export default function IncomesByCategory({ isEditMode, incomes, segmentIndex, c
                     </ResponsiveContainer>
                     <div className='pie-chart-tooltip'>
                         {filteredIncomesByCategory[0] && filteredIncomesByCategory.map((ec, i) => (
-                            <div key={ec.category} className='row' style={{ borderBottom: `1px solid ${COLORS[i % COLORS.length]}` }}>
-                                <div className='label' style={{ color: COLORS[i % COLORS.length] }}>{ec.category}</div>
-                                <div className='value'>{ec.categorySum.toLocaleString('hu-HU', { style: 'currency', currency: 'HUF' })}</div>
+                            <div key={ec ? ec.category : `na${i}`} className='row' style={{ borderBottom: `1px solid ${COLORS[i % COLORS.length]}` }}>
+                                <div className='label' style={{ color: COLORS[i % COLORS.length] }}>{ec ? ec.category : "N/A"}</div>
+                                <div className='value'>{ec ? ec.categorySum.toLocaleString('hu-HU', { style: 'currency', currency: 'HUF' }) : 0}</div>
                             </div>
                         ))}
                     </div>

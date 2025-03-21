@@ -17,7 +17,7 @@ public class RegularExpenseService(IRegularExpenseRepository repository,IExpense
 
 	public async Task<List<RegularExpenseDto>> GetAllWithId(int accountId)
 	{
-		var rawExpenses = await _repository.GetAllRegularWithId(accountId);
+		var rawExpenses = await _repository.GetAllRegularWithId(accountId); 
 
 		if (rawExpenses.Count == 0)
 			return [];
