@@ -36,8 +36,8 @@ export default function AccountsThisMonth({ isEditMode, segmentIndex, chosenLayo
             ]
 
             updatedAccsWithTrxs.forEach(acc => {
-                if (acc1Inc[0]) acc.inc = acc.inc.reduce((a, c) => a += c.amount, 0)
-                if (acc1Exp[0]) acc.exp = acc.exp.reduce((a, c) => a += c.amount, 0)
+                if (acc) acc.inc = acc.inc.reduce((a, c) => a += c.amount, 0)
+                if (acc) acc.exp = acc.exp.reduce((a, c) => a += c.amount, 0)
             });
             setAccountsWithTotals(updatedAccsWithTrxs)
             chartLoaded(chartName)

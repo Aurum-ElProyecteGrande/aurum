@@ -5,9 +5,9 @@ import ChangeChartTransactions from './chart-utils/change-chart-transactions';
 import ChangeChartType from './chart-utils/change-chart-acc';
 
 export default function LastTransactions({ isEditMode, expenses, incomes, segmentIndex, chosenLayout, chosenCharts, possibleChartsBySegment, setChosenCharts, chartLoaded }) {
-    
-    const chartName = "last-transactions" 
-    
+
+    const chartName = "last-transactions"
+
     const [transactions, setTransactions] = useState([])
     const [maxTransactions, setMaxTransactions] = useState(15)
     const numberOfTransactions = [15, 20, 25, 30, 35, 40, 45, 50, 100]
@@ -46,7 +46,8 @@ export default function LastTransactions({ isEditMode, expenses, incomes, segmen
 
         let updatedTransactions = []
         for (let i = 0; i < maxTransactions; i++) {
-            updatedTransactions.push(allTransactions[i])
+            if (allTransactions[i])
+                updatedTransactions.push(allTransactions[i])
         }
 
         return updatedTransactions
@@ -55,6 +56,8 @@ export default function LastTransactions({ isEditMode, expenses, incomes, segmen
     const handleChangeNrOfTransactions = (e) => {
         setMaxTransactions(e.target.value)
     }
+
+    console.log(transactions)
 
     return (
         <div key={segmentIndex} className={`${chosenLayout}-${segmentIndex + 1} chart-container ${isEditMode && "edit-mode"}`}>

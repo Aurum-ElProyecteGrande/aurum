@@ -87,9 +87,9 @@ namespace Aurum.Controllers.IncomeControllers
         {
             try
             {
-                var regularIncomes = await _regularIncomeService.GetAllRegularWithId(accountId);
+                var regularIncomes = await _regularIncomeService.GetAllRegularWithId(accountId); 
                 return Ok(regularIncomes);
-            }
+            } 
             catch (Exception ex)
             {
 				_logger.LogError($"An error occured while getting regular incomes for acc#{accountId}: {ex.Message}");
