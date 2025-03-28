@@ -11,7 +11,9 @@ During development we followed SOLID principles and Clean Code methodology, impl
 The product runs in Docker containers.
 
 ## Snapshots:
-![database-structure](./Documentation/Snapshots/Add-transaction.png)
+- ![login](./Documentation/Snapshots/Login.png)
+- ![dashboard](./Documentation/Snapshots/Dashboard.png)
+- ![add-transactionss](./Documentation/Snapshots/Add-transaction.png)
 
 
 ##  1. Main features: 
