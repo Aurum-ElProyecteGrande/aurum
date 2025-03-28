@@ -32,10 +32,20 @@ The product runs in Docker containers.
 [![React][React.js]][React-url]
 [![Next][Next.js]][Next-url]
 [![Sass][Sass-logo]][Sass-url]
-- **Backend:** ASP.NET Core, C#
+- **Backend:**
+* [![ASP.NET Core][AspNet-logo]][AspNet-url]
+
 - **Database:** MSSQL (Entity Framework)
 - **Containerization:** Docker
 - **Version Control:** Git, GitHub
+
+
+* [![C#][Csharp-logo]][Csharp-url]
+* [![MSSQL][Mssql-logo]][Mssql-url]
+* [![Entity Framework][Ef-logo]][Ef-url]
+* [![Docker][Docker-logo]][Docker-url]
+* [![Git][Git-logo]][Git-url]
+* [![GitHub][Github-logo]][Github-url]
  
 ## 3. Installation and Running
 
@@ -138,3 +148,17 @@ LinkedIns: **[https://www.linkedin.com/in/gaborbartos731, https://www.linkedin.c
 [React-url]: https://reactjs.org/
 [Sass-logo]: https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=sass&logoColor=white
 [Sass-url]: https://sass-lang.com/
+[AspNet-logo]: https://img.shields.io/badge/ASP.NET_Core-5C2D91?style=for-the-badge&logo=dotnet&logoColor=white
+[AspNet-url]: https://dotnet.microsoft.com/en-us/apps/aspnet
+[Csharp-logo]: https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=csharp&logoColor=white
+[Csharp-url]: https://learn.microsoft.com/en-us/dotnet/csharp/
+[Mssql-logo]: https://img.shields.io/badge/Microsoft_SQL_Server-CC2927?style=for-the-badge&logo=microsoft-sql-server&logoColor=white
+[Mssql-url]: https://www.microsoft.com/en-us/sql-server
+[Ef-logo]: https://img.shields.io/badge/Entity_Framework-512BD4?style=for-the-badge&logo=.net&logoColor=white
+[Ef-url]: https://learn.microsoft.com/en-us/ef/
+[Docker-logo]: https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white
+[Docker-url]: https://www.docker.com/
+[Git-logo]: https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white
+[Git-url]: https://git-scm.com/
+[Github-logo]: https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white
+[Github-url]: https://github.com/
