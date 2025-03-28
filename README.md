@@ -10,7 +10,7 @@ We had 5 sprints, daily stand-up meetings to split the tasks, used project board
 During development we followed SOLID principles and Clean Code methodology, implemented CI in github actions.
 The product runs in Docker containers.
 
-**Snapshots:**
+## Snapshots:
 ![snap1](./Documentation/Snapshots/add-transaction.png)
 
 
