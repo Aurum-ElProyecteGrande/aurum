@@ -28,7 +28,7 @@ The product runs in Docker containers.
 - Responsive mobile view
 
 ## 2. Technology Stack
-- **Frontend:** React, Next.js, sass
+- **Frontend:** [![React][React.js]][React-url], [![Next][Next.js]][Next-url], [![Sass][Sass-logo]][Sass-url]
 - **Backend:** ASP.NET Core, C#
 - **Database:** MSSQL (Entity Framework)
 - **Containerization:** Docker
@@ -127,3 +127,11 @@ The project is built with a **RESTful API backend** and a **component-based fron
 Developers: **[Bartos Gábor, Fekete Nándor, Gelecsák Tamás]**  
 Emails: **[aurumelproyectegrande@gmail.com]**  
 LinkedIns: **[https://www.linkedin.com/in/gaborbartos731, https://www.linkedin.com/in/nándor-fekete-fn97, https://www.linkedin.com/in/tamasgelecsak]**
+
+
+[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
+[Next-url]: https://nextjs.org/
+[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[React-url]: https://reactjs.org/
+[Sass-logo]: https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=sass&logoColor=white
+[Sass-url]: https://sass-lang.com/
