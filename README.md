@@ -11,12 +11,12 @@ During development we followed SOLID principles and Clean Code methodology, impl
 The product runs in Docker containers.
 
 **Snapshots:**
-![snap1](.Documentation/Snapshots/add-transaction.png)
-![snap1](.Documentation/Snapshots/dashboard.png)
-![snap1](.Documentation/Snapshots/landing.png)
-![snap1](.Documentation/Snapshots/login.png)
-![snap1](.Documentation/Snapshots/profile.png)
-![snap1](.Documentation/Snapshots/transaction-list.png)
+![snap1](./Documentation/Snapshots/add-transaction.png)
+![snap1](./Documentation/Snapshots/dashboard.png)
+![snap1](./Documentation/Snapshots/landing.png)
+![snap1](./Documentation/Snapshots/login.png)
+![snap1](./Documentation/Snapshots/profile.png)
+![snap1](./Documentation/Snapshots/transaction-list.png)
 
 
 ##  1. Main features: 
@@ -119,7 +119,7 @@ dotnet ef database update
 The project is built with a **RESTful API backend** and a **component-based frontend**.
 
 ## 6. Database Structure (SQL)
-![database-structure](.Documentation/database-structure.png)
+![database-structure](./Documentation/database-structure.png)
 
 ## 7. Contribution
 - **Fork the repo**
