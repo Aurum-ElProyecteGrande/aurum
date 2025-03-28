@@ -29,9 +29,9 @@ The product runs in Docker containers.
 
 ## 2. Technology Stack
 - **Frontend:**
-- [![React][React.js]][React-url]
-- [![Next][Next.js]][Next-url]
-- [![Sass][Sass-logo]][Sass-url]
+[![React][React.js]][React-url]
+[![Next][Next.js]][Next-url]
+[![Sass][Sass-logo]][Sass-url]
 - **Backend:** ASP.NET Core, C#
 - **Database:** MSSQL (Entity Framework)
 - **Containerization:** Docker
