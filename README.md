@@ -10,9 +10,11 @@ We had 5 sprints, daily stand-up meetings to split the tasks, used project board
 During development we followed SOLID principles and Clean Code methodology, implemented CI in github actions.
 The product runs in Docker containers.
 
-**App demo:**
-//youtube?
-//.gif?
+## Snapshots:
+ ![login](./Documentation/Snapshots/Login.png)
+ ![dashboard](./Documentation/Snapshots/Dashboard.png)
+ ![add-transactionss](./Documentation/Snapshots/Add-transaction.png)
+
 
 ##  1. Main features: 
 - Register user
@@ -26,11 +28,21 @@ The product runs in Docker containers.
 - Responsive mobile view
 
 ## 2. Technology Stack
-- **Frontend:** React, Next.js, sass
-- **Backend:** ASP.NET Core, C#
-- **Database:** MSSQL (Entity Framework)
-- **Containerization:** Docker
-- **Version Control:** Git, GitHub
+- **Frontend:**
+[![React][React.js]][React-url]
+[![Next][Next.js]][Next-url]
+[![Sass][Sass-logo]][Sass-url]
+- **Backend:**
+[![ASP.NET Core][AspNet-logo]][AspNet-url]
+[![C#][Csharp-logo]][Csharp-url]
+- **Database:**
+[![MSSQL][Mssql-logo]][Mssql-url]
+[![Entity Framework][Ef-logo]][Ef-url]
+- **Containerization:**
+[![Docker][Docker-logo]][Docker-url]
+- **Version Control:**
+[![Git][Git-logo]][Git-url]
+[![GitHub][Github-logo]][Github-url]
  
 ## 3. Installation and Running
 
@@ -114,7 +126,7 @@ dotnet ef database update
 The project is built with a **RESTful API backend** and a **component-based frontend**.
 
 ## 6. Database Structure (SQL)
-![database-structure](./database-structure.png)
+![database-structure](./Documentation/database-structure.png)
 
 ## 7. Contribution
 - **Fork the repo**
@@ -124,4 +136,26 @@ The project is built with a **RESTful API backend** and a **component-based fron
 ## 8. Contact
 Developers: **[Bartos Gábor, Fekete Nándor, Gelecsák Tamás]**  
 Emails: **[aurumelproyectegrande@gmail.com]**  
-LinkedIns: **[https://www.linkedin.com/in/gaborbartos731, https://www.linkedin.com/in/nándor-fekete-fn97, https://www.linkedin.com/in/tamasgelecsak]**
+LinkedIns: **[https://www.linkedin.com/in/dashg, https://www.linkedin.com/in/nándor-fekete-fn97, https://www.linkedin.com/in/tamasgelecsak]**
+
+
+[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
+[Next-url]: https://nextjs.org/
+[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[React-url]: https://reactjs.org/
+[Sass-logo]: https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=sass&logoColor=white
+[Sass-url]: https://sass-lang.com/
+[AspNet-logo]: https://img.shields.io/badge/ASP.NET_Core-5C2D91?style=for-the-badge&logo=dotnet&logoColor=white
+[AspNet-url]: https://dotnet.microsoft.com/en-us/apps/aspnet
+[Csharp-logo]: https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=csharp&logoColor=white
+[Csharp-url]: https://learn.microsoft.com/en-us/dotnet/csharp/
+[Mssql-logo]: https://img.shields.io/badge/Microsoft_SQL_Server-CC2927?style=for-the-badge&logo=microsoft-sql-server&logoColor=white
+[Mssql-url]: https://www.microsoft.com/en-us/sql-server
+[Ef-logo]: https://img.shields.io/badge/Entity_Framework-512BD4?style=for-the-badge&logo=.net&logoColor=white
+[Ef-url]: https://learn.microsoft.com/en-us/ef/
+[Docker-logo]: https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white
+[Docker-url]: https://www.docker.com/
+[Git-logo]: https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white
+[Git-url]: https://git-scm.com/
+[Github-logo]: https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white
+[Github-url]: https://github.com/
