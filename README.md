@@ -33,19 +33,16 @@ The product runs in Docker containers.
 [![Next][Next.js]][Next-url]
 [![Sass][Sass-logo]][Sass-url]
 - **Backend:**
-* [![ASP.NET Core][AspNet-logo]][AspNet-url]
-
-- **Database:** MSSQL (Entity Framework)
-- **Containerization:** Docker
-- **Version Control:** Git, GitHub
-
-
-* [![C#][Csharp-logo]][Csharp-url]
-* [![MSSQL][Mssql-logo]][Mssql-url]
-* [![Entity Framework][Ef-logo]][Ef-url]
-* [![Docker][Docker-logo]][Docker-url]
-* [![Git][Git-logo]][Git-url]
-* [![GitHub][Github-logo]][Github-url]
+[![ASP.NET Core][AspNet-logo]][AspNet-url]
+[![C#][Csharp-logo]][Csharp-url]
+- **Database:**
+[![MSSQL][Mssql-logo]][Mssql-url]
+[![Entity Framework][Ef-logo]][Ef-url]
+- **Containerization:**
+[![Docker][Docker-logo]][Docker-url]
+- **Version Control:**
+[![Git][Git-logo]][Git-url]
+[![GitHub][Github-logo]][Github-url]
  
 ## 3. Installation and Running
 
