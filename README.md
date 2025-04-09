@@ -29,6 +29,7 @@ The product runs in Docker containers.
 
 ## 2. Technology Stack
 - **Frontend:**
+[![npm][npm-logo]][npm-link]
 [![React][React.js]][React-url]
 [![Next][Next.js]][Next-url]
 [![Sass][Sass-logo]][Sass-url]
@@ -45,8 +46,6 @@ The product runs in Docker containers.
 [![GitHub][Github-logo]][Github-url]
  
 ## 3. Installation and Running
-
-- **Github repo:** https://github.com/Aurum-ElProyecteGrande/aurum/
 
 ### 3.1. Prerequisites
 - Node.js & npm
@@ -159,3 +158,5 @@ LinkedIns: **[https://www.linkedin.com/in/dashg, https://www.linkedin.com/in/ná
 [Git-url]: https://git-scm.com/
 [Github-logo]: https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white
 [Github-url]: https://github.com/
+[npm-logo]: https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white
+[npm-link]: https://www.npmjs.com/
